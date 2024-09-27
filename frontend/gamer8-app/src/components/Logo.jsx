@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
 
-function Logo() {
-  return (
-    <div>R8</div>
-  )
+function Logo({ className }) {
+
+  return <div className={className}>R<span className="italic">8</span></div>;
 }
 
-export default Logo
+export default Logo;
