@@ -2,7 +2,7 @@ const { Sequelize, DataTypes, Deferrable } = require("sequelize");
 const sequelize = require("../db");
 const User = require("./userModel");
 
-const Review = sequelize.define("Review", {
+const Rating = sequelize.define("Review", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -37,8 +37,12 @@ const Review = sequelize.define("Review", {
   },
 });
 
-Review.hasOne(User, {
+Rating.hasOne(User, {
   onDelete: "NO ACTION",
 });
 
-module.exports = Review;
+User.hasMany(Rating, {
+  onDelete: "CASCADE",
+});
+
+module.exports = Rating;

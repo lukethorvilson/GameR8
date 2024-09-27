@@ -1,14 +1,13 @@
-const User = require("../models/userModel");
+const Rating = require("../models/ratingModel");
 
-exports.getAllUsers = async (req, res) => {
+exports.getAllRatings = async (req, res) => {
   try {
-    const users = await User.findAll();
-    console.log();
+    const ratings = await Rating.findAll();
     res.status(200).json({
       status: "success",
-      results: users.length,
+      results: ratings.length,
       data: {
-        users,
+        ratings,
       },
     });
   } catch (err) {
@@ -19,7 +18,7 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-exports.createUser = async (req, res) => {
+exports.postRating = async (req, res) => {
   try{
     const {title, description, rating} = req.body
     if(!rating) {
@@ -41,6 +40,3 @@ exports.createUser = async (req, res) => {
     })
   }
 };
-
-
-exports

@@ -1,6 +1,5 @@
 const sequelize = require("../db");
 const { Sequelize, DataTypes } = require("sequelize");
-const Review = require("./reviewModel");
 
 const User = sequelize.define("User", {
   id: {
@@ -47,10 +46,6 @@ const User = sequelize.define("User", {
       this.setDataValue("dislikedReviews", val.join(","));
     },
   },
-});
-
-User.hasMany(Review, {
-  onDelete: "CASCADE",
 });
 
 module.exports = User;
