@@ -1,6 +1,7 @@
 import React from "react";
-
+import {useNavigate} from "react-router-dom"
 function LoginBox() {
+  const navigate = useNavigate()
   return (
     <div className="mx-auto flex h-[60%] w-[45%] flex-col rounded-xl bg-cyan-950 px-4 py-8">
       <h1 className="mb-10 text-center text-2xl font-bold text-yellow-300">
@@ -33,6 +34,7 @@ function LoginBox() {
       <button className="mx-auto h-[8%] w-[20%] rounded-md bg-yellow-300 font-bold text-cyan-950">
         Login
       </button>
+      <p className="mx-auto text-yellow-300 ">New user? <span onClick={() => navigate("/register")}>Register here</span></p>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import Games from "./pages/Games";
 import NavBar from "./components/NavBar";
 import Login from "./pages/Login";
 import Layout from "./pages/Layout";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/games" element={<Games />} />
         </Route>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />}></Route>
       </Routes>
     </Router>
   );
