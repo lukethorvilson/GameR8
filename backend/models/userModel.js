@@ -27,8 +27,9 @@ const User = sequelize.define("User", {
     allowNull: false,
   },
   likedReviews: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
+    defaultValue: "",
     get() {
       return this.getDataValue("likedReviews").split(",");
     },
@@ -37,8 +38,9 @@ const User = sequelize.define("User", {
     },
   },
   dislikedReviews: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
+    defaultValue: "",
     get() {
       return this.getDataValue("dislikedReviews").split(",");
     },

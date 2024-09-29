@@ -21,15 +21,13 @@ exports.getAllUsers = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try{
-    const {title, description, rating} = req.body
-    if(!rating) {
-        throw new Error("Rating not defined on game!")
-    }
-    const newRating = await Rating.create({title, description, rating})
+    const {firstName, lastName, email, username, password, passwordCheck} = req.body
+    const fullName = `${firstName} ${lastName}`
+    const newUser = await User.create({fullName, email, username, password})
     res.status(201).json({
         status: "success",
         data: {
-            newRating
+            newUser
         }
     })
   }catch(err){

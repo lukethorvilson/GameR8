@@ -4,6 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const rateLimit = require("express-rate-limit");
+const cors = require("cors");
 
 const userRouter = require("./routes/userRoutes");
 const ratingRouter = require("./routes/ratingRoutes");
@@ -14,12 +15,14 @@ const app = express();
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 
+app.use(cors())
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 require('dotenv').config();
+
 
 // ROUTE MOUNTS
 // app.use("/api/v1/games", gameRouter);
