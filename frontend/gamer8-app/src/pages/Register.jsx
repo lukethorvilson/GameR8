@@ -1,5 +1,6 @@
 import React from "react";
 import LoginBox from "../components/LoginBox";
+import RegisterBox from "../components/RegisterBox";
 
 function Register() {
   return (
@@ -7,7 +8,7 @@ function Register() {
       <div className="mx-auto flex flex-row text-6xl font-extrabold text-yellow-300">
         Game R<span className="italic">8</span>
       </div>
-      <LoginBox />
+      <RegisterBox />
     </div>
   );
 }
