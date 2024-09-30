@@ -6,29 +6,33 @@ const logger = require("morgan");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 
+// Routers
 const userRouter = require("./routes/userRoutes");
 const ratingRouter = require("./routes/ratingRoutes");
 const gameRouter = require("./routes/gameRoutes");
+const authRouter = require("./routes/authRoutes");
 
+// setup app
 const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 
-app.use(cors())
+// middlewares
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-require('dotenv').config();
-
+require("dotenv").config();
 
 // ROUTE MOUNTS
 // app.use("/api/v1/games", gameRouter);
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/ratings", ratingRouter);
-app.use("/api/v1/games", gameRouter);
+app.use("gamer8/api/v1/users", userRouter);
+app.use("gamer8/api/v1/ratings", ratingRouter);
+app.use("gamer8/api/v1/games", gameRouter);
+app.use("gamer8/api/v1/auth", authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

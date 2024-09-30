@@ -27,7 +27,7 @@ function RegisterBox() {
 
     if (formData.password !== formData.passwordCheck) return;
     try {
-      const response = await fetch("http://localhost:8000/api/v1/users", {
+      const response = await fetch("http://localhost:8000/gamer8/api/v1/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
