@@ -1,5 +1,6 @@
 const sequelize = require("../db");
 const { Sequelize, DataTypes } = require("sequelize");
+const bcrypt = require("bcrypt")
 
 const User = sequelize.define("User", {
   id: {
@@ -47,6 +48,22 @@ const User = sequelize.define("User", {
     set(val) {
       this.setDataValue("dislikedReviews", val.join(","));
     },
+  },
+}, {
+  hooks: {
+    beforeCreate: async(user) => {
+      if(user.password) {
+        const saltRounds = 10;
+        user.password = await bcrypt.hash(user.password, saltRounds);
+      }
+    },
+    beforeUpdate: async (user) => {
+      if(user.password) {
+        const saltRounds = 10;
+        user.password = await bcrypt.hash(user.password, saltRounds);
+      }
+    before
+    }
   },
 });
 
