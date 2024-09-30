@@ -29,28 +29,6 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    likedReviews: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: "",
-      get() {
-        return this.getDataValue("likedReviews").split(",");
-      },
-      set(val) {
-        this.setDataValue("likedReviews", val.join(","));
-      },
-    },
-    dislikedReviews: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: "",
-      get() {
-        return this.getDataValue("dislikedReviews").split(",");
-      },
-      set(val) {
-        this.setDataValue("dislikedReviews", val.join(","));
-      },
-    },
   },
   {
     hooks: {
