@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import RegisterInput from "./RegisterInput";
 import Register from "../pages/Register";
+import { useNavigate } from "react-router-dom";
+import Spinner from "./Spinner";
 
 function RegisterBox() {
   const [formData, setFormData] = useState({
@@ -12,6 +14,8 @@ function RegisterBox() {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   async function handleRegisterSubmit(e) {
     e.preventDefault();
@@ -22,18 +26,32 @@ function RegisterBox() {
       !formData.username ||
       !formData.password ||
       !formData.passwordCheck
-    )
+    ) {
+      setError("Please fill in all data fields to register as a user!");
+      setTimeout(() => {
+        setError(null);
+      }, 1000 * 30);
       return;
+    }
 
-    if (formData.password !== formData.passwordCheck) return;
+    if (formData.password !== formData.passwordCheck)
+      throw new Error(
+        "Password check didn't match! Please re-enter passwords and double check them!",
+      );
     try {
-      const response = await fetch("http://localhost:8000/gamer8/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      setIsLoading(true);
+      const response = await fetch(
+        "http://localhost:8000/gamer8/api/v1/users/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
+      setIsLoading(false);
+      navigate(response.ok ? "/login" : "/register");
       if (response.ok) {
         console.log("User successfully created!");
       } else {
@@ -57,6 +75,11 @@ function RegisterBox() {
       <h1 className="col-span-2 mb-10 text-center text-2xl font-bold text-yellow-300">
         Register
       </h1>
+      {error && (
+        <p className="mx-auto bg-red-500 p-4 text-base text-white">
+          Registration Error: {error}
+        </p>
+      )}
       <form
         onSubmit={handleRegisterSubmit}
         className="row-span-3 grid h-[80%] w-[100%] grid-cols-2"
@@ -65,6 +88,7 @@ function RegisterBox() {
           label="First Name"
           name="firstName"
           id="firstName"
+          isPassword={false}
           value={formData.firstName}
           onChange={handleChange}
         />
@@ -72,6 +96,7 @@ function RegisterBox() {
           label="Last Name"
           name="lastName"
           id="lastName"
+          isPassword={false}
           value={formData.lastName}
           onChange={handleChange}
         />
@@ -79,12 +104,14 @@ function RegisterBox() {
           label="Email"
           name="email"
           id="email"
+          isPassword={false}
           value={formData.email}
           onChange={handleChange}
         />
         <RegisterInput
           label="Username"
           name="username"
+          isPassword={false}
           id="username"
           value={formData.username}
           onChange={handleChange}
@@ -93,12 +120,14 @@ function RegisterBox() {
           label="Password"
           name="password"
           id="password"
+          isPassword={true}
           value={formData.password}
           onChange={handleChange}
         />
         <RegisterInput
           label="Re-type Password"
           name="passwordCheck"
+          isPassword={true}
           id="passwordCheck"
           value={formData.passwordCheck}
           onChange={handleChange}
@@ -107,7 +136,7 @@ function RegisterBox() {
           type="submit"
           className="col-span-2 mx-auto h-[110%] w-[40%] rounded-md bg-yellow-300 font-bold text-cyan-950"
         >
-          Register
+          {isLoading ? <Spinner className="" /> : "Register"}
         </button>
       </form>
     </div>

@@ -1,40 +1,106 @@
-import React from "react";
-import {useNavigate} from "react-router-dom"
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import LoginInput from "./LoginInput";
+import Spinner from "./Spinner";
 function LoginBox() {
-  const navigate = useNavigate()
+  const [formData, setFormData] = useState({
+    usernameOrEmail: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleLoginSubmit(e) {
+    e.preventDefault();
+    if (!formData.usernameOrEmail || !formData.password) {
+      setError("Please fill in all data fields to login as a user!");
+      setTimeout(() => {
+        setError(null);
+      }, 1000 * 30);
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        "http://localhost:8000/gamer8/api/v1/users/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        },
+      );
+      setIsLoading(false);
+      navigate(response.ok ? "/" : "/login");
+      if (response.ok) {
+        console.log("User successfully logged in!");
+      } else {
+        console.log("There was an error!");
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  }
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  }
+
   return (
-    <div className="mx-auto flex h-[60%] w-[45%] flex-col rounded-xl bg-cyan-950 px-4 py-8">
+    <div className="mx-auto h-[60%] w-[45%] rounded-xl bg-cyan-950 px-4 py-8">
       <h1 className="mb-10 text-center text-2xl font-bold text-yellow-300">
         Login
       </h1>
-      <label
-        htmlFor="username"
-        className="mx-auto font-semibold text-yellow-300"
+      {error && (
+        <p className="mx-auto bg-red-500 p-4 text-base text-white">
+          Login Error: {error}
+        </p>
+      )}
+      <form
+        className="mx-auto flex h-[80%] w-[100%] flex-col rounded-xl bg-cyan-950 px-2"
+        onSubmit={handleLoginSubmit}
       >
-        Username
-      </label>
-      <input
-        id="username"
-        placeholder="username | email"
-        className="mx-auto mb-8 h-[6%] w-[80%] rounded-md bg-cyan-800 px-2 placeholder-yellow-300 placeholder-opacity-70"
-      />
+        <LoginInput
+          label="Username"
+          placeholder="Username or Email"
+          name="usernameOrEmail"
+          isPassword={false}
+          value={formData.usernameOrEmail}
+          onChange={handleChange}
+        />
+        <LoginInput
+          label="Password"
+          placeholder="Password"
+          name="password"
+          isPassword={true}
+          value={formData.password}
+          onChange={(e) =>
+            setFormData({ ...formData, password: e.target.value })
+          }
+        />
+        <button
+          className="mx-auto h-[8%] w-[20%] rounded-md bg-yellow-300 font-bold text-cyan-950"
+          type="submit"
+        >
+          {isLoading ? <Spinner className="" /> : "Login"}
+        </button>
+      </form>
 
-      <label
-        htmlFor="password"
-        className="mx-auto font-semibold text-yellow-300"
-      >
-        Password
-      </label>
-      <input
-        id="password"
-        type="password"
-        placeholder="username or email"
-        className="mx-auto mb-8 h-[6%] w-[80%] rounded-md bg-cyan-800 px-2 placeholder-yellow-300 placeholder-opacity-70"
-      />
-      <button className="mx-auto h-[8%] w-[20%] rounded-md bg-yellow-300 font-bold text-cyan-950">
-        Login
-      </button>
-      <p className="mx-auto text-yellow-300 ">New user? <span onClick={() => navigate("/register")}>Register here</span></p>
+      <p className="mx-auto mt-4 text-yellow-300">
+        New user?{" "}
+        <button
+          className="hover:underline"
+          onClick={() => navigate("/register")}
+        >
+          Register here &rarr;
+        </button>
+      </p>
     </div>
   );
 }

@@ -6,17 +6,8 @@ const logger = require("morgan");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 
-// Routers
-const userRouter = require("./routes/userRoutes");
-const ratingRouter = require("./routes/ratingRoutes");
-const gameRouter = require("./routes/gameRoutes");
-const authRouter = require("./routes/authRoutes");
-
 // setup app
 const app = express();
-
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
 
 // middlewares
 app.use(cors());
@@ -27,12 +18,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 require("dotenv").config();
 
+// Routers
+const userRouter = require("./routes/userRoutes");
+const ratingRouter = require("./routes/ratingRoutes");
+const gameRouter = require("./routes/gameRoutes");
+
 // ROUTE MOUNTS
 // app.use("/api/v1/games", gameRouter);
-app.use("gamer8/api/v1/users", userRouter);
-app.use("gamer8/api/v1/ratings", ratingRouter);
-app.use("gamer8/api/v1/games", gameRouter);
-app.use("gamer8/api/v1/auth", authRouter);
+app.use("/gamer8/api/v1/users", userRouter);
+app.use("/gamer8/api/v1/ratings", ratingRouter);
+app.use("/gamer8/api/v1/games", gameRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -50,7 +45,7 @@ const limiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   message: "Too many requests from this IP, please try again in an hour!",
 });
-app.use("/api", limiter);
+app.use("/gamer8/api", limiter);
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -59,8 +54,10 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render("error");
+  res.status(err.status || 500).json({
+    status: "failed",
+    error: err,
+  });
 });
 
 module.exports = app;

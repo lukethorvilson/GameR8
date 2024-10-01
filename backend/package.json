@@ -17,6 +17,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "~1.9.1",
     "node-fetch": "^3.3.2",
+    "pg": "^8.13.0",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7"
   }

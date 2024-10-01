@@ -1,6 +1,6 @@
 import React from "react";
 
-function RegisterInput({ label, id, name, value, onChange }) {
+function RegisterInput({ label, id, name, isPassword, value, onChange }) {
   return (
     <div>
       <label
@@ -13,6 +13,7 @@ function RegisterInput({ label, id, name, value, onChange }) {
         id={id}
         name={name}
         placeholder={label}
+        type={isPassword ? "password" : ""}
         value={value}
         onChange={onChange}
         className="mx-auto mb-8 h-[30%] w-[95%] rounded-md bg-cyan-800 px-2 text-yellow-300 placeholder-yellow-300 placeholder-opacity-60"
