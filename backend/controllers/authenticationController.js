@@ -58,7 +58,7 @@ exports.login = async (req, res, next) => {
     throw new Error("Please provide email/username and password!");
     return;
   }
-
+  
   // check if user exists && password is correct
   const user = await User.findOne({
     where: {
