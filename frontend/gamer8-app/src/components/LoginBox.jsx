@@ -63,7 +63,7 @@ function LoginBox() {
         </p>
       )}
       <form
-        className="mx-auto flex h-[80%] w-[100%] flex-col rounded-xl bg-cyan-950 px-2"
+        className="mx-auto flex h-[70%] w-[100%] flex-col rounded-xl bg-cyan-950 px-2"
         onSubmit={handleLoginSubmit}
       >
         <LoginInput
@@ -85,14 +85,14 @@ function LoginBox() {
           }
         />
         <button
-          className="mx-auto h-[8%] w-[20%] rounded-md bg-yellow-300 font-bold text-cyan-950"
+          className="mx-auto h-[12%] w-[25%] rounded-md bg-yellow-300 font-bold text-cyan-950"
           type="submit"
         >
           {isLoading ? <Spinner className="" /> : "Login"}
         </button>
       </form>
 
-      <p className="mx-auto mt-4 text-yellow-300">
+      <p className="ml-4 mt-4 text-yellow-300">
         New user?{" "}
         <button
           className="hover:underline"

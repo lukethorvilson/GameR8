@@ -14,7 +14,7 @@ function LoginInput({ label, placeholder, name, value, onChange, isPassword }) {
         placeholder={placeholder}
         name={name}
         type={isPassword ? "password" : ""}
-        className="mb-8 h-[10%] w-[90%] content-start rounded-md bg-cyan-800 px-2 text-yellow-300 placeholder-yellow-300 placeholder-opacity-70"
+        className="mb-8 h-[14%] w-[90%] content-start rounded-md bg-cyan-800 px-2 text-yellow-300 placeholder-yellow-300 placeholder-opacity-70"
         value={value}
         onChange={onChange}
       />
