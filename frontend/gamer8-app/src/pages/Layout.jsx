@@ -1,13 +1,14 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 // import Footer from "../components/Footer";
 
 function Layout() {
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-screen w-screen">
       <NavBar />
       <Outlet />
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }
