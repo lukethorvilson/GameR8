@@ -9,6 +9,10 @@ const Rating = sequelize.define("Review", {
     autoIncrement: true,
     primaryKey: true,
   },
+  gameId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   title: {
     type: DataTypes.STRING,
     allowNull: true,

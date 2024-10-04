@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Ratings from "./pages/Ratings";
-import Games from "./pages/Games";
+import GamePage from "./pages/GamePage";
 import NavBar from "./components/NavBar";
 import Login from "./pages/Login";
 import Layout from "./pages/Layout";
@@ -14,7 +14,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/ratings" element={<Ratings />} />
-          <Route path="/games" element={<Games />} />
+          <Route path="/game/:id" element={<GamePage />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />}></Route>

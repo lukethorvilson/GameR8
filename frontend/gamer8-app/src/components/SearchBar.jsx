@@ -19,7 +19,7 @@ function SearchBar() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:8000/gamer8/api/v1/games?search=${dbSearchVal}`,
+          `${import.meta.env.VITE_RAWG_GAMES}?key=${import.meta.env.VITE_RAWG_API_KEY}&search=${dbSearchVal}`,
         );
 
         if (!response.ok) {
@@ -28,8 +28,9 @@ function SearchBar() {
         }
 
         const data = await response.json();
+        console.log(data);
         setSearchData(
-          data.data.results.map((game) => {
+          data.results.map((game) => {
             return {
               id: game.id,
               image: game.background_image,
@@ -50,7 +51,7 @@ function SearchBar() {
     } else {
       resultBox.current.classList.remove("h-0");
       resultBox.current.classList.add("h-72");
-      fetchGames();
+      if (dbSearchVal !== "") fetchGames();
     }
   }, [searchVal, dbSearchVal]);
 
@@ -75,10 +76,10 @@ function SearchBar() {
           <Spinner className="mx-auto mt-8 animate-spin text-6xl" />
         )}
 
-        {!isLoading && searchData.length && (
+        {!isLoading && searchData.length > 0 && (
           <div className="mx-auto flex w-[95%] flex-col rounded-md border-l-2 border-r-2 border-yellow-300 px-2 py-2">
             {searchData.map((game) => (
-              <SearchedGameEntry key={game.id} game={game} />
+              <SearchedGameEntry game={game} setSearchVal />
             ))}
           </div>
         )}
