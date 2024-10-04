@@ -1,21 +1,36 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
+import debounce from "lodash/debounce";
 import Spinner from "./Spinner";
 import SearchedGameEntry from "./SearchedGameEntry";
+import { values } from "lodash";
 
 function SearchBar() {
   const [searchVal, setSearchVal] = useState("");
-  const [dbSearchVal] = useDebounce(searchVal, 700);
+  const [dbSearchVal, setDbSearchVal] = useState("");
   const resultBox = useRef(null);
   const [searchData, setSearchData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const updateSearchVal = useCallback(
+    debounce((value) => {
+      setDbSearchVal(value);
+    }, 500),
+  );
+
+  // Update dbSearchVal whenever searchVal changes
   useEffect(() => {
-    async function fetchGames() {
-      if (!dbSearchVal || dbSearchVal === "") {
-        setSearchData([]);
+    updateSearchVal(searchVal);
+  }, [searchVal, updateSearchVal]);
+
+  // Fetch games data
+  useEffect(() => {
+    const fetchGames = async () => {
+      if (!dbSearchVal) {
+        setSearchData([]); // Empty search value should clear the data
         return;
       }
+
       setIsLoading(true);
       try {
         const response = await fetch(
@@ -23,37 +38,41 @@ function SearchBar() {
         );
 
         if (!response.ok) {
-          setIsLoading(false);
           throw new Error("Network response was not ok");
         }
 
         const data = await response.json();
-        console.log(data);
-        setSearchData(
-          data.results.map((game) => {
-            return {
-              id: game.id,
-              image: game.background_image,
-              name: game.name,
-            };
-          }),
-        );
-        console.log(searchData);
-        setIsLoading(false);
+        const results = data.results.map((game) => ({
+          id: game.id,
+          image: game.background_image,
+          name: game.name,
+        }));
+
+        setSearchData(results);
       } catch (err) {
-        setIsLoading(false);
         console.error("Fetch error: ", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (dbSearchVal) {
+      fetchGames();
+    }
+  }, [dbSearchVal]);
+
+  // Effect to manage the result box expansion
+  useEffect(() => {
+    if (resultBox.current) {
+      if (searchVal === "") {
+        resultBox.current.classList.remove("h-72");
+        resultBox.current.classList.add("h-0");
+      } else {
+        resultBox.current.classList.remove("h-0");
+        resultBox.current.classList.add("h-72");
       }
     }
-    if (searchVal === "") {
-      resultBox.current.classList.remove("h-72");
-      resultBox.current.classList.add("h-0");
-    } else {
-      resultBox.current.classList.remove("h-0");
-      resultBox.current.classList.add("h-72");
-      if (dbSearchVal !== "") fetchGames();
-    }
-  }, [searchVal, dbSearchVal]);
+  }, [searchVal]); // Effect to manage the result box height
 
   return (
     <>
