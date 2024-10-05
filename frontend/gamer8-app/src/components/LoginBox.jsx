@@ -33,6 +33,8 @@ function LoginBox() {
         },
       );
       setIsLoading(false);
+      const data = await response.json();
+      console.log(data)
       navigate(response.ok ? "/" : "/login");
       if (response.ok) {
         console.log("User successfully logged in!");
