@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginInput from "./LoginInput";
 import Spinner from "./Spinner";
+
 function LoginBox() {
   const [formData, setFormData] = useState({
     usernameOrEmail: "",
@@ -34,7 +35,17 @@ function LoginBox() {
       );
       setIsLoading(false);
       const data = await response.json();
-      console.log(data)
+      if (response.ok) {
+        localStorage.setItem(
+          "token",
+          JSON.stringify({
+            token: data.accessToken,
+            refreshToken: data.refreshToken,
+          }),
+        );
+        localStorage.setItem("user", JSON.stringify({ user: data.user }));
+      }
+
       navigate(response.ok ? "/" : "/login");
       if (response.ok) {
         console.log("User successfully logged in!");

@@ -78,27 +78,40 @@ exports.login = async (req, res, next) => {
     });
   }
 
-  const accessToken = jwt.sign({user: user.username}, process.env.NODE_JWT_SECRET, {
-    expiresIn: process.env.NODE_JWT_EXPIRES_IN,
-  });
-  const refreshToken = jwt.sign({user: user.username}, process.env.NODE_JWT_REFRESH_SECRET);
+  const accessToken = jwt.sign(
+    { user: user.username },
+    process.env.NODE_JWT_SECRET,
+    {
+      expiresIn: process.env.NODE_JWT_EXPIRES_IN,
+    }
+  );
+  const refreshToken = jwt.sign(
+    { user: user.username },
+    process.env.NODE_JWT_REFRESH_SECRET
+  );
   refreshTokens.push(refreshToken);
-
-  res.status(200).json({ accessToken, refreshToken });
+  user.password = undefined
+  res
+    .status(200)
+    .json({
+      accessToken,
+      refreshToken,
+      user,
+    });
 };
 
 exports.logout = (req, res) => {
-  const {refreshToken} = req.body;
-  if(!refreshToken) {
+  const { refreshToken } = req.body;
+  if (!refreshToken) {
     return res.sendStatus(400);
   }
 
   const index = refreshTokens.indexOf(refreshToken);
-  if(index !== -1) {
+  if (index !== -1) {
     refreshTokens.splice(index, 1);
   }
   res.sendStatus(204);
-}
+};
 
 const authenticationMiddleware = (req, res, next) => {
   // get the token from the header to verify
@@ -145,9 +158,13 @@ const generateNewToken = (req, res) => {
     if (err) {
       return res.sendStatus(403);
     }
-    const accessToken = jwt.sign({ username: user.username }, process.env.NODE_JWT_SECRET, {
-      expiresIn: process.env.NODE_JWT_EXPIRES_IN,
-    });
+    const accessToken = jwt.sign(
+      { username: user.username },
+      process.env.NODE_JWT_SECRET,
+      {
+        expiresIn: process.env.NODE_JWT_EXPIRES_IN,
+      }
+    );
     res.send(201).json({ accessToken });
   });
 };
