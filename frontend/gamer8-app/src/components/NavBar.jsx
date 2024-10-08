@@ -12,7 +12,7 @@ function NavBar() {
   }
 
   return (
-    <div className="sticky mx-auto flex h-20 w-[100%] flex-row justify-between bg-cyan-950 text-center text-base">
+    <div className="sticky top-0 z-10 mx-auto flex h-20 w-[100%] flex-row justify-between bg-cyan-950 text-center text-base">
       <div className="h-[100%] w-[15%] content-center justify-center">
         <Logo className="ml-4 cursor-default text-6xl font-extrabold text-yellow-300" />
       </div>

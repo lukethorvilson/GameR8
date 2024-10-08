@@ -20,25 +20,48 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
-  try{
-    const {firstName, lastName, email, username, password, passwordCheck} = req.body
-    const fullName = `${firstName} ${lastName}`
-    const newUser = await User.create({fullName, email, username, password})
+  try {
+    const { firstName, lastName, email, username, password, passwordCheck } =
+      req.body;
+    const fullName = `${firstName} ${lastName}`;
+    const newUser = await User.create({ fullName, email, username, password });
     res.status(201).json({
-        status: "success",
-        data: {
-            newUser
-        }
-    })
-  }catch(err){
+      status: "success",
+      data: {
+        newUser,
+      },
+    });
+  } catch (err) {
     res.status(400).json({
-        status: "failed",
-        message: {
-            err
-        }
-    })
+      status: "failed",
+      message: {
+        err,
+      },
+    });
   }
 };
 
+exports.getLoggedUser = async (req, res) => {
+  const { userId: id, userUsername: username } = req.user;
+  if (!id || !username) {
+    return res.status(401).json({
+      status: "failed",
+      message: "You must login before accessing this page!",
+    });
+  }
+  try{
+    const user = await User.findByPk(+id);
+    if(user){
+      user.password = undefined
+    }
+    res.status(200).json({
+      status: "success",
+      body: {
+        user
+      }
+    })
+  } catch(err){
 
-exports
+  }
+  
+};

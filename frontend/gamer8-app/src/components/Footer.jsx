@@ -2,12 +2,17 @@ import React from "react";
 
 function Footer() {
   return (
-    <div className="absolute bottom-0 flex h-[15vh] w-screen bg-cyan-950">
+    <footer className="fixed bottom-0 z-0 flex h-[60px] w-screen bg-cyan-950">
       <p className="mx-auto my-auto align-middle font-bold text-yellow-300">
         Powered by
-        <a className="ml-2 text-2xl hover:text-[26px] transition-all font-extrabold text-white" href="https://rawg.io/">R A W G</a>
+        <a
+          className="ml-2 text-2xl font-extrabold text-white transition-all hover:text-[26px]"
+          href="https://rawg.io/"
+        >
+          R A W G
+        </a>
       </p>
-    </div>
+    </footer>
   );
 }
 

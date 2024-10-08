@@ -98,7 +98,7 @@ function SearchBar() {
         {!isLoading && searchData.length > 0 && (
           <div className="mx-auto flex w-[95%] flex-col rounded-md border-l-2 border-r-2 border-yellow-300 px-2 py-2">
             {searchData.map((game) => (
-              <SearchedGameEntry game={game} setSearchVal />
+              <SearchedGameEntry key={game.id} game={game} setSearchVal />
             ))}
           </div>
         )}

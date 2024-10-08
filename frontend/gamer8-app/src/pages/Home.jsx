@@ -1,9 +1,9 @@
 import React from "react";
-import useStoredData from "../hooks/useStoredData";
+import useLoggedUser from "../hooks/useLoggedUser";
 
 function Home() {
-  const [user, tokens] = useStoredData();
-  return <div className="text-4xl">{user.user.fullName}</div>;
+  const [hasAccess, user, setUser, isLoading] = useLoggedUser()
+  return <div className="text-4xl">{user.fullName}</div>;
 
 }
 

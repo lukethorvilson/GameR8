@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 
 function Layout() {
   return (
-    <div className="relative h-screen w-screen">
+    <div className="relative flex flex-col h-full w-full">
       <NavBar />
       <Outlet />
       <Footer />
