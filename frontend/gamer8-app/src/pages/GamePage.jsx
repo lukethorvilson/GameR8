@@ -1,11 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import RatingInput from "../components/RatingInput";
 
 function GamePage() {
   const { id } = useParams();
   const [gameData, setGameData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const ratingForm = useRef();
+  const ratingButton = useRef();
+  const [formShown, setFormShown] = useState(false);
+
+  function handleClickRating() {
+    setFormShown((val) => !val);
+  }
+
+  useEffect(() => {
+    if (formShown) {
+    }
+  }, [formShown]);
 
   useEffect(() => {
     async function fetchGame() {
@@ -50,7 +63,6 @@ function GamePage() {
                 : "No game description available"}
             </p>
 
-
             {gameData.platforms.length && (
               <>
                 <h3 className="ml-8 mt-4 border-b-2 border-yellow-300 pb-2 text-lg text-yellow-300">
@@ -58,10 +70,13 @@ function GamePage() {
                 </h3>
                 <ul className="ml-12 list-disc text-yellow-300">
                   {gameData.platforms.map((platform) => (
-                    <li key={platform.platform.id} className="italic">{platform.platform.name}</li>
+                    <li key={platform.platform.id} className="italic">
+                      {platform.platform.name}
+                    </li>
                   ))}
                 </ul>
-              </>)}
+              </>
+            )}
 
             {gameData.genres && (
               <>
@@ -70,7 +85,9 @@ function GamePage() {
                 </h3>
                 <ul className="ml-12 list-disc text-yellow-300">
                   {gameData.genres.map((genre) => (
-                    <li key={genre.id} className="italic">{genre.name}</li>
+                    <li key={genre.id} className="italic">
+                      {genre.name}
+                    </li>
                   ))}
                 </ul>
               </>
@@ -88,6 +105,31 @@ function GamePage() {
             ) : (
               <h2>No rating available!</h2>
             )}
+            <hr className="my-4 h-8 w-full rounded-xl border-none bg-cyan-950" />
+            <h1 className="text-center text-4xl font-semibold text-yellow-300">
+              {gameData.name}'s' R<span className="font-bold italic">8</span>
+              ings
+            </h1>
+            <button
+              ref={ratingButton}
+              onClick={handleClickRating}
+              className="mx-auto my-4 flex rounded-md bg-yellow-300 px-[40dvw] py-2 text-2xl"
+            >
+              R8 {gameData.name}
+            </button>
+            <form className="mx-auto flex w-[90dvw] flex-col">
+              <label htmlFor="review-desc" className="text-lg text-yellow-300">
+                Write your review here!
+              </label>
+              <textarea
+                id="review-desc"
+                type="text"
+                maxLength={1000}
+                placeholder={`Write your review about ${gameData.name} here!`}
+                className="text-left p-2 h-[12dvh] overflow-y-auto border-2 border-yellow-300 bg-cyan-900 text-yellow-300 placeholder-yellow-300 placeholder-opacity-60 focus:ring-2 focus:ring-yellow-300"
+              />
+              <RatingInput className="text-6xl cursor-pointer"/>
+            </form>
           </div>
         </div>
       )}
