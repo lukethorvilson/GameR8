@@ -7,17 +7,34 @@ function GamePage() {
   const { id } = useParams();
   const [gameData, setGameData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const ratingForm = useRef();
-  const ratingButton = useRef();
+  const ratingForm = useRef(null);
+  const ratingButton = useRef(null);
   const [formShown, setFormShown] = useState(false);
-
+  let fadeTimeOut;
   function handleClickRating() {
     setFormShown((val) => !val);
   }
 
   useEffect(() => {
-    if (formShown) {
+    if (ratingButton.current && ratingForm.current) {
+      if (formShown) {
+        ratingButton.current.classList.add("hidden");
+        ratingForm.current.classList.add("animate-fadeIn");
+        ratingForm.current.classList.add("flex");
+        ratingForm.current.classList.add("flex-col");
+        ratingForm.current.classList.remove("hidden");
+      } else {
+        clearTimeout(fadeTimeOut);
+        ratingForm.current.classList.remove("animate-fadeIn");
+        ratingForm.current.classList.add("animate-fadeOut");
+
+        fadeTimeOut = setTimeout(() => {
+          ratingForm.current.classList.add("hidden");
+          ratingButton.current.classList.remove("hidden");
+        }, 250);
+      }
     }
+    return () => clearTimeout(fadeTimeOut);
   }, [formShown]);
 
   useEffect(() => {
@@ -112,12 +129,33 @@ function GamePage() {
             </h1>
             <button
               ref={ratingButton}
+              type="button"
               onClick={handleClickRating}
-              className="mx-auto my-4 flex rounded-md bg-yellow-300 px-[40dvw] py-2 text-2xl"
+              className={`mx-auto my-4 flex rounded-md bg-yellow-300 px-[40dvw] py-2 text-2xl`}
             >
               R8 {gameData.name}
             </button>
-            <form className="mx-auto flex w-[90dvw] flex-col">
+            <form ref={ratingForm} className={`mx-auto hidden w-[90dvw]`}>
+              <div className="my-4 h-[5vh]">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setFormShown((val) => !val);
+                  }}
+                  className="h-fit w-fit rounded-xl border-2 border-yellow-300 px-4 py-2 text-left text-2xl font-bold text-yellow-300 hover:border-4"
+                >
+                  x
+                </button>
+              </div>
+
+              <label htmlFor="title" className="text-lg text-yellow-300">
+                Title
+              </label>
+              <input
+                type="text"
+                id="title"
+                className="h-[3dvh] overflow-y-auto rounded-md border-2 border-yellow-300 bg-cyan-900 p-2 text-left text-yellow-300 placeholder-yellow-300 placeholder-opacity-60 focus:ring-2 focus:ring-yellow-300"
+              ></input>
               <label htmlFor="review-desc" className="text-lg text-yellow-300">
                 Write your review here!
               </label>
@@ -126,9 +164,9 @@ function GamePage() {
                 type="text"
                 maxLength={1000}
                 placeholder={`Write your review about ${gameData.name} here!`}
-                className="text-left p-2 h-[12dvh] overflow-y-auto border-2 border-yellow-300 bg-cyan-900 text-yellow-300 placeholder-yellow-300 placeholder-opacity-60 focus:ring-2 focus:ring-yellow-300"
+                className="h-[12dvh] overflow-y-auto rounded-md border-2 border-yellow-300 bg-cyan-900 p-2 text-left text-yellow-300 placeholder-yellow-300 placeholder-opacity-60 focus:ring-2 focus:ring-yellow-300"
               />
-              <RatingInput className="text-6xl cursor-pointer"/>
+              <RatingInput className="cursor-pointer text-6xl" />
             </form>
           </div>
         </div>
