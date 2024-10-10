@@ -3,7 +3,7 @@ import { useDebounce } from "use-debounce";
 import debounce from "lodash/debounce";
 import Spinner from "./Spinner";
 import SearchedGameEntry from "./SearchedGameEntry";
-import { values } from "lodash";
+import clickDetector from "../utils/ClickDetector";
 
 function SearchBar() {
   const [searchVal, setSearchVal] = useState("");
@@ -64,6 +64,8 @@ function SearchBar() {
   // Effect to manage the result box expansion
   useEffect(() => {
     if (resultBox.current) {
+      if (resultBox.current.classList.contains("hidden"))
+        resultBox.current.classList.remove("hidden");
       if (searchVal === "") {
         resultBox.current.classList.remove("h-72");
         resultBox.current.classList.add("h-0");
@@ -73,6 +75,8 @@ function SearchBar() {
       }
     }
   }, [searchVal]); // Effect to manage the result box height
+
+  clickDetector(resultBox);
 
   return (
     <>
