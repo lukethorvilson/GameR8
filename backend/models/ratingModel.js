@@ -43,10 +43,12 @@ const Rating = sequelize.define("Review", {
 
 Rating.hasOne(User, {
   onDelete: "NO ACTION",
+  foreignKey: "userId",
 });
 
 User.hasMany(Rating, {
   onDelete: "CASCADE",
+  foreignKey: "userId",
 });
 
 module.exports = Rating;
