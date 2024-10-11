@@ -89,7 +89,7 @@ exports.login = async (req, res, next) => {
   res
     .cookie("access_token", token, {
       httpOnly: true,
-      maxAge: process.env.NODE_JWT_COOKIE_EXPIRES_IN * 1000 * 60,
+      sameSite: "None",
       secure: process.env.NODE_ENV === "production" ? true : false,
       path: "/",
     })
@@ -102,7 +102,6 @@ exports.login = async (req, res, next) => {
 
 exports.authorization = (req, res, next) => {
   const token = req.cookies.access_token;
-  console.log("Response cookies: ", res.cookies);
   if (!token) {
     console.log("💥ERROR: Token wasn't accessable!");
     return res.sendStatus(403);

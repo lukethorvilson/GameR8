@@ -19,13 +19,12 @@ export default function useLoggedUser() {
           },
         );
         if (response.ok) {
-          let data = await response.json();
-          data = data.parse();
+          const data = await response.json();
           if (data?.body?.user) {
             setUser(data.body.user);
           }
-          isLoading(false);
-        } else if (response.status === 401 || response === 403) {
+          setIsLoading(false);
+        } else if (response.status === 401 || response.status === 403) {
           setUser({});
           setIsLoading(false);
         }

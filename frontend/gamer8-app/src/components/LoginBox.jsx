@@ -31,6 +31,7 @@ function LoginBox() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
+          credentials: "include", // Include cookies with requests
         },
       );
       setIsLoading(false);

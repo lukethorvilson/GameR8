@@ -42,7 +42,8 @@ exports.createUser = async (req, res) => {
 };
 
 exports.getLoggedUser = async (req, res) => {
-  const { userId: id, userUsername: username } = req.user;
+  const { id, username } = req.user;
+  console.log(id, username)
   if (!id || !username) {
     return res.status(401).json({
       status: "failed",
