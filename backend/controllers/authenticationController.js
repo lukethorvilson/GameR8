@@ -2,6 +2,9 @@ const User = require("../models/userModel");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const catchAsync = require("../util/catchAsync");
+const AppError = require("../util/appError");
+const validator = require("validator");
 const refreshTokens = [];
 
 // Helpful Links and attributions
@@ -26,33 +29,56 @@ exports.createTokens = (req, res) => {
   });
 };
 
-exports.register = async (req, res, next) => {
-  try {
-    const { firstName, lastName, email, username, password, passwordCheck } =
-      req.body;
-    if (password !== passwordCheck) {
-      return res.status(400).json({
-        status: "failed",
-        message: "Passwords do not match",
-      });
-    }
-    const fullName = `${firstName} ${lastName}`;
-    const newUser = await User.create({ fullName, email, username, password });
-    if (newUser) {
-      res.status(201).json({
-        status: "success",
-        body: {
-          message: `Welcome to GameR8 ${newUser.fullName}!`,
-        },
-      });
-    }
-  } catch (err) {
-    res.status(400).json({
-      status: "failed",
-      message: err.message
+exports.register = catchAsync(async (req, res, next) => {
+  const { firstName, lastName, email, username, password, passwordCheck } =
+    req.body;
+
+  if (!email || !validator.isEmail(email)) {
+    return next(
+      new AppError(
+        "The email you are using is not of correct format. Please retry with a different email of correct format. Thank you!",
+        400
+      )
+    );
+  }
+  if (!username || !validator.isAlphanumeric(username)) {
+    return next(
+      new AppError(
+        "The username you are using contains bad characters. Characters: Aa-Zz, and numbers: 0-9 are permitted. Please try again, thank you!",
+        400
+      )
+    );
+  }
+  if (password !== passwordCheck) {
+    return next(
+      new AppError("Please use matching passwords to register! Thank you!", 400)
+    );
+  }
+
+  const existingUserCount = await User.count({
+    where: {
+      // Check if either the email or username matches
+      [Sequelize.Op.or]: [{ email: email }, { username: username }],
+    },
+  });
+  if (existingUserCount > 0) {
+    return next(
+      new AppError(
+        "The username or email already has an associated account. Please try again with a different username or email. Thank you!",
+        409
+      )
+    );
+  }
+
+  const fullName = `${firstName} ${lastName}`;
+  const newUser = await User.create({ fullName, email, username, password });
+  if (newUser) {
+    res.status(201).json({
+      status: "success",
+      message: `Welcome to GameR8 ${newUser.fullName}!`,
     });
   }
-};
+});
 
 exports.login = async (req, res, next) => {
   const { usernameOrEmail, password } = req.body;
