@@ -3,12 +3,22 @@ const catchAsync = require("../util/catchAsync");
 const AppError = require("../util/appError");
 
 exports.getAllRatings = catchAsync(async (req, res) => {
-  const ratings = await Rating.findAll();
+  let ratings;
+  if (req.params?.gameId) {
+    ratings = await Rating.findAll({
+      where: {
+        gameId: req.params.gameId,
+      },
+    });
+  } else {
+    ratings = await Rating.findAll();
+  }
+
   if (ratings || ratings?.length >= 0) {
     res.status(200).json({
       status: "success",
       results: ratings.length,
-      data: {
+      body: {
         ratings,
       },
     });
@@ -27,7 +37,7 @@ exports.postRating = catchAsync(async (req, res, next) => {
       )
     );
   }
-  console.log(req.body)
+  console.log(req.body);
   // get the rating, check for at least the rating number(minimum req for rating a game)
   const { title, description, rating, gameId } = req.body;
   if (!rating || !gameId) {
@@ -50,12 +60,12 @@ exports.postRating = catchAsync(async (req, res, next) => {
     description,
     rating,
     userId: user.id,
-    gameId
+    gameId,
   });
   // send new rating back
   res.status(201).json({
     status: "success",
-    data: {
+    body: {
       newRating,
     },
   });

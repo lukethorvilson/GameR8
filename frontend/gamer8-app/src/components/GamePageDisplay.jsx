@@ -1,6 +1,7 @@
 import React from "react";
 import GamePageDetails from "./GamePageDetails";
 import GameRateForm from "./GameRateForm";
+import RatingList from "./RatingList";
 
 function GamePageDisplay({
   gameData,
@@ -33,6 +34,8 @@ function GamePageDisplay({
             handleClickRating={handleClickRating}
             setFormShown={setFormShown}
           />
+          <hr className="my-4 h-8 w-full rounded-xl border-none bg-cyan-950" />
+          <RatingList />
         </div>
       </div>
     </>
