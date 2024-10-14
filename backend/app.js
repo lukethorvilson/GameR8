@@ -5,11 +5,15 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
+const morgan = require("morgan")
+// error handler
 
 // setup app
 const app = express();
 require("dotenv").config();
 
+const AppError = require("./util/appError");
+const globalErrorHandler = require("./controllers/errorController");
 // middlewares
 app.use(
   cors({
@@ -52,17 +56,12 @@ const limiter = rateLimit({
 });
 app.use("/gamer8/api", limiter);
 
-// error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
-  res.status(err.status || 500).json({
-    status: "failed",
-    error: err,
-  });
+// global error handler
+app.all("*", (req, res, next) => {
+  next(new AppError(`Cant find ${req.originalUrl} on this server.`, 404));
 });
+
+// EXPRESS's error handling middleware
+app.use(globalErrorHandler);
 
 module.exports = app;

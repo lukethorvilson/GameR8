@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const catchAsync = require("../util/catchAsync");
 const AppError = require("../util/appError");
 const validator = require("validator");
+const Sequelize = require("sequelize");
 const refreshTokens = [];
 
 // Helpful Links and attributions
@@ -34,6 +35,7 @@ exports.register = catchAsync(async (req, res, next) => {
     req.body;
 
   if (!email || !validator.isEmail(email)) {
+    console.log("error in email error!");
     return next(
       new AppError(
         "The email you are using is not of correct format. Please retry with a different email of correct format. Thank you!",
@@ -42,6 +44,7 @@ exports.register = catchAsync(async (req, res, next) => {
     );
   }
   if (!username || !validator.isAlphanumeric(username)) {
+    console.log("Username error");
     return next(
       new AppError(
         "The username you are using contains bad characters. Characters: Aa-Zz, and numbers: 0-9 are permitted. Please try again, thank you!",
@@ -49,7 +52,9 @@ exports.register = catchAsync(async (req, res, next) => {
       )
     );
   }
+
   if (password !== passwordCheck) {
+    console.log("Password error");
     return next(
       new AppError("Please use matching passwords to register! Thank you!", 400)
     );
@@ -73,19 +78,21 @@ exports.register = catchAsync(async (req, res, next) => {
   const fullName = `${firstName} ${lastName}`;
   const newUser = await User.create({ fullName, email, username, password });
   if (newUser) {
-    res.status(201).json({
+    return res.status(201).json({
       status: "success",
       message: `Welcome to GameR8 ${newUser.fullName}!`,
     });
   }
 });
 
-exports.login = async (req, res, next) => {
+exports.login = catchAsync(async (req, res, next) => {
   const { usernameOrEmail, password } = req.body;
 
   // check existance of password or user/email
   if (!usernameOrEmail || !password) {
-    throw new Error("Please provide email/username and password!");
+    return next(
+      new AppError("Please provide email/username and password!", 400)
+    );
   }
 
   // check if user exists && password is correct
@@ -97,10 +104,12 @@ exports.login = async (req, res, next) => {
 
   // compare the password to the correct password
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(400).json({
-      status: "failed",
-      message: "Incorrect username/email or password! Please try again!",
-    });
+    return next(
+      new AppError(
+        "Incorrect username/email or password! Please try again!",
+        400
+      )
+    );
   }
 
   const token = jwt.sign(
@@ -114,7 +123,7 @@ exports.login = async (req, res, next) => {
     .cookie("access_token", token, {
       httpOnly: true,
       sameSite: "None",
-      secure: process.env.NODE_ENV === "production" ? true : false,
+      secure: true,
       path: "/",
     })
     .status(200)
@@ -122,7 +131,7 @@ exports.login = async (req, res, next) => {
       status: "success",
       message: `Login successful! Welcome ${user.fullName}!`,
     });
-};
+});
 
 exports.authorization = (req, res, next) => {
   const token = req.cookies.access_token;

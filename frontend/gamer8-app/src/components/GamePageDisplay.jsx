@@ -7,6 +7,7 @@ function GamePageDisplay({
   ratingButton,
   ratingForm,
   handleClickRating,
+  setFormShown,
 }) {
   return (
     <>
@@ -30,6 +31,7 @@ function GamePageDisplay({
             ratingButton={ratingButton}
             ratingForm={ratingForm}
             handleClickRating={handleClickRating}
+            setFormShown={setFormShown}
           />
         </div>
       </div>

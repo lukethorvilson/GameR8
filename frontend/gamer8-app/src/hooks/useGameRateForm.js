@@ -31,7 +31,7 @@ const useGameRateForm = () => {
     return () => clearTimeout(fadeTimeOut);
   }, [formShown]);
 
-  return [ratingButton, ratingForm, handleClickRating];
+  return [ratingButton, ratingForm, setFormShown, handleClickRating];
 };
 
 export default useGameRateForm;

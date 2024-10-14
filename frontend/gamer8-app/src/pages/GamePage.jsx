@@ -8,13 +8,22 @@ import GamePageDisplay from "../components/GamePageDisplay";
 // may need to use a context for some of the props being passed in here
 function GamePage() {
   const { id } = useParams();
-  const [ratingButton, ratingForm, handleClickRating] = useGameRateForm();
+  const [ratingButton, ratingForm, handleClickRating, setFormShown] =
+    useGameRateForm();
   const [gameData, isLoading] = useGamePageData(id);
 
   return (
     <div className="-z-10 h-fit w-full">
       {isLoading && <Spinner className="mx-auto" />}
-      {!isLoading && gameData && <GamePageDisplay gameData={gameData} ratingButton={ratingButton} ratingForm={ratingForm} handleClickRating={handleClickRating}/>}
+      {!isLoading && gameData && (
+        <GamePageDisplay
+          gameData={gameData}
+          ratingButton={ratingButton}
+          ratingForm={ratingForm}
+          handleClickRating={handleClickRating}
+          setFormShown={setFormShown}
+        />
+      )}
     </div>
   );
 }

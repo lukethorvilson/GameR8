@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import Eight from "./Eight";
 
-function RatingInput({ className }) {
-  const [rating, setRating] = useState(0);
+function RatingInput({ rating, setRating, className }) {
   const [hovered, setHovered] = useState(0);
-
   return (
     <>
       <h1 className="text-center text-yellow-300">Game R8 Score</h1>

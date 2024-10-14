@@ -16,9 +16,22 @@ function RegisterBox() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  let errorTimeout;
+
+  function handleError(message, seconds) {
+    // check for previous timeout
+    if (errorTimeout) {
+      clearTimeout(errorTimeout);
+    }
+    setError(message);
+    errorTimeout = setTimeout(() => {
+      setError(null);
+    }, 1000 * seconds);
+  }
 
   async function handleRegisterSubmit(e) {
     e.preventDefault();
+    // check for data in all fields, if missing throw new error:
     if (
       !formData.firstName ||
       !formData.lastName ||
@@ -27,17 +40,19 @@ function RegisterBox() {
       !formData.password ||
       !formData.passwordCheck
     ) {
-      setError("Please fill in all data fields to register as a user!");
-      setTimeout(() => {
-        setError(null);
-      }, 1000 * 30);
+      handleError("Please fill in all data fields to register as a user!", 30);
+      return;
+    }
+    // check for invalid password mismatch:
+    if (formData.password !== formData.passwordCheck) {
+      handleError(
+        "Password check didn't match! Please re-enter passwords and double check them!",
+        30,
+      );
       return;
     }
 
-    if (formData.password !== formData.passwordCheck)
-      throw new Error(
-        "Password check didn't match! Please re-enter passwords and double check them!",
-      );
+    // make the register request:
     try {
       setIsLoading(true);
       const response = await fetch(
@@ -50,15 +65,17 @@ function RegisterBox() {
           body: JSON.stringify(formData),
         },
       );
+      const data = await response.json();
       setIsLoading(false);
-      navigate(response.ok ? "/login" : "/register");
-      if (response.ok) {
-        console.log("User successfully created!");
-      } else {
-        console.log("There was an error!");
+      if (!response.ok) {
+        handleError(data.message, 30);
+        return;
       }
+      navigate(response.ok ? "/login" : "/register");
     } catch (err) {
-      console.error("Fetch error:", err);
+      console.error(err.message);
+      setIsLoading(false);
+      return;
     }
   }
 

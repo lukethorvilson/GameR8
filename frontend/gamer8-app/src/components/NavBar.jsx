@@ -3,9 +3,11 @@ import Logo from "../components/Logo";
 import SearchBar from "./SearchBar";
 import UserIcon from "./UserIcon";
 import { useState } from "react";
+import useLoggedUser from "../hooks/useLoggedUser";
+import { FaRegUserCircle } from "react-icons/fa";
 
 function NavBar() {
-  const [user, setUser] = useState(null);
+  const [hasAccess, user, setUser, isLoading] = useLoggedUser();
   const navigate = useNavigate();
   function navigateLogin() {
     navigate("/login");
@@ -21,14 +23,15 @@ function NavBar() {
         <SearchBar />
       </div>
       <div className="h-[100%] w-[10%] content-center justify-center text-yellow-300">
-        {user && <UserIcon className="mx-auto h-[50%] w-[50%]" />}
-        {!user && (
+        {!hasAccess ? (
           <button
             onClick={() => navigateLogin()}
             className="h-[40%] w-[60%] rounded-md bg-yellow-300 text-cyan-950"
           >
             Login
           </button>
+        ) : (
+          <FaRegUserCircle className="mx-auto h-[50%] w-[50%] text-yellow-300" />
         )}
       </div>
     </div>
