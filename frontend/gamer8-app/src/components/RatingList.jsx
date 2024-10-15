@@ -3,9 +3,10 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import Rating from "./Rating";
 
-function RatingList({ ratings, setRatings }) {
+function RatingList({ ratingData, setRatingData }) {
   const { id: gameId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     async function fetchRatings() {
       try {
@@ -17,7 +18,9 @@ function RatingList({ ratings, setRatings }) {
           },
         );
         const data = await response.json();
-        console.log(data);
+        if (response.ok) {
+          setRatings((curr) => ({ ...data.body.ratings }));
+        }
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
@@ -36,6 +39,7 @@ function RatingList({ ratings, setRatings }) {
         className="mx-auto my-6 flex h-fit w-[95%] justify-center rounded-md border-x-2 border-x-yellow-300 px-1"
       >
         {/* map each rating here to this rating object */}
+        {}
         <Rating rating />
       </div>
     </>

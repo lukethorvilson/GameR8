@@ -2,6 +2,7 @@ import React from "react";
 import GamePageDetails from "./GamePageDetails";
 import GameRateForm from "./GameRateForm";
 import RatingList from "./RatingList";
+import { useState } from "react";
 
 function GamePageDisplay({
   gameData,
@@ -10,6 +11,7 @@ function GamePageDisplay({
   handleClickRating,
   setFormShown,
 }) {
+  const [ratingData, setRatingData] = useState([]);
   return (
     <>
       <div className="flex h-[600px] w-full flex-col bg-cyan-800">

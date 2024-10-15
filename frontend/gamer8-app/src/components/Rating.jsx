@@ -1,7 +1,7 @@
 import React from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 
-function Rating() {
+function Rating({rating}) {
   return (
     <div className="flex h-fit w-[90%] flex-col rounded-lg border-4 border-cyan-950 bg-cyan-600 transition-all hover:border-8">
       <div id="username-container" className="mr-auto flex flex-row">
