@@ -61,6 +61,7 @@ exports.postRating = catchAsync(async (req, res, next) => {
     rating,
     userId: user.id,
     gameId,
+    author: user.username
   });
   // send new rating back
   res.status(201).json({

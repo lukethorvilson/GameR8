@@ -39,6 +39,11 @@ const Rating = sequelize.define("Review", {
     allowNull: false,
     defaultValue: 0,
   },
+  author: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: false
+  }
 });
 
 Rating.hasOne(User, {

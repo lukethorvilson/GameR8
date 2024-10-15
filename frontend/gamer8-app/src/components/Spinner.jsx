@@ -2,8 +2,8 @@ import React from "react";
 
 function Spinner({ className }) {
   return (
-    <div className={className + `animate-spin`}>
-      <span className="font-extrabold italic">8</span>
+    <div className={className}>
+      <span className="font-extrabold italic animate-spin">8</span>
     </div>
   );
 }

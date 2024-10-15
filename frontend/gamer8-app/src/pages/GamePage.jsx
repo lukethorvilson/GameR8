@@ -14,7 +14,15 @@ function GamePage() {
 
   return (
     <div className="-z-10 h-fit w-full">
-      {isLoading && <Spinner className="mx-auto" />}
+      {isLoading && (
+        <div className="flex h-screen w-screen items-center justify-center bg-cyan-800">
+          <div className="flex h-16 w-16 animate-spin items-center justify-center">
+            <h1 className="bold text-7xl font-extrabold italic text-yellow-300">
+              8
+            </h1>
+          </div>
+        </div>
+      )}
       {!isLoading && gameData && (
         <GamePageDisplay
           gameData={gameData}
