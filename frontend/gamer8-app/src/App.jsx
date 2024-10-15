@@ -6,6 +6,7 @@ import NavBar from "./components/NavBar";
 import Login from "./pages/Login";
 import Layout from "./pages/Layout";
 import Register from "./pages/Register";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/ratings" element={<Ratings />} />
           <Route path="/game/:id" element={<GamePage />} />
+          <Route path="/profile/:id" element={<ProfilePage />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />}></Route>

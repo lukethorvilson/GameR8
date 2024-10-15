@@ -10,6 +10,7 @@ function GameRateForm({
   gameData,
   ratingForm,
   setFormShown,
+  setRatingData,
 }) {
   const [ratingBody, setRatingBody] = useState({
     title: "",
@@ -38,14 +39,20 @@ function GameRateForm({
         },
       );
       const data = await response.json();
+      console.log(data)
       // if the data was submitted
       if (response.ok) {
         // TO-DO
         // if success we should get a new rating object back and place it in the current pool if ratings
-        console.log(data);
-
+        setRatingData((curr) => [ratingBody, ...curr]);
         // reset data and hide form!
-        
+        setRatingBody((curr) => ({
+          ...curr,
+          title: "",
+          description: "",
+          rating: 0,
+        }));
+        setFormShown(false);
       }
     } catch (err) {
       console.log(err.message);

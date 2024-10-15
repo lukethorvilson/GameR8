@@ -3,6 +3,7 @@ import GamePageDetails from "./GamePageDetails";
 import GameRateForm from "./GameRateForm";
 import RatingList from "./RatingList";
 import { useState } from "react";
+import useLoggedUser from "../hooks/useLoggedUser";
 
 function GamePageDisplay({
   gameData,
@@ -11,6 +12,7 @@ function GamePageDisplay({
   handleClickRating,
   setFormShown,
 }) {
+  const [hasAccess, user, setUser, isLoading] = useLoggedUser();
   const [ratingData, setRatingData] = useState([]);
   return (
     <>
@@ -24,20 +26,31 @@ function GamePageDisplay({
         </div>
         <div className="absolute top-2/3 h-fit w-screen rounded-t-xl bg-cyan-800 pb-[65px]">
           <GamePageDetails gameData={gameData} />
+          {!ratingData.some((entry) => {
+            if (entry.userId === user.id) {
+              return true;
+            } else {
+              return false;
+            }
+          }) && (
+            <>
+              <hr className="my-4 h-8 w-full rounded-xl border-none bg-cyan-950" />
+              <GameRateForm
+                gameData={gameData}
+                ratingButton={ratingButton}
+                ratingForm={ratingForm}
+                handleClickRating={handleClickRating}
+                setFormShown={setFormShown}
+                setRatingData={setRatingData}
+              />
+            </>
+          )}
           <hr className="my-4 h-8 w-full rounded-xl border-none bg-cyan-950" />
-          <h1 className="text-center text-4xl font-semibold text-yellow-300">
-            {gameData.name}'s' R<span className="font-bold italic">8</span>
-            ings
-          </h1>
-          <GameRateForm
-            gameData={gameData}
-            ratingButton={ratingButton}
-            ratingForm={ratingForm}
-            handleClickRating={handleClickRating}
-            setFormShown={setFormShown}
+          <RatingList
+            ratingData={ratingData}
+            setRatingData={setRatingData}
+            title={gameData.name}
           />
-          <hr className="my-4 h-8 w-full rounded-xl border-none bg-cyan-950" />
-          <RatingList />
         </div>
       </div>
     </>

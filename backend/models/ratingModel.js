@@ -42,11 +42,20 @@ const Rating = sequelize.define("Review", {
   author: {
     type: DataTypes.STRING,
     unique: true,
-    allowNull: false
-  }
+    allowNull: false,
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: "Users", // Name of the table in the database
+      key: "id", // Primary key in the Users table
+    },
+    onDelete: "CASCADE", // Optional: Deletes ratings if the user is deleted
+  },
 });
 
-Rating.hasOne(User, {
+Rating.belongsTo(User, {
   onDelete: "NO ACTION",
   foreignKey: "userId",
 });
