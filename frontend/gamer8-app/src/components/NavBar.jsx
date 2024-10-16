@@ -31,7 +31,12 @@ function NavBar() {
             Login
           </button>
         ) : (
-          <FaRegUserCircle onClick={() => {navigate("/profile")}} className="mx-auto h-[50%] w-[50%] text-yellow-300" />
+          <FaRegUserCircle
+            onClick={() => {
+              navigate(`/profile/${user.id}`);
+            }}
+            className="mx-auto h-[50%] w-[50%] text-yellow-300"
+          />
         )}
       </div>
     </div>

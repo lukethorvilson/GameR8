@@ -1,4 +1,6 @@
 const User = require("../models/userModel");
+const AppError = require("../util/appError");
+const catchAsync = require("../util/catchAsync");
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -43,26 +45,47 @@ exports.createUser = async (req, res) => {
 
 exports.getLoggedUser = async (req, res) => {
   const { id, username } = req.user;
-  console.log(id, username)
+  console.log(id, username);
   if (!id || !username) {
     return res.status(401).json({
       status: "failed",
       message: "You must login before accessing this page!",
     });
   }
-  try{
+  try {
     const user = await User.findByPk(+id);
-    if(user){
-      user.password = undefined
+    if (user) {
+      user.password = undefined;
     }
     res.status(200).json({
       status: "success",
       body: {
-        user
-      }
-    })
-  } catch(err){
-
-  }
-  
+        user,
+      },
+    });
+  } catch (err) {}
 };
+
+exports.getUserById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id)
+  if (!id)
+    return next(new AppError("Bad Request: User was not specified.", 400));
+
+  const user = await User.findOne({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!user) return next(new AppError("User not found!", 404));
+
+  user.password = undefined;
+
+  return res.status(200).json({
+    status: "success",
+    body: {
+      user,
+    },
+  });
+});

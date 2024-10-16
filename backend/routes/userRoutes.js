@@ -12,6 +12,10 @@ router
   .get(userController.getAllUsers)
   .post(userController.createUser);
 
-router.route("/logged").get(authController.authorization, userController.getLoggedUser)
+router
+  .route("/logged")
+  .get(authController.authorization, userController.getLoggedUser);
+
+router.route("/:id").get(userController.getUserById);
 
 module.exports = router;
