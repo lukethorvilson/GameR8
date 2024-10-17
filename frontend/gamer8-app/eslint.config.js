@@ -41,6 +41,8 @@ export default [
         "warn",
         { allowConstantExport: true },
       ],
+      // Ensure the exhaustiveness of useEffect dependencies is checked
+      "react-hooks/exhaustive-deps": "warn", // or "error" to make it more strict
     },
   },
 ];

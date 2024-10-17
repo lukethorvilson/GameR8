@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes, Deferrable } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../db");
 const User = require("./userModel");
 
@@ -51,7 +51,6 @@ const Rating = sequelize.define("Review", {
       model: "Users", // Name of the table in the database
       key: "id", // Primary key in the Users table
     },
-    onDelete: "CASCADE", // Optional: Deletes ratings if the user is deleted
   },
 });
 

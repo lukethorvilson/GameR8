@@ -19,8 +19,8 @@ export default function useGamePageData(id) {
         setIsLoading(false);
       }
     }
-    if (!gameData) fetchGame();
-  }, []);
+    fetchGame();
+  }, [id]);
 
   return [gameData, isLoading];
 }
