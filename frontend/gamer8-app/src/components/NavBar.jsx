@@ -18,7 +18,7 @@ function NavBar() {
       <div className="h-[100%] w-[15%] content-center justify-center">
         <Logo
           onClick={() => navigate("/")}
-          className="ml-4 cursor-default text-6xl font-extrabold text-yellow-300"
+          className="ml-4 font-base cursor-default text-6xl font-extrabold text-yellow-300"
         />
       </div>
 

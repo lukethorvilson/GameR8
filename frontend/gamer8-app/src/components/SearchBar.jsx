@@ -82,12 +82,12 @@ function SearchBar() {
     <>
       <div className="flex gap-4">
         <input
-          className="ml-3 h-10 w-[75%] rounded-md border-0 bg-cyan-800 px-3 text-yellow-300 placeholder-yellow-300 placeholder-opacity-80 ring-1 ring-yellow-300 ring-offset-2 focus:ring-2 focus:ring-yellow-300"
+          className="ml-3 h-10 w-[75%] font-base rounded-md border-0 bg-cyan-800 px-3 text-yellow-300 placeholder-yellow-300 placeholder-opacity-80 ring-1 ring-yellow-300 ring-offset-2 focus:ring-2 focus:ring-yellow-300"
           placeholder="Search Game-title; Users; platforms;"
           value={searchVal}
           onChange={(e) => setSearchVal(e.target.value)}
         />
-        <button className="mr-3 w-[15%] rounded-md bg-yellow-300 text-sm text-cyan-950 hover:bg-yellow-400">
+        <button className="mr-3 w-[15%] rounded-md font-base bg-yellow-300 text-sm text-cyan-950 hover:bg-yellow-400">
           Search
         </button>
       </div>

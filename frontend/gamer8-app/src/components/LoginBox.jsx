@@ -68,7 +68,7 @@ function LoginBox() {
 
   return (
     <div className="mx-auto h-[60%] w-[45%] rounded-xl bg-cyan-950 px-4 py-8">
-      <h1 className="mb-10 text-center text-2xl font-bold text-yellow-300">
+      <h1 className="font-header mb-10 text-center text-2xl font-bold text-yellow-300">
         Login
       </h1>
       {error && (
@@ -99,14 +99,14 @@ function LoginBox() {
           }
         />
         <button
-          className="mx-auto h-[12%] w-[25%] rounded-md bg-yellow-300 font-bold text-cyan-950"
+          className="mx-auto h-[12%] w-[25%] rounded-md font-header bg-yellow-300 font-bold text-cyan-950"
           type="submit"
         >
           {isLoading ? <Spinner className="" /> : "Login"}
         </button>
       </form>
 
-      <p className="ml-4 mt-4 text-yellow-300">
+      <p className="ml-4 mt-4 text-yellow-300 font-base">
         New user?{" "}
         <button
           className="hover:underline"

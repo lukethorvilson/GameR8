@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function DropDownRatings({ userId }) {
   const [ratings, setRatings] = useState([]);
+  const [hidden, setHidden] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
     async function fetchUserRatings() {
@@ -25,28 +26,31 @@ function DropDownRatings({ userId }) {
   return (
     <DropDown
       title="Recent Ratings"
+      initHidden={true}
       render={ratings.map((rating) => (
         <div
           key={rating.id}
-          className="flex h-[125px] w-[30%] flex-col rounded-md border-4 border-cyan-950 p-2"
+          className="flex h-[175px] w-[33%] flex-col rounded-md border-4 border-cyan-950 p-2"
         >
-          <h4 className="text-base font-bold">
-            Game Title: <span className="italic">{rating.gameName}</span>
+          <h4 className="font-base text-lg font-bold">
+            Game Title:{" "}
+            <span className="font-normal italic">{rating.gameName}</span>
           </h4>
           {rating?.title && (
-            <h6 className="text-[12px]">
-              <span className="font-bold">Title:</span> {rating.title}
+            <h6 className="text-[12px] text-base">
+              <span className="font-base font-bold">Title:</span> {rating.title}
             </h6>
           )}
           {rating?.rating && (
-            <p>
-              R8 Score: <span>{rating.rating}/8</span>
+            <p className="font-base">
+              R<span className="italic">8</span> Score:{" "}
+              <span>{rating.rating}/8</span>
             </p>
           )}
-          <div className="mt-2">
+          <div className="font-base relative mt-2 h-[100%]">
             <button
               onClick={() => navigate(`/game/${rating.gameId}`)}
-              className="h-fit w-fit rounded-lg bg-yellow-300 px-2 text-cyan-950"
+              className="absolute bottom-0 right-0 h-fit w-fit rounded-lg bg-yellow-300 px-2 text-cyan-950"
             >
               Visit Game Page
             </button>

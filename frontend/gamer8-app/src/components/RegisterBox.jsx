@@ -89,7 +89,7 @@ function RegisterBox() {
 
   return (
     <div className="mx-auto h-[65%] w-[60%] rounded-xl bg-cyan-950 px-4 py-8">
-      <h1 className="col-span-2 mb-10 text-center text-2xl font-bold text-yellow-300">
+      <h1 className="font-header col-span-2 mb-10 text-center text-2xl font-bold text-yellow-300">
         Register
       </h1>
       {error && (
@@ -151,7 +151,7 @@ function RegisterBox() {
         />
         <button
           type="submit"
-          className="col-span-2 mx-auto h-[110%] w-[40%] rounded-md bg-yellow-300 font-bold text-cyan-950"
+          className="font-header col-span-2 mx-auto h-[110%] w-[40%] rounded-md bg-yellow-300 font-bold text-cyan-950"
         >
           {isLoading ? <Spinner className="" /> : "Register"}
         </button>
