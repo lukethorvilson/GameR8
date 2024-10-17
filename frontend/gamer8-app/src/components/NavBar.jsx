@@ -29,7 +29,7 @@ function NavBar() {
         {!hasAccess ? (
           <button
             onClick={() => navigateLogin()}
-            className="h-[40%] w-[60%] rounded-md bg-yellow-300 text-cyan-950"
+            className="h-[40%] w-[60%] rounded-md font-base bg-yellow-300 text-cyan-950"
           >
             Login
           </button>

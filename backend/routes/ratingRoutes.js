@@ -8,4 +8,9 @@ router
   .get(ratingController.getAllRatings)
   .post(authenticationController.authorization, ratingController.postRating);
 
+// update the specified category category of a specific rating
+router.route("/:ratingId/:feedback/add").patch(authenticationController.authorization, )
+
+
+
 module.exports = router;

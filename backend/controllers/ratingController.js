@@ -70,12 +70,45 @@ exports.postRating = catchAsync(async (req, res, next) => {
     gameName,
     author: user.username,
   });
-  console.log(newRating);
   // send new rating back
   res.status(201).json({
     status: "success",
     body: {
       newRating,
+    },
+  });
+});
+
+exports.updateFeedback = catchAsync(async (req, res, next) => {
+  const { ratingId, feedback } = req.params;
+  const { user } = req;
+  const feedbackFields = ["helpful", "unhelpful", "detailed", "entertaining"];
+  // gaurd clause
+  if (!ratingId || !feedback)
+    return next(new AppError("Request for updating feedback is invalid!", 400));
+
+  if (!user)
+    return next(
+      new AppError("Not permitted for un-logged users! Please login!", 403)
+    );
+
+  const rating = await Rating.findByPk(ratingId);
+  if (!rating) return next(new AppError("Rating to update not found!", 404));
+
+  // update the rating based on the feedback type
+  const currentArray = rating.getDataValue(feedback) || [];
+  if (!currentArray.includes(user.id)) {
+    currentArray.push(user.id);
+  }
+
+  // Update the rating object
+  await rating.update({ [feedback]: currentArray });
+
+  res.status(200).json({
+    status: "success",
+    message: `${user.username} thought this review was ${feedback}!`,
+    body: {
+      rating,
     },
   });
 });
