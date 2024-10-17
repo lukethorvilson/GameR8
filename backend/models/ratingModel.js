@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../db");
 const User = require("./userModel");
 
-const Rating = sequelize.define("Review", {
+const Rating = sequelize.define("Rating", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -11,6 +11,10 @@ const Rating = sequelize.define("Review", {
   },
   gameId: {
     type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  gameName: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
   title: {
@@ -41,14 +45,13 @@ const Rating = sequelize.define("Review", {
   },
   author: {
     type: DataTypes.STRING,
-    unique: true,
     allowNull: false,
   },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "Users", // Name of the table in the database
+      model: User, // Name of the table in the database
       key: "id", // Primary key in the Users table
     },
   },
@@ -57,11 +60,13 @@ const Rating = sequelize.define("Review", {
 Rating.belongsTo(User, {
   onDelete: "NO ACTION",
   foreignKey: "userId",
+  as: "user",
 });
 
 User.hasMany(Rating, {
   onDelete: "CASCADE",
   foreignKey: "userId",
+  as: "ratings",
 });
 
 module.exports = Rating;

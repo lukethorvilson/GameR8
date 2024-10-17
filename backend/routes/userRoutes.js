@@ -18,4 +18,6 @@ router
 
 router.route("/:id").get(userController.getUserById);
 
+router.route("/:id/ratings").get(userController.getUserRatings)
+
 module.exports = router;

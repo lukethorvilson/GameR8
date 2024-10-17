@@ -3,6 +3,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { IoAddCircle } from "react-icons/io5";
 import { useParams } from "react-router-dom";
 import DropDown from "../components/DropDown";
+import DropDownRatings from "../components/DropDownRatings";
 
 function ProfilePage() {
   const { id: userId } = useParams();
@@ -77,6 +78,7 @@ function ProfilePage() {
               <p>Add Friend</p>
             </button>
           </div>
+          <DropDownRatings userId={profileData?.id} />
           <DropDown title="Favorite Games" />
           <DropDown title="Recent Posts" />
         </div>

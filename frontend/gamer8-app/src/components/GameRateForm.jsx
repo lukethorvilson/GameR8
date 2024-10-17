@@ -35,16 +35,31 @@ function GameRateForm({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...ratingBody, gameId }),
+          body: JSON.stringify({
+            ...ratingBody,
+            author: user.username,
+            userId: user.id,
+            gameId,
+            gameName: gameData.name,
+          }),
         },
       );
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       // if the data was submitted
       if (response.ok) {
         // TO-DO
         // if success we should get a new rating object back and place it in the current pool if ratings
-        setRatingData((curr) => [ratingBody, ...curr]);
+        setRatingData((curr) => [
+          {
+            ...ratingBody,
+            author: user.username,
+            userId: user.id,
+            gameId,
+            gameName: gameData.name,
+          },
+          ...curr,
+        ]);
         // reset data and hide form!
         setRatingBody((curr) => ({
           ...curr,

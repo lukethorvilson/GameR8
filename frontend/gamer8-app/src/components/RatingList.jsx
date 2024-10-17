@@ -49,7 +49,9 @@ function RatingList({ ratingData, setRatingData, title }) {
       >
         {/* map each rating here to this rating object */}
         {filteredData.length > 0 &&
-          filteredData.map((rating) => <Rating rating={rating} />)}
+          filteredData.map((rating) => (
+            <Rating key={rating.id} rating={rating} />
+          ))}
         {filteredData.length === 0 && (
           <h2 className="text-center text-2xl font-bold text-yellow-300">
             No R<span className="font-extrabold italic">8</span>ings on this

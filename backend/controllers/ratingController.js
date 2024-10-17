@@ -11,6 +11,7 @@ exports.getAllRatings = catchAsync(async (req, res) => {
       },
     });
   } else {
+    console.log("here");
     ratings = await Rating.findAll();
   }
 
@@ -37,9 +38,8 @@ exports.postRating = catchAsync(async (req, res, next) => {
       )
     );
   }
-  console.log(req.body, user);
   // get the rating, check for at least the rating number(minimum req for rating a game)
-  const { title, description, rating, gameId } = req.body;
+  const { title, description, rating, gameId, gameName } = req.body;
   if (!rating || !gameId) {
     return next(
       new AppError(
@@ -48,7 +48,13 @@ exports.postRating = catchAsync(async (req, res, next) => {
       )
     );
   }
-  const userRatingCount = await Rating.count({ userId: user.id, gameId });
+  const userRatingCount = await Rating.count({
+    where: {
+      userId: user.id,
+      gameId: gameId,
+    },
+  });
+  console.log(userRatingCount);
   if (userRatingCount > 0) {
     return next(
       new AppError("User already has a rating under this game!", 400)
@@ -61,8 +67,10 @@ exports.postRating = catchAsync(async (req, res, next) => {
     rating,
     userId: user.id,
     gameId,
+    gameName,
     author: user.username,
   });
+  console.log(newRating);
   // send new rating back
   res.status(201).json({
     status: "success",

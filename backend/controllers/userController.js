@@ -1,3 +1,4 @@
+const Rating = require("../models/ratingModel");
 const User = require("../models/userModel");
 const AppError = require("../util/appError");
 const catchAsync = require("../util/catchAsync");
@@ -68,7 +69,7 @@ exports.getLoggedUser = async (req, res) => {
 
 exports.getUserById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  console.log(id)
+  console.log(id);
   if (!id)
     return next(new AppError("Bad Request: User was not specified.", 400));
 
@@ -86,6 +87,59 @@ exports.getUserById = catchAsync(async (req, res, next) => {
     status: "success",
     body: {
       user,
+    },
+  });
+});
+
+exports.getUserRatings = catchAsync(async (req, res, next) => {
+  const { byDate, limit } = req.query;
+  const { id } = req.params;
+  let user;
+  if (limit) {
+    user = await User.findByPk(id, {
+      include: [
+        {
+          model: Rating,
+          as: "ratings",
+          attributes: [
+            "id",
+            "rating",
+            "title",
+            "description",
+            "gameId",
+            "createdAt",
+            "gameName",
+          ],
+          limit: Number(limit),
+        },
+      ],
+    });
+  } else {
+    user = await User.findByPk(id, {
+      include: [
+        {
+          model: Rating,
+          as: "ratings",
+          attributes: [
+            "id",
+            "rating",
+            "title",
+            "description",
+            "gameId",
+            "createdAt",
+            "gameName",
+          ],
+        },
+      ],
+    });
+  }
+
+  if (!user) return next(new AppError("No user found with ratings", 404));
+
+  res.status(200).json({
+    status: "success",
+    body: {
+      ratings: user.ratings,
     },
   });
 });
