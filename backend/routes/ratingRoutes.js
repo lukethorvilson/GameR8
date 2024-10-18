@@ -9,8 +9,11 @@ router
   .post(authenticationController.authorization, ratingController.postRating);
 
 // update the specified category category of a specific rating
-router.route("/:ratingId/:feedback/add").patch(authenticationController.authorization, )
-
-
+router
+  .route("/:ratingId/:gameId/:feedback/add")
+  .patch(
+    authenticationController.authorization,
+    ratingController.updateFeedback
+  );
 
 module.exports = router;

@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
-export default function useLoggedUser() {
+export const LoginContext = createContext();
+
+export const LoginProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const hasAccess = !user ? false : true;
@@ -34,5 +36,10 @@ export default function useLoggedUser() {
     }
     fetchLogged();
   }, []);
-  return [hasAccess, user, setUser, isLoading];
-}
+  //   return [hasAccess, user, setUser, isLoading];
+  return (
+    <LoginContext.Provider value={{ user, isLoading, hasAccess }}>
+      {children}
+    </LoginContext.Provider>
+  );
+};

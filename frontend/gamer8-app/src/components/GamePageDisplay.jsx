@@ -27,7 +27,7 @@ function GamePageDisplay({
         <div className="absolute top-2/3 h-fit w-screen rounded-t-xl bg-cyan-800 pb-[65px]">
           <GamePageDetails gameData={gameData} />
           {!ratingData.some((entry) => {
-            if (entry.userId === user.id) {
+            if (entry.userId === user?.id) {
               return true;
             } else {
               return false;

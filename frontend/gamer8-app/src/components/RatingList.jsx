@@ -40,7 +40,7 @@ function RatingList({ ratingData, setRatingData, title }) {
   }, []);
   return (
     <>
-      <h2 className="mb-3 ml-4 mr-auto w-fit border-b-2 border-yellow-300 pb-3 text-2xl font-bold text-yellow-300">
+      <h2 className="mb-3 ml-4 mr-auto w-fit border-b-2 border-yellow-300 pb-3 font-header text-2xl font-bold text-yellow-300">
         User R<span className="font-extrabold italic">8</span>ings of {title}
       </h2>
       <div
@@ -53,7 +53,7 @@ function RatingList({ ratingData, setRatingData, title }) {
             <Rating key={rating.id} rating={rating} />
           ))}
         {filteredData.length === 0 && (
-          <h2 className="text-center text-2xl font-bold text-yellow-300">
+          <h2 className="text-center font-header text-2xl font-bold text-yellow-300">
             No R<span className="font-extrabold italic">8</span>ings on this
             title yet!
           </h2>

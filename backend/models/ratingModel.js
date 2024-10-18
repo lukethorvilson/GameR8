@@ -109,7 +109,7 @@ const Rating = sequelize.define("Rating", {
   },
 });
 
-Rating.prototype.removeFromOtherFields = (value) => {
+Rating.prototype.removeFromOtherFields = function(value) {
   // Remove value from helpful
   let helpfulArray = this.getDataValue("helpful") || [];
   this.setDataValue(

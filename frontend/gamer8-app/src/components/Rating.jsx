@@ -1,10 +1,11 @@
 import React from "react";
 import { FaRegUserCircle } from "react-icons/fa";
+import FeedBackButton from "./FeedBackButton";
+import FeedbackButtons from "./FeedbackButtons";
 
 function Rating({ rating }) {
-  console.log(rating.author)
   return (
-    <div className="flex h-fit w-[90%] mx-auto flex-col rounded-lg border-4 border-cyan-950 bg-cyan-600 transition-all hover:border-8">
+    <div className="mx-auto my-4 flex h-fit w-[90%] flex-col rounded-lg border-4 border-cyan-950 bg-cyan-600 transition-all hover:border-8">
       <div id="username-container" className="mr-auto flex flex-row">
         <FaRegUserCircle className="m-2 ml-2 h-[25px] w-[25px] text-yellow-300" />
         <h6 className="my-auto text-yellow-300">{rating.author}</h6>
@@ -28,6 +29,7 @@ function Rating({ rating }) {
           {rating.rating}/8
         </p>
       </div>
+      <FeedbackButtons rating={rating}/>
     </div>
   );
 }
