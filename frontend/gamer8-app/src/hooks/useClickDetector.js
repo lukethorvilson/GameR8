@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-function clickDetector(element) {
+function useClickDetector(element) {
   useEffect(() => {
     const handleClick = (event) => {
       // add a check of whether item passed in was clicked or not
@@ -18,7 +18,7 @@ function clickDetector(element) {
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, []);
+  }, [element]);
 }
 
-export default clickDetector;
+export default useClickDetector;

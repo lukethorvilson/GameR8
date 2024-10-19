@@ -1,6 +1,5 @@
 import React from "react";
 import { FaRegUserCircle } from "react-icons/fa";
-import FeedBackButton from "./FeedBackButton";
 import FeedbackButtons from "./FeedbackButtons";
 
 function Rating({ rating }) {
@@ -29,7 +28,7 @@ function Rating({ rating }) {
           {rating.rating}/8
         </p>
       </div>
-      <FeedbackButtons rating={rating}/>
+      <FeedbackButtons rating={rating} />
     </div>
   );
 }

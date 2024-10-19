@@ -4,7 +4,7 @@ const useGameRateForm = () => {
   const ratingForm = useRef(null);
   const ratingButton = useRef(null);
   const [formShown, setFormShown] = useState(false);
-  let fadeTimeOut;
+  let fadeTimeOut = useRef();
   function handleClickRating() {
     setFormShown((val) => !val);
   }
@@ -22,7 +22,7 @@ const useGameRateForm = () => {
         ratingForm.current.classList.remove("animate-fadeIn");
         ratingForm.current.classList.add("animate-fadeOut");
 
-        fadeTimeOut = setTimeout(() => {
+        fadeTimeOut.current = setTimeout(() => {
           ratingForm.current.classList.add("hidden");
           ratingButton.current.classList.remove("hidden");
         }, 250);

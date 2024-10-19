@@ -18,7 +18,7 @@ function GameRateForm({
     rating: 0,
   });
   const { id: gameId } = useParams();
-  const [hasAccess, user, setUser, isLoading] = useLoggedUser();
+  const [, user] = useLoggedUser();
   useGameRateForm();
   async function handleSubmit(e) {
     e.preventDefault();
@@ -94,13 +94,13 @@ function GameRateForm({
               e.preventDefault();
               setFormShown((val) => !val);
             }}
-            className="h-fit w-fit font-base rounded-xl border-2 border-yellow-300 px-3 py-1 text-left text-xl font-bold text-yellow-300 hover:border-4"
+            className="h-fit w-fit rounded-xl border-2 border-yellow-300 px-3 py-1 text-left font-base text-xl font-bold text-yellow-300 hover:border-4"
           >
             x
           </button>
         </div>
 
-        <label htmlFor="title" className="text-lg text-yellow-300 font-header">
+        <label htmlFor="title" className="font-header text-lg text-yellow-300">
           Title
         </label>
         <input
@@ -111,9 +111,12 @@ function GameRateForm({
           onChange={(e) =>
             setRatingBody((body) => ({ ...body, title: e.target.value }))
           }
-          className="h-[3dvh] overflow-y-auto font-base rounded-md border-2 border-yellow-300 bg-cyan-900 p-2 text-left text-yellow-300 placeholder-yellow-300 placeholder-opacity-60 focus:ring-2 focus:ring-yellow-300"
+          className="h-[3dvh] overflow-y-auto rounded-md border-2 border-yellow-300 bg-cyan-900 p-2 text-left font-base text-yellow-300 placeholder-yellow-300 placeholder-opacity-60 focus:ring-2 focus:ring-yellow-300"
         ></input>
-        <label htmlFor="review-desc" className="text-lg text-yellow-300 font-header">
+        <label
+          htmlFor="review-desc"
+          className="font-header text-lg text-yellow-300"
+        >
           Write your review here!
         </label>
         <textarea
@@ -126,7 +129,7 @@ function GameRateForm({
           }
           maxLength={1000}
           placeholder={`Write your review about ${gameData.name} here!`}
-          className="h-[12dvh] overflow-y-auto font-base rounded-md border-2 border-yellow-300 bg-cyan-900 p-2 text-left text-yellow-300 placeholder-yellow-300 placeholder-opacity-60 focus:ring-2 focus:ring-yellow-300"
+          className="h-[12dvh] overflow-y-auto rounded-md border-2 border-yellow-300 bg-cyan-900 p-2 text-left font-base text-yellow-300 placeholder-yellow-300 placeholder-opacity-60 focus:ring-2 focus:ring-yellow-300"
         />
         <RatingInput
           rating={ratingBody.rating}

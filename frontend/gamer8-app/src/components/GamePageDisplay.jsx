@@ -12,7 +12,8 @@ function GamePageDisplay({
   handleClickRating,
   setFormShown,
 }) {
-  const [hasAccess, user, setUser, isLoading] = useLoggedUser();
+  const [hasAccess, user] = useLoggedUser();
+  console.log(user);
   const [ratingData, setRatingData] = useState([]);
   return (
     <>
@@ -20,31 +21,32 @@ function GamePageDisplay({
         <div className="absolute top-20 z-0 mx-auto h-[70%] w-[100%]">
           <img
             src={gameData.background_image}
-            alt={`Image of ${gameData.name}`}
+            alt={`${gameData.name}`}
             className="h-full w-full"
           />
         </div>
         <div className="absolute top-2/3 h-fit w-screen rounded-t-xl bg-cyan-800 pb-[65px]">
           <GamePageDetails gameData={gameData} />
-          {!ratingData.some((entry) => {
-            if (entry.userId === user?.id) {
-              return true;
-            } else {
-              return false;
-            }
-          }) && (
-            <>
-              <hr className="my-4 h-8 w-full rounded-xl border-none bg-cyan-950" />
-              <GameRateForm
-                gameData={gameData}
-                ratingButton={ratingButton}
-                ratingForm={ratingForm}
-                handleClickRating={handleClickRating}
-                setFormShown={setFormShown}
-                setRatingData={setRatingData}
-              />
-            </>
-          )}
+          {hasAccess &&
+            !ratingData.some((entry) => {
+              if (entry.userId === user?.id) {
+                return true;
+              } else {
+                return false;
+              }
+            }) && (
+              <>
+                <hr className="my-4 h-8 w-full rounded-xl border-none bg-cyan-950" />
+                <GameRateForm
+                  gameData={gameData}
+                  ratingButton={ratingButton}
+                  ratingForm={ratingForm}
+                  handleClickRating={handleClickRating}
+                  setFormShown={setFormShown}
+                  setRatingData={setRatingData}
+                />
+              </>
+            )}
           <hr className="my-4 h-8 w-full rounded-xl border-none bg-cyan-950" />
           <RatingList
             ratingData={ratingData}

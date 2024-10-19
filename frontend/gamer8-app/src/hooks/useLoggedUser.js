@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export default function useLoggedUser() {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const hasAccess = !user ? false : true;
+  const hasAccess = !user || Object.entries(user).length === 0 ? false : true;
   useEffect(() => {
     async function fetchLogged() {
       setIsLoading(true);

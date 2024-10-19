@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoAddCircle } from "react-icons/io5";
 import { MdEdit } from "react-icons/md";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DropDown from "../components/DropDown";
 import DropDownRatings from "../components/DropDownRatings";
 import useLoggedUser from "../hooks/useLoggedUser";
@@ -12,7 +12,8 @@ function ProfilePage() {
   const [profileData, setProfileData] = useState(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [hasAccess, user, setUser] = useLoggedUser();
+  const [, user] = useLoggedUser();
+  const navigate = useNavigate();
   const sameUser = +userId === +user?.id;
   useEffect(() => {
     async function fetchUser() {
@@ -34,7 +35,7 @@ function ProfilePage() {
       }
     }
     fetchUser();
-  }, []);
+  }, [userId]);
   return (
     <div className="h-fit w-full">
       {isLoading ||

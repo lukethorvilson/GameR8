@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FaRegUserCircle } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import Rating from "./Rating";
 
 function RatingList({ ratingData, setRatingData, title }) {
   const { id: gameId } = useParams();
-  const [isLoading, setIsLoading] = useState(false);
+  const [, setIsLoading] = useState(false);
   console.log(ratingData);
   const filteredData = ratingData.filter((rating) => {
     if (rating.title && rating.description) {
@@ -37,7 +36,7 @@ function RatingList({ ratingData, setRatingData, title }) {
       }
     }
     fetchRatings();
-  }, []);
+  }, [gameId, setRatingData]);
   return (
     <>
       <h2 className="mb-3 ml-4 mr-auto w-fit border-b-2 border-yellow-300 pb-3 font-header text-2xl font-bold text-yellow-300">

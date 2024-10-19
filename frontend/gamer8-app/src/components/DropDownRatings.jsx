@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 function DropDownRatings({ userId }) {
   const [ratings, setRatings] = useState([]);
-  const [hidden, setHidden] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
     async function fetchUserRatings() {
@@ -22,7 +21,7 @@ function DropDownRatings({ userId }) {
       }
     }
     fetchUserRatings();
-  }, []);
+  }, [userId]);
   return (
     <DropDown
       title="Recent Ratings"
@@ -47,7 +46,7 @@ function DropDownRatings({ userId }) {
               <span>{rating.rating}/8</span>
             </p>
           )}
-          <div className="font-base relative mt-2 h-[100%]">
+          <div className="relative mt-2 h-[100%] font-base">
             <button
               onClick={() => navigate(`/game/${rating.gameId}`)}
               className="absolute bottom-0 right-0 h-fit w-fit rounded-lg bg-yellow-300 px-2 text-cyan-950"

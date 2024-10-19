@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import RegisterInput from "./RegisterInput";
-import Register from "../pages/Register";
 import { useNavigate } from "react-router-dom";
 import Spinner from "./Spinner";
 

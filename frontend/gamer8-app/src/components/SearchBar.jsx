@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useDebounce } from "use-debounce";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import debounce from "lodash/debounce";
 import Spinner from "./Spinner";
 import SearchedGameEntry from "./SearchedGameEntry";
-import clickDetector from "../utils/ClickDetector";
+import useClickDetector from "../hooks/useClickDetector";
 
 function SearchBar() {
   const [searchVal, setSearchVal] = useState("");
@@ -12,15 +11,25 @@ function SearchBar() {
   const [searchData, setSearchData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Memoize the debounced function so it's created only once
+  const debouncedSetDbSearchVal = useMemo(
+    () => debounce((value) => setDbSearchVal(value), 500),
+    [],
+  );
+
+  // updates the value to be searched every time the set 
   const updateSearchVal = useCallback(
-    debounce((value) => {
-      setDbSearchVal(value);
-    }, 500),
+    (value) => {
+      debouncedSetDbSearchVal(value); // Use the memoized debounced function
+    },
+    [debouncedSetDbSearchVal],
   );
 
   // Update dbSearchVal whenever searchVal changes
   useEffect(() => {
-    updateSearchVal(searchVal);
+    if (searchVal) {
+      updateSearchVal(searchVal);
+    }
   }, [searchVal, updateSearchVal]);
 
   // Fetch games data
@@ -76,18 +85,18 @@ function SearchBar() {
     }
   }, [searchVal]); // Effect to manage the result box height
 
-  clickDetector(resultBox);
+  useClickDetector(resultBox);
 
   return (
     <>
       <div className="flex gap-4">
         <input
-          className="ml-3 h-10 w-[75%] font-base rounded-md border-0 bg-cyan-800 px-3 text-yellow-300 placeholder-yellow-300 placeholder-opacity-80 ring-1 ring-yellow-300 ring-offset-2 focus:ring-2 focus:ring-yellow-300"
+          className="ml-3 h-10 w-[75%] rounded-md border-0 bg-cyan-800 px-3 font-base text-yellow-300 placeholder-yellow-300 placeholder-opacity-80 ring-1 ring-yellow-300 ring-offset-2 focus:ring-2 focus:ring-yellow-300"
           placeholder="Search Game-title; Users; platforms;"
           value={searchVal}
           onChange={(e) => setSearchVal(e.target.value)}
         />
-        <button className="mr-3 w-[15%] rounded-md font-base bg-yellow-300 text-sm text-cyan-950 hover:bg-yellow-400">
+        <button className="mr-3 w-[15%] rounded-md bg-yellow-300 font-base text-sm text-cyan-950 hover:bg-yellow-400">
           Search
         </button>
       </div>
@@ -102,7 +111,7 @@ function SearchBar() {
         {!isLoading && searchData.length > 0 && (
           <div className="mx-auto flex w-[95%] flex-col rounded-md border-l-2 border-r-2 border-yellow-300 px-2 py-2">
             {searchData.map((game) => (
-              <SearchedGameEntry key={game.id} game={game} setSearchVal />
+              <SearchedGameEntry key={game.id} game={game} setSearchVal={setSearchVal} />
             ))}
           </div>
         )}

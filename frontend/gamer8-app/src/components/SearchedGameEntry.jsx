@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function SearchedGameEntry({ game }) {
+function SearchedGameEntry({ game, setSearchVal }) {
   const navigate = useNavigate();
-  function handleGameClick(){
+  function handleGameClick() {
     navigate(`/game/${game.id}`);
+    setSearchVal("");
   }
   return (
     <div
@@ -15,7 +16,7 @@ function SearchedGameEntry({ game }) {
       <img
         className="h-[100px] w-[180px]"
         src={game.image}
-        alt={`Image of ${game.name}`}
+        alt={`${game.name}`}
       />
       <p className="ml-3 w-[70%] text-center">{game.name}</p>
     </div>

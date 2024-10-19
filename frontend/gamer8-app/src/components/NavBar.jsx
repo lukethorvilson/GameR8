@@ -1,13 +1,13 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Logo from "../components/Logo";
 import SearchBar from "./SearchBar";
-import UserIcon from "./UserIcon";
-import { useState } from "react";
 import useLoggedUser from "../hooks/useLoggedUser";
 import { FaRegUserCircle } from "react-icons/fa";
+import { has } from "lodash";
 
 function NavBar() {
-  const [hasAccess, user, setUser, isLoading] = useLoggedUser();
+  const [hasAccess, user] = useLoggedUser();
+  console.log(hasAccess)
   const navigate = useNavigate();
   function navigateLogin() {
     navigate("/login");
@@ -18,7 +18,7 @@ function NavBar() {
       <div className="h-[100%] w-[15%] content-center justify-center">
         <Logo
           onClick={() => navigate("/")}
-          className="ml-4 font-base cursor-default text-6xl font-extrabold text-yellow-300"
+          className="ml-4 cursor-default font-base text-6xl font-extrabold text-yellow-300"
         />
       </div>
 
@@ -29,7 +29,7 @@ function NavBar() {
         {!hasAccess ? (
           <button
             onClick={() => navigateLogin()}
-            className="h-[40%] w-[60%] rounded-md font-base bg-yellow-300 text-cyan-950"
+            className="h-[40%] w-[60%] rounded-md bg-yellow-300 font-base text-cyan-950"
           >
             Login
           </button>

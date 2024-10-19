@@ -10,7 +10,7 @@ function FeedBackButton({
   setCurrentFeedback,
 }) {
   //get the user from the context to check if the id is concurrent within any of the feedback data
-  const { user, isLoading, hasAccess } = useContext(LoginContext);
+  const { user } = useContext(LoginContext);
 
   // if the title is the same as the users current feedback state then the user has clicked the button so it should he a darker shade
   const isClicked = currentFeedback === title;
@@ -38,6 +38,7 @@ function FeedBackButton({
           },
         );
         const data = await response.json();
+        console.log(data);
       } catch (err) {
         console.log(err);
       }
@@ -57,6 +58,7 @@ function FeedBackButton({
           },
         );
         const data = await response.json();
+        console.log(data)
         if (response.ok) {
           // increment the interactions on screen
           setCurrentFeedback(title);
