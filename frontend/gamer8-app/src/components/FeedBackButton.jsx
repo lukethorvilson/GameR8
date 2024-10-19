@@ -31,7 +31,7 @@ function FeedBackButton({
       // call api to remove current feedback through http://localhost:8000/gamer8/api/v1/ratings/${rating.id}/${rating.gameId}/${title.toLowerCase()}/remove
       try {
         const response = await fetch(
-          `http://localhost:8000/gamer8/api/v1/ratings/${rating.id}/${rating.gameId}/${title.toLowerCase()}/remove`,
+          `http://localhost:8000/gamer8/api/v1/ratings/feedback/remove/${rating.id}/${rating.gameId}/${title.toLowerCase()}`,
           {
             method: "PATCH",
             credentials: "include",
@@ -51,14 +51,14 @@ function FeedBackButton({
     } else {
       try {
         const response = await fetch(
-          `http://localhost:8000/gamer8/api/v1/ratings/${rating.id}/${rating.gameId}/${title.toLowerCase()}/add`,
+          `http://localhost:8000/gamer8/api/v1/ratings/feedback/add/${rating.id}/${rating.gameId}/${title.toLowerCase()}`,
           {
             method: "PATCH",
             credentials: "include",
           },
         );
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         if (response.ok) {
           // increment the interactions on screen
           setCurrentFeedback(title);

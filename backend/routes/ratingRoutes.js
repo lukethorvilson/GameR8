@@ -10,10 +10,14 @@ router
 
 // update the specified category category of a specific rating
 router
-  .route("/:ratingId/:gameId/:feedback/add")
+  .route("/feedback/add/:ratingId/:gameId/:feedback")
+  .patch(authenticationController.authorization, ratingController.addFeedback);
+
+router
+  .route("/feedback/remove/:ratingId/:gameId/:feedback")
   .patch(
     authenticationController.authorization,
-    ratingController.updateFeedback
+    ratingController.removeFeedback
   );
 
 module.exports = router;
