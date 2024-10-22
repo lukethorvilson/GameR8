@@ -3,8 +3,6 @@ import GamePageDetails from './GamePageDetails';
 import GameRateForm from './GameRateForm';
 import RatingList from './RatingList';
 import useLoggedUser from '../hooks/useLoggedUser';
-import useGameRatings from '../hooks/useGameRatings';
-import { useParams } from 'react-router-dom';
 import { RatingsContext } from '../contexts/RatingsContext';
 
 function GamePageDisplay({
@@ -15,7 +13,7 @@ function GamePageDisplay({
   setFormShown,
 }) {
   const [hasAccess, user] = useLoggedUser();
-  const { ratingData, setRatingData } =
+  const { ratingData } =
     useContext(RatingsContext);
     console.log(ratingData)
   return (
