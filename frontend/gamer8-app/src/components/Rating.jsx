@@ -34,7 +34,7 @@ function Rating({ rating }) {
           {rating.rating}/8
         </p>
       </div>
-      <FeedbackButtons rating={rating} />
+      <FeedbackButtons rating={rating}  />
     </div>
   );
 }

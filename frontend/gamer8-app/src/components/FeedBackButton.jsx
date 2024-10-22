@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
+import { RatingsContext } from '../contexts/RatingsContext';
 // import { useSnackbar } from "notistack";
 
 function FeedBackButton({
@@ -11,7 +12,7 @@ function FeedBackButton({
 }) {
   //get the user from the context to check if the id is concurrent within any of the feedback data
   const { user } = useContext(LoginContext);
-
+  const { setFilteredRatings } = useContext(RatingsContext);
   // if the title is the same as the users current feedback state then the user has clicked the button so it should he a darker shade
   let isClicked =
     currentFeedback[title.toLowerCase()] === 1;
@@ -32,6 +33,13 @@ function FeedBackButton({
   // just need to handle the remove feedback in handle click
   async function handleClick() {
     if (isClicked) {
+      setCurrentFeedback((feedback) => ({
+        ...feedback,
+        helpful: 0,
+        entertaining: 0,
+        detailed: 0,
+        unhelpful: 0,
+      }));
       // call api to remove current feedback through http://localhost:8000/gamer8/api/v1/ratings/${rating.id}/${rating.gameId}/${title.toLowerCase()}/remove
       try {
         const response = await fetch(
@@ -43,17 +51,30 @@ function FeedBackButton({
         );
         const data = await response.json();
         console.log(data);
+        if (!response.ok) {
+          setCurrentFeedback((feedback) => ({
+            ...feedback,
+            [title.toLowerCase()]: 1, // Revert to previous feedback state
+          }));
+        } else {
+          setFilteredRatings((prevRatings) =>
+            prevRatings.map((r) =>
+              r.id === rating.id
+                ? {
+                    ...r,
+                    [title.toLowerCase()]: r[
+                      title.toLowerCase()
+                    ].filter(
+                      (userId) => userId !== user.id,
+                    ),
+                  }
+                : r,
+            ),
+          );
+        }
       } catch (err) {
         console.log(err);
       }
-      // need to set the current states to all false since the user clicked to remove others
-      setCurrentFeedback((feedback) => ({
-        ...feedback,
-        helpful: 0,
-        entertaining: 0,
-        detailed: 0,
-        unhelpful: 0,
-      }));
     } else {
       try {
         const response = await fetch(
@@ -66,6 +87,31 @@ function FeedBackButton({
         const data = await response.json();
         console.log(data);
         if (response.ok) {
+          setFilteredRatings((prevRatings) =>
+            prevRatings.map((r) =>
+              r.id === rating.id
+                ? {
+                    ...r,
+                    helpful: r.helpful.filter(
+                      (id) => id !== user?.id,
+                    ),
+                    entertaining: r.entertaining.filter(
+                      (id) => id !== user?.id,
+                    ),
+                    detailed: r.detailed.filter(
+                      (id) => id !== user?.id,
+                    ),
+                    unhelpful: r.unhelpful.filter(
+                      (id) => id !== user?.id,
+                    ),
+                    [title.toLowerCase()]: [
+                      ...r[title.toLowerCase()],
+                      user.id,
+                    ],
+                  }
+                : r,
+            ),
+          );
           // increment the interactions on screen
           setCurrentFeedback((feedback) => ({
             ...feedback,

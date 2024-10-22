@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import RatingInput from "./RatingInput";
-import useLoggedUser from "../hooks/useLoggedUser";
-import useGameRateForm from "../hooks/useGameRateForm";
-import { useParams } from "react-router-dom";
+import React, { useContext, useState } from 'react';
+import RatingInput from './RatingInput';
+import useLoggedUser from '../hooks/useLoggedUser';
+import useGameRateForm from '../hooks/useGameRateForm';
+import { useParams } from 'react-router-dom';
+import { RatingsContext } from '../contexts/RatingsContext';
 
 function GameRateForm({
   ratingButton,
@@ -10,16 +11,16 @@ function GameRateForm({
   gameData,
   ratingForm,
   setFormShown,
-  setRatingData,
 }) {
   const [ratingBody, setRatingBody] = useState({
-    title: "",
-    description: "",
+    title: '',
+    description: '',
     rating: 0,
   });
   const { id: gameId } = useParams();
   const [, user] = useLoggedUser();
   useGameRateForm();
+  const { setRatingData } = useContext(RatingsContext);
   async function handleSubmit(e) {
     e.preventDefault();
     // if theres no rating, don't submit
@@ -28,12 +29,12 @@ function GameRateForm({
     //if rating then fetch api,
     try {
       const response = await fetch(
-        "http://localhost:8000/gamer8/api/v1/ratings",
+        'http://localhost:8000/gamer8/api/v1/ratings',
         {
-          method: "POST",
-          credentials: "include",
+          method: 'POST',
+          credentials: 'include',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             ...ratingBody,
@@ -63,8 +64,8 @@ function GameRateForm({
         // reset data and hide form!
         setRatingBody((curr) => ({
           ...curr,
-          title: "",
-          description: "",
+          title: '',
+          description: '',
           rating: 0,
         }));
         setFormShown(false);
@@ -100,7 +101,10 @@ function GameRateForm({
           </button>
         </div>
 
-        <label htmlFor="title" className="font-header text-lg text-yellow-300">
+        <label
+          htmlFor="title"
+          className="font-header text-lg text-yellow-300"
+        >
           Title
         </label>
         <input
@@ -109,7 +113,10 @@ function GameRateForm({
           id="title"
           value={ratingBody.title}
           onChange={(e) =>
-            setRatingBody((body) => ({ ...body, title: e.target.value }))
+            setRatingBody((body) => ({
+              ...body,
+              title: e.target.value,
+            }))
           }
           className="h-[3dvh] overflow-y-auto rounded-md border-2 border-yellow-300 bg-cyan-900 p-2 text-left font-base text-yellow-300 placeholder-yellow-300 placeholder-opacity-60 focus:ring-2 focus:ring-yellow-300"
         ></input>
@@ -125,7 +132,10 @@ function GameRateForm({
           name="description"
           value={ratingBody.description}
           onChange={(e) =>
-            setRatingBody((body) => ({ ...body, description: e.target.value }))
+            setRatingBody((body) => ({
+              ...body,
+              description: e.target.value,
+            }))
           }
           maxLength={1000}
           placeholder={`Write your review about ${gameData.name} here!`}

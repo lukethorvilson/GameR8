@@ -1,14 +1,19 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import useGameRateForm from "../hooks/useGameRateForm";
-import useGamePageData from "../hooks/useGamePageData";
-import GamePageDisplay from "../components/GamePageDisplay";
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import useGameRateForm from '../hooks/useGameRateForm';
+import useGamePageData from '../hooks/useGamePageData';
+import GamePageDisplay from '../components/GamePageDisplay';
+import { RatingsProvider } from '../contexts/RatingsContext';
 
 // may need to use a context for some of the props being passed in here
 function GamePage() {
   const { id } = useParams();
-  const [ratingButton, ratingForm, handleClickRating, setFormShown] =
-    useGameRateForm();
+  const [
+    ratingButton,
+    ratingForm,
+    handleClickRating,
+    setFormShown,
+  ] = useGameRateForm();
   const [gameData, isLoading] = useGamePageData(id);
 
   return (
@@ -22,14 +27,17 @@ function GamePage() {
           </div>
         </div>
       )}
+      {/* if game data is done loading and gameData is populated, provide the display with the correct ratings */}
       {!isLoading && gameData && (
-        <GamePageDisplay
-          gameData={gameData}
-          ratingButton={ratingButton}
-          ratingForm={ratingForm}
-          handleClickRating={handleClickRating}
-          setFormShown={setFormShown}
-        />
+        <RatingsProvider>
+          <GamePageDisplay
+            gameData={gameData}
+            ratingButton={ratingButton}
+            ratingForm={ratingForm}
+            handleClickRating={handleClickRating}
+            setFormShown={setFormShown}
+          />
+        </RatingsProvider>
       )}
     </div>
   );
