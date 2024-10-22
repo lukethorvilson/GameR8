@@ -1,12 +1,19 @@
-import React, { useState } from "react";
-import FeedBackButton from "./FeedBackButton";
+import React, { useState } from 'react';
+import FeedBackButton from './FeedBackButton';
+
+// will need a rating context
 
 function FeedbackButtons({ rating }) {
-  const [currentFeedback, setCurrentFeedback] = useState("None");
+  const [currentFeedback, setCurrentFeedback] = useState({
+    helpful: 0,
+    detailed: 0,
+    entertaining: 0,
+    unhelpful: 0,
+  });
   return (
     <div
       id="feedback-container"
-      className="mx-48 my-6 flex flex-row justify-between"
+      className="my-auto flex h-[100px] flex-row items-center justify-center"
     >
       <FeedBackButton
         title="Helpful"

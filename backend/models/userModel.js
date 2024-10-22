@@ -44,7 +44,7 @@ const User = sequelize.define(
       defaultValue: "No GameR8 biography yet...",
     },
     favoriteGames: {
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      type: DataTypes.ARRAY(DataTypes.JSON),
       allowNull: false,
       defaultValue: [],
       validate: {
