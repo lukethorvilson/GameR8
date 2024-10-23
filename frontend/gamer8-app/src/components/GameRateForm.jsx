@@ -46,7 +46,6 @@ function GameRateForm({
         },
       );
       const data = await response.json();
-      console.log(data);
       // if the data was submitted
       if (response.ok) {
         // TO-DO

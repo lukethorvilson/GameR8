@@ -13,9 +13,7 @@ function GamePageDisplay({
   setFormShown,
 }) {
   const [hasAccess, user] = useLoggedUser();
-  const { ratingData } =
-    useContext(RatingsContext);
-    console.log(ratingData)
+  const { ratingData } = useContext(RatingsContext);
   return (
     <>
       <div className="flex h-[600px] w-full flex-col bg-cyan-800">
@@ -48,9 +46,7 @@ function GamePageDisplay({
               </>
             )}
           <hr className="my-4 h-8 w-full rounded-xl border-none bg-cyan-950" />
-          <RatingList
-            title={gameData.name}
-          />
+          <RatingList title={gameData.name} />
         </div>
       </div>
     </>
