@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+import HomePage from "./pages/HomePage";
 import Ratings from "./pages/Ratings";
 import GamePage from "./pages/GamePage";
 import Login from "./pages/Login";
@@ -15,7 +15,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
+            <Route index element={<HomePage />} />
             <Route path="/ratings" element={<Ratings />} />
             <Route path="/game/:id" element={<GamePage />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
