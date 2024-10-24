@@ -2,7 +2,22 @@ import React from 'react';
 import { BiImageAdd } from 'react-icons/bi';
 import { IoSend } from 'react-icons/io5';
 import { CiShoppingTag } from 'react-icons/ci';
+import {
+  LiaCommentSolid,
+  LiaCommentSlashSolid,
+} from 'react-icons/lia';
+import { RiDislikeFill } from 'react-icons/ri';
+import { FaHeart, FaLock } from 'react-icons/fa';
+import usePostForm from '../hooks/usePostForm';
+
 function PostForm({ user }) {
+  const {
+    commentsDisabled,
+    likesDisabled,
+    handleDisableComments,
+    handleDisableLikes,
+    isAuth,
+  } = usePostForm();
   return (
     <div
       id="form-container"
@@ -21,18 +36,52 @@ function PostForm({ user }) {
         >
           Write a post!
         </label>
-        <textarea
-          name="postBody"
-          id="post-body"
-          className="ml-6 h-24 w-[80%]  overflow-y-auto rounded-t-lg bg-cyan-700 px-4 py-2 font-base text-yellow-300 placeholder-yellow-300 placeholder-opacity-70 ring-2 focus:ring-4 border-yellow-300 focus:border-transparent focus:ring-yellow-300 ring-yellow-300"
-          placeholder="Post something for your friends to see!"
-        ></textarea>
-        <div className="mb-6 ml-6 flex h-16 w-[80%] flex-row items-center justify-between rounded-b-lg bg-cyan-800 px-5 py-3 ring-2 ring-yellow-300">
-          <div className='flex flex-row gap-4 my-5'>
-            <BiImageAdd className="text-3xl text-yellow-300 hover:text-4xl cursor-pointer" />
-            <CiShoppingTag className="text-3xl text-yellow-300 hover:text-4xl cursor-pointer" />
+        <div className="relative flex h-fit w-fit flex-col">
+          <textarea
+            name="postBody"
+            id="post-body"
+            className="mb-1 ml-6 h-[18dvh] w-[80dvw] overflow-y-auto rounded-t-lg border-yellow-300 bg-cyan-700 px-4 py-2 font-base text-yellow-300 placeholder-yellow-300 placeholder-opacity-70 ring-2 ring-yellow-400 focus:border-transparent focus:shadow-[0_-2px_0_0_transparent] focus:outline-none focus:ring-4 focus:ring-yellow-300"
+            placeholder="Post something for your friends to see!"
+          />
+          <div className="mb-6 ml-6 flex h-[7dvh] w-[80dvw] flex-row items-center justify-between rounded-b-lg bg-cyan-800 px-5 py-3 ring-2 ring-yellow-400">
+            <div className="my-5 flex flex-row gap-6">
+              <BiImageAdd className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl" />
+              <CiShoppingTag className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl" />
+              {likesDisabled ? (
+                <RiDislikeFill
+                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl"
+                  onClick={handleDisableLikes}
+                />
+              ) : (
+                <FaHeart
+                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl"
+                  onClick={handleDisableLikes}
+                />
+              )}
+              {commentsDisabled ? (
+                <LiaCommentSlashSolid
+                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl"
+                  onClick={handleDisableComments}
+                />
+              ) : (
+                <LiaCommentSolid
+                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl"
+                  onClick={handleDisableComments}
+                />
+              )}
+            </div>
+            <button
+              type="submit"
+              className="rounded-md p-1 transition-colors hover:bg-cyan-900"
+              disabled={!isAuth}
+            >
+              {isAuth ? (
+                <IoSend className="mr-1 cursor-pointer rounded-lg p-1 text-3xl text-yellow-300 transition-colors" />
+              ) : (
+                <FaLock className="mr-1 cursor-pointer rounded-lg p-1 text-3xl text-yellow-300 transition-colors opacity-70" />
+              )}
+            </button>
           </div>
-          <button type="submit" className='hover:bg-cyan-950'><IoSend className="text-3xl cursor-pointer text-yellow-300  transition-colors mr-1 p-1 rounded-lg" /></button>
         </div>
       </form>
     </div>
