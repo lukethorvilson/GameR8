@@ -17,6 +17,12 @@ export default function usePostForm(user) {
       setIsAuth(false);
     }
   }, [user]);
+
+  /**
+   * The state of the posts body.
+   */
+  const [textArea, setTextArea] = useState("");
+
   /**
    * state for disabled comments on a users post
    */
@@ -36,19 +42,24 @@ export default function usePostForm(user) {
   }
 
   /**
-   *
+   * Handles when a user wants to disable likes on their post
    */
   function handleDisableLikes() {
     setLikesDisabled((val) => !val);
   }
 
-  function handleSubmit() {
+  /**
+   * Handles the sending the data to the server to verify and create for the database.
+   */
+  async function handleSubmit() {
     console.log('Post submitted!');
   }
 
   return {
     commentsDisabled,
     likesDisabled,
+    textArea,
+    setTextArea,
     handleDisableComments,
     handleDisableLikes,
     handleSubmit,

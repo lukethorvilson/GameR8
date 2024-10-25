@@ -14,15 +14,16 @@ function PostForm({ user }) {
   const {
     commentsDisabled,
     likesDisabled,
+    textArea,
+    setTextArea,
     handleDisableComments,
     handleDisableLikes,
+    handleSubmit,
     isAuth,
   } = usePostForm();
+
   return (
-    <div
-      id="form-container"
-      className="h-fit w-full bg-cyan-800"
-    >
+    <div id="form-container" className="h-fit w-full">
       <form
         id="post-form"
         className="flex flex-col"
@@ -40,6 +41,8 @@ function PostForm({ user }) {
           <textarea
             name="postBody"
             id="post-body"
+            value={textArea}
+            onChange={(e) => setTextArea(e.target.value)}
             className="mb-1 ml-6 h-[18dvh] w-[80dvw] overflow-y-auto rounded-t-lg border-yellow-300 bg-cyan-700 px-4 py-2 font-base text-yellow-300 placeholder-yellow-300 placeholder-opacity-70 ring-2 ring-yellow-400 focus:border-transparent focus:shadow-[0_-2px_0_0_transparent] focus:outline-none focus:ring-4 focus:ring-yellow-300"
             placeholder="Post something for your friends to see!"
           />
@@ -73,12 +76,13 @@ function PostForm({ user }) {
             <button
               type="submit"
               className="rounded-md p-1 transition-colors hover:bg-cyan-900"
+              onSubmit={handleSubmit}
               disabled={!isAuth}
             >
               {isAuth ? (
                 <IoSend className="mr-1 cursor-pointer rounded-lg p-1 text-3xl text-yellow-300 transition-colors" />
               ) : (
-                <FaLock className="mr-1 cursor-pointer rounded-lg p-1 text-3xl text-yellow-300 transition-colors opacity-70" />
+                <FaLock className="mr-1 cursor-pointer rounded-lg p-1 text-3xl text-yellow-300 opacity-70 transition-colors" />
               )}
             </button>
           </div>
