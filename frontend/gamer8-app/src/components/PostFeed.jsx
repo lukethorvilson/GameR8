@@ -7,41 +7,47 @@ const ONE = [
       id: 1,
       username: 'lukethor08',
     },
-    postBody: 'Some dope caption that this post will have about some random topic or something game related.',
+    postBody:
+      'Some dope caption that this post will have about some random topic or something game related.',
     mediaList: [],
     likesDisabled: false,
-    commentsDisabled: true,
+    commentsDisabled: false,
     likes: 0,
     comments: [],
     tags: [],
   },
 ];
 
-const MANY = [{
+const MANY = [
+  {
     user: {
       id: 1,
       username: 'lukethor08',
     },
-    postBody: 'Some dope caption that this post will have about some random topic or something game related.',
+    postBody:
+      'Some dope caption that this post will have about some random topic or something game related. ',
     mediaList: [],
     likesDisabled: false,
     commentsDisabled: true,
     tags: [],
-  },{
+  },
+  {
     user: {
       id: 2,
       username: 'Pookie',
     },
-    postBody: 'Some other dope caption that this post will have about some random topic or something game related. Booty fart flakes',
+    postBody:
+      "Some other dope caption that this post will have about some random topic or something game related. With GameR8, were changing the way players discover and review games. Imagine a platform that not only curates top titles but also brings you insights from gamers just like you! Whether you're looking for a fresh RPG to lose yourself in or a quick indie gem to play on the go, GameR8 has it all. Rate your favorites, leave feedback, and see what the community thinks—no more wasted downloads or hours of uninspired gameplay. Join us, make your voice heard, and let's create a gaming hub where every rating and review truly counts. 🕹️ #GameR8 #GamingCommunity #RateYourGames #LevelUp",
     mediaList: [],
     likesDisabled: false,
     commentsDisabled: true,
     tags: [],
-  },]
+  },
+];
 const WINK_TIME = 1;
 
 function PostFeed() {
-  const [postFeed] = useState(ONE);
+  const [postFeed] = useState(MANY);
   const [wink, setWink] = useState(true);
   let intervalId = useRef();
   useEffect(() => {
@@ -71,7 +77,7 @@ function PostFeed() {
           )}
         </div>
       ) : (
-        <div className="flex h-[50dvh] w-[100dvw] flex-col mt-10">
+        <div className="mt-10 mb-28 flex max-h-fit w-[100dvw] flex-col gap-10">
           {postFeed.map((post) => (
             <Post post={post} />
           ))}

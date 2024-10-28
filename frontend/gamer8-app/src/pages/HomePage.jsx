@@ -6,7 +6,7 @@ import PostFeed from '../components/PostFeed';
 function HomePage() {
   const [, user] = useLoggedUser();
   return (
-    <div className="h-fit w-full bg-cyan-800">
+    <div className="h-fit w-full bg-cyan-800 flex-grow overflow-auto overflow-x-hidden">
       <PostForm user={user} />
       <hr className='border-2 border-yellow-300 w-[90dvw] mx-auto rounded-lg opacity-80 skew-x-8'></hr>
       <PostFeed/>

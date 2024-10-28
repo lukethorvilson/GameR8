@@ -33,13 +33,14 @@ function PostForm({ user }) {
       >
         <label
           htmlFor="postBody"
-          className="mb-3 ml-6 mt-6 font-header text-3xl text-yellow-300"
+          className="mb-3 ml-6 mr-auto mt-6 font-header text-3xl text-yellow-300"
         >
           Write a post!
         </label>
         <div className="relative flex h-fit w-fit flex-col">
           <textarea
             name="postBody"
+            disabled={!isAuth}
             id="post-body"
             value={textArea}
             onChange={(e) => setTextArea(e.target.value)}
@@ -48,27 +49,27 @@ function PostForm({ user }) {
           />
           <div className="mb-6 ml-6 flex h-[7dvh] w-[80dvw] flex-row items-center justify-between rounded-b-lg bg-cyan-800 px-5 py-3 ring-2 ring-yellow-400">
             <div className="my-5 flex flex-row gap-6">
-              <BiImageAdd className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl" />
-              <CiShoppingTag className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl" />
+              <BiImageAdd className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl transition-all duration-100" />
+              <CiShoppingTag className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl transition-all duration-100" />
               {likesDisabled ? (
                 <RiDislikeFill
-                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl"
+                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl transition-all duration-100"
                   onClick={handleDisableLikes}
                 />
               ) : (
                 <FaHeart
-                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl"
+                  className="cursor-pointer text-[26px] text-yellow-300 hover:text-[29px] transition-all duration-100"
                   onClick={handleDisableLikes}
                 />
               )}
               {commentsDisabled ? (
                 <LiaCommentSlashSolid
-                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl"
+                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl transition-all duration-100"
                   onClick={handleDisableComments}
                 />
               ) : (
                 <LiaCommentSolid
-                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl"
+                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl transition-all duration-100"
                   onClick={handleDisableComments}
                 />
               )}
