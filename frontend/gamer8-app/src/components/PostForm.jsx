@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BiImageAdd } from 'react-icons/bi';
 import { IoSend } from 'react-icons/io5';
 import { CiShoppingTag } from 'react-icons/ci';
@@ -9,8 +9,13 @@ import {
 import { RiDislikeFill } from 'react-icons/ri';
 import { FaHeart, FaLock } from 'react-icons/fa';
 import usePostForm from '../hooks/usePostForm';
+import { LoginContext } from '../contexts/LoginContext';
 
-function PostForm({ user }) {
+function PostForm() {
+  /**
+   * handles all the users post data on changes and submissions
+   */
+  const { user } = useContext(LoginContext);
   const {
     commentsDisabled,
     likesDisabled,
@@ -20,15 +25,15 @@ function PostForm({ user }) {
     handleDisableLikes,
     handleSubmit,
     isAuth,
-  } = usePostForm();
+  } = usePostForm(user);
 
   return (
-    <div id="form-container" className="h-fit w-full">
+    <div id="form-container" className="ml-20 h-fit w-full">
       <form
         id="post-form"
         className="flex flex-col"
-        onSubmit={() => {
-          console.log(`${user.fullName} posted something`);
+        onSubmit={(e) => {
+          handleSubmit(e);
         }}
       >
         <label
@@ -49,27 +54,27 @@ function PostForm({ user }) {
           />
           <div className="mb-6 ml-6 flex h-[7dvh] w-[80dvw] flex-row items-center justify-between rounded-b-lg bg-cyan-800 px-5 py-3 ring-2 ring-yellow-400">
             <div className="my-5 flex flex-row gap-6">
-              <BiImageAdd className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl transition-all duration-100" />
-              <CiShoppingTag className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl transition-all duration-100" />
+              <BiImageAdd className="cursor-pointer text-3xl text-yellow-300 transition-all duration-100 hover:text-4xl" />
+              <CiShoppingTag className="cursor-pointer text-3xl text-yellow-300 transition-all duration-100 hover:text-4xl" />
               {likesDisabled ? (
                 <RiDislikeFill
-                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl transition-all duration-100"
+                  className="cursor-pointer text-3xl text-yellow-300 transition-all duration-100 hover:text-4xl"
                   onClick={handleDisableLikes}
                 />
               ) : (
                 <FaHeart
-                  className="cursor-pointer text-[26px] text-yellow-300 hover:text-[29px] transition-all duration-100"
+                  className="cursor-pointer text-[26px] text-yellow-300 transition-all duration-100 hover:text-[29px]"
                   onClick={handleDisableLikes}
                 />
               )}
               {commentsDisabled ? (
                 <LiaCommentSlashSolid
-                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl transition-all duration-100"
+                  className="cursor-pointer text-3xl text-yellow-300 transition-all duration-100 hover:text-4xl"
                   onClick={handleDisableComments}
                 />
               ) : (
                 <LiaCommentSolid
-                  className="cursor-pointer text-3xl text-yellow-300 hover:text-4xl transition-all duration-100"
+                  className="cursor-pointer text-3xl text-yellow-300 transition-all duration-100 hover:text-4xl"
                   onClick={handleDisableComments}
                 />
               )}
@@ -77,7 +82,6 @@ function PostForm({ user }) {
             <button
               type="submit"
               className="rounded-md p-1 transition-colors hover:bg-cyan-900"
-              onSubmit={handleSubmit}
               disabled={!isAuth}
             >
               {isAuth ? (

@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
-const morgan = require("morgan")
+const morgan = require("morgan");
 // error handler
 
 // setup app
@@ -31,12 +31,14 @@ app.use(express.static(path.join(__dirname, "public")));
 const userRouter = require("./routes/userRoutes");
 const ratingRouter = require("./routes/ratingRoutes");
 const gameRouter = require("./routes/gameRoutes");
+const postRouter = require("./routes/postRoutes");
 
 // ROUTE MOUNTS
 // app.use("/api/v1/games", gameRouter);
 app.use("/gamer8/api/v1/users", userRouter);
 app.use("/gamer8/api/v1/ratings", ratingRouter);
 app.use("/gamer8/api/v1/games", gameRouter);
+app.use("/gamer8/api/v1/posts", postRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
