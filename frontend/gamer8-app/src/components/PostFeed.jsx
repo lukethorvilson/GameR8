@@ -47,7 +47,12 @@ const MANY = [
 const WINK_TIME = 1;
 
 function PostFeed() {
-  const [postFeed] = useState(MANY);
+  const [postFeed] = useState([]);
+  
+  /**
+   * Created a small wink animation when there are no posts found
+   */
+  //////////////////////////////////////////////
   const [wink, setWink] = useState(true);
   let intervalId = useRef();
   useEffect(() => {
@@ -58,6 +63,7 @@ function PostFeed() {
       clearInterval(intervalId.current);
     };
   }, [setWink]);
+  ///////////////////////////////////////////////
 
   return (
     <>

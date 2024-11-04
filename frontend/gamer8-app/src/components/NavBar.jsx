@@ -1,23 +1,23 @@
-import { useNavigate } from "react-router-dom";
-import Logo from "../components/Logo";
-import SearchBar from "./SearchBar";
-import useLoggedUser from "../hooks/useLoggedUser";
-import { FaRegUserCircle } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+import Logo from '../components/Logo';
+import SearchBar from './SearchBar';
+import useLoggedUser from '../hooks/useLoggedUser';
+import { FaRegUserCircle } from 'react-icons/fa';
 
 function NavBar() {
   const [hasAccess, user] = useLoggedUser();
-  console.log(hasAccess)
+  console.log(hasAccess);
   const navigate = useNavigate();
   function navigateLogin() {
-    navigate("/login");
+    navigate('/login');
   }
 
   return (
-    <div className="sticky top-0 z-10 mx-auto flex h-20 w-[100%] flex-row justify-between bg-cyan-950 text-center text-base">
-      <div className="h-[100%] w-[15%] content-center justify-center">
+    <div className="sticky top-0 z-10 mx-auto flex h-28 w-[100%] flex-row justify-between bg-cyan-950 py-4 text-center text-base">
+      <div className="h-[100%] w-[10%] justify-center mr-4">
         <Logo
-          onClick={() => navigate("/")}
-          className="ml-4 cursor-default font-base text-6xl font-extrabold text-yellow-300"
+          onClick={() => navigate('/')}
+          className="cursor-default font-base text-6xl font-extrabold text-yellow-300"
         />
       </div>
 
