@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import Logo from '../components/Logo';
-import SearchBar from './SearchBar';
-import useLoggedUser from '../hooks/useLoggedUser';
+import Logo from './..//universal/Logo';
+import SearchBar from './../universal/SearchBar';
+import useLoggedUser from '../../hooks/useLoggedUser';
 import { FaRegUserCircle } from 'react-icons/fa';
 
 function NavBar() {

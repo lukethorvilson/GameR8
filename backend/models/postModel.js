@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize, DataTypes, STRING } = require("sequelize");
 const sequelize = require("../db");
 const User = require("./userModel");
 
@@ -26,10 +26,15 @@ const Post = sequelize.define("Post", {
     allowNull: false,
     defaultValue: false,
   },
+  author: {
+    type: STRING,
+    allowNull:false,
+    defaultValue: ""
+  }
 });
 
 //associations
-User.hasMany(Post);
-Post.belongsTo(User);
+// User.hasMany(Post);
+// Post.belongsTo(User);
 
 module.exports = Post;

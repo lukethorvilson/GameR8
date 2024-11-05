@@ -109,7 +109,7 @@ const Rating = sequelize.define("Rating", {
   },
 });
 
-Rating.prototype.removeFromOtherFields = function(value) {
+Rating.prototype.removeFromOtherFields = function (value) {
   // Remove value from helpful
   let helpfulArray = this.getDataValue("helpful") || [];
   this.setDataValue(
@@ -139,16 +139,16 @@ Rating.prototype.removeFromOtherFields = function(value) {
   );
 };
 
-Rating.belongsTo(User, {
-  onDelete: "NO ACTION",
-  foreignKey: "userId",
-  as: "user",
-});
+// Rating.belongsTo(User, {
+//   onDelete: "NO ACTION",
+//   foreignKey: "userId",
+//   as: "user",
+// });
 
-User.hasMany(Rating, {
-  onDelete: "CASCADE",
-  foreignKey: "userId",
-  as: "ratings",
-});
+// User.hasMany(Rating, {
+//   onDelete: "CASCADE",
+//   foreignKey: "userId",
+//   as: "ratings",
+// });
 
 module.exports = Rating;

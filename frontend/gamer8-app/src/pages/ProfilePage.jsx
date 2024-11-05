@@ -3,8 +3,8 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { IoAddCircle } from "react-icons/io5";
 import { MdEdit } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
-import DropDown from "../components/DropDown";
-import DropDownRatings from "../components/DropDownRatings";
+import DropDown from "../components/profilepage/DropDown";
+import DropDownRatings from "../components/profilepage/DropDownRatings";
 import useLoggedUser from "../hooks/useLoggedUser";
 
 function ProfilePage() {

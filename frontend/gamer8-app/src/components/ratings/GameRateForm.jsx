@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import RatingInput from './RatingInput';
-import useLoggedUser from '../hooks/useLoggedUser';
-import useGameRateForm from '../hooks/useGameRateForm';
+import useLoggedUser from '../../hooks/useLoggedUser';
+import useGameRateForm from '../../hooks/useGameRateForm';
 import { useParams } from 'react-router-dom';
-import { RatingsContext } from '../contexts/RatingsContext';
+import { RatingsContext } from '../../contexts/RatingsContext';
 
 function GameRateForm({
   ratingButton,

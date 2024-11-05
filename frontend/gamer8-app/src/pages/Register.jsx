@@ -1,5 +1,5 @@
 import React from "react";
-import RegisterBox from "../components/RegisterBox";
+import RegisterBox from "../components/authentication/RegisterBox";
 
 function Register() {
   return (

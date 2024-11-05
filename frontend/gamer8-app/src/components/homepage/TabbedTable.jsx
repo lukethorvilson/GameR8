@@ -9,7 +9,7 @@ function TabbedTable({ titles, content }) {
           <div
             key={i}
             onClick={() => setActiveTab(i)}
-            className={`${i === activeTab ? 'bg-yellow-300 text-cyan-950 underline' : 'bg-cyan-900 text-yellow-300'} h-12 w-[50%] content-center text-center ${i === 0 && 'rounded-l-md'} ${i === arr.length - 1 && 'rounded-r-md'} my-auto cursor-pointer font-base transition-colors duration-300`}
+            className={`${i === activeTab ? 'bg-yellow-300 text-cyan-950 underline' : 'bg-cyan-900 text-yellow-300'} h-12 w-[50%] content-center text-center ${i === 0 && 'rounded-l-md'} ${i === arr.length - 1 && 'rounded-r-md'} my-auto cursor-pointer font-base text-xl transition-colors duration-300`}
           >
             {tab}
           </div>

@@ -2,8 +2,8 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import useGameRateForm from '../hooks/useGameRateForm';
 import useGamePageData from '../hooks/useGamePageData';
-import GamePageDisplay from '../components/GamePageDisplay';
-import { RatingsProvider } from '../contexts/RatingsContext';
+import GamePageDisplay from './../components/ratings/GamePageDisplay';
+import { RatingsProvider } from './../contexts/RatingsContext';
 
 // may need to use a context for some of the props being passed in here
 function GamePage() {

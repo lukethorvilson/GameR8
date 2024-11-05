@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import debounce from "lodash/debounce";
 import Spinner from "./Spinner";
 import SearchedGameEntry from "./SearchedGameEntry";
-import useClickDetector from "../hooks/useClickDetector";
+import useClickDetector from "../../hooks/useClickDetector";
 
 function SearchBar() {
   const [searchVal, setSearchVal] = useState("");

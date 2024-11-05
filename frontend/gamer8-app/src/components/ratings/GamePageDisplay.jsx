@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import GamePageDetails from './GamePageDetails';
 import GameRateForm from './GameRateForm';
 import RatingList from './RatingList';
-import useLoggedUser from '../hooks/useLoggedUser';
-import { RatingsContext } from '../contexts/RatingsContext';
+import useLoggedUser from '../../hooks/useLoggedUser';
+import { RatingsContext } from '../../contexts/RatingsContext';
 
 function GamePageDisplay({
   gameData,

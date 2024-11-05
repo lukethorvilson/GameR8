@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { PostContext } from '../contexts/PostContext';
 
 export default function usePostForm(user) {
   const [isAuth, setIsAuth] = useState(null);
-  console.log(user);
+  const { setPostData } = useContext(PostContext);
   useEffect(() => {
     if (!user) {
       setIsAuth(false);
@@ -58,7 +59,7 @@ export default function usePostForm(user) {
   async function handleSubmit(e) {
     e.preventDefault();
     // return if not post content
-    if (!textArea.length) {
+    if (!textArea.length && isAuth) {
       setError(
         'The post contained no text, please post something with content!',
       );
@@ -68,8 +69,10 @@ export default function usePostForm(user) {
       body: textArea,
       likesDisabled,
       commentsDisabled,
+      author: user?.username,
+      UserId: user?.id,
     };
-    console.log(post);
+    setPostData((cur) => [post, ...cur]);
     // do the api call
     try {
       setIsLoading(true);
@@ -85,8 +88,18 @@ export default function usePostForm(user) {
         },
       );
       const data = await response.json();
-      console.log(data);
+      setIsLoading(false);
+
+      if (response.ok && data.status === 'success') {
+        setTextArea('');
+      } else {
+        setPostData((cur) => {
+          cur.shift();
+          return [...cur];
+        });
+      }
     } catch (err) {
+      setIsLoading(false);
       setError(err.message);
     }
   }

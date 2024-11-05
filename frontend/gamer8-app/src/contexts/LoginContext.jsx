@@ -1,23 +1,24 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from 'react';
 
 export const LoginContext = createContext();
 
 export const LoginProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const hasAccess = !user ? false : true;
+  const hasAccess =
+    !user || !Object.entries(user).length ? false : true;
   useEffect(() => {
     async function fetchLogged() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:8000/gamer8/api/v1/users/logged",
+          'http://localhost:8000/gamer8/api/v1/users/logged',
           {
-            method: "GET",
+            method: 'GET',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
-            credentials: "include", // This allows cookies to be sent
+            credentials: 'include', // This allows cookies to be sent
           },
         );
         if (response.ok) {
@@ -26,7 +27,10 @@ export const LoginProvider = ({ children }) => {
             setUser(data.body.user);
           }
           setIsLoading(false);
-        } else if (response.status === 401 || response.status === 403) {
+        } else if (
+          response.status === 401 ||
+          response.status === 403
+        ) {
           setUser({});
           setIsLoading(false);
         }
@@ -38,7 +42,9 @@ export const LoginProvider = ({ children }) => {
   }, []);
   //   return [hasAccess, user, setUser, isLoading];
   return (
-    <LoginContext.Provider value={{ user, isLoading, hasAccess }}>
+    <LoginContext.Provider
+      value={{ user, isLoading, hasAccess }}
+    >
       {children}
     </LoginContext.Provider>
   );

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
-import { LoginContext } from '../contexts/LoginContext';
-import { RatingsContext } from '../contexts/RatingsContext';
+import { LoginContext } from '../../contexts/LoginContext';
+import { RatingsContext } from '../../contexts/RatingsContext';
 // import { useSnackbar } from "notistack";
 
 function FeedBackButton({

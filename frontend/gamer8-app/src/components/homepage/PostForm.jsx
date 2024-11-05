@@ -8,8 +8,8 @@ import {
 } from 'react-icons/lia';
 import { RiDislikeFill } from 'react-icons/ri';
 import { FaHeart, FaLock } from 'react-icons/fa';
-import usePostForm from '../hooks/usePostForm';
-import { LoginContext } from '../contexts/LoginContext';
+import usePostForm from '../../hooks/usePostForm';
+import { LoginContext } from '../../contexts/LoginContext';
 
 function PostForm() {
   /**

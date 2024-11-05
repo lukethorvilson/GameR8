@@ -1,11 +1,9 @@
 import React, { useContext } from 'react';
 import Rating from './Rating';
-import { RatingsContext } from '../contexts/RatingsContext';
+import { RatingsContext } from '../../contexts/RatingsContext';
 
 function RatingList({ title }) {
-  const { filteredRatings } =
-    useContext(RatingsContext);
-  console.log(filteredRatings)
+  const { filteredRatings } = useContext(RatingsContext);
   return (
     <>
       <h2 className="mb-3 ml-4 mr-auto w-fit border-b-2 border-yellow-300 pb-3 font-header text-2xl font-bold text-yellow-300">

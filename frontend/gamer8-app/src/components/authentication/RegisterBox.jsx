@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import RegisterInput from "./RegisterInput";
-import { useNavigate } from "react-router-dom";
-import Spinner from "./Spinner";
+import React, { useState } from 'react';
+import RegisterInput from './RegisterInput';
+import { useNavigate } from 'react-router-dom';
+import Spinner from './../universal/Spinner';
 
 function RegisterBox() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    username: "",
-    passwordCheck: "",
-    password: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    username: '',
+    passwordCheck: '',
+    password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -39,7 +39,10 @@ function RegisterBox() {
       !formData.password ||
       !formData.passwordCheck
     ) {
-      handleError("Please fill in all data fields to register as a user!", 30);
+      handleError(
+        'Please fill in all data fields to register as a user!',
+        30,
+      );
       return;
     }
     // check for invalid password mismatch:
@@ -55,11 +58,11 @@ function RegisterBox() {
     try {
       setIsLoading(true);
       const response = await fetch(
-        "http://localhost:8000/gamer8/api/v1/users/register",
+        'http://localhost:8000/gamer8/api/v1/users/register',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
         },
@@ -70,7 +73,7 @@ function RegisterBox() {
         handleError(data.message, 30);
         return;
       }
-      navigate(response.ok ? "/login" : "/register");
+      navigate(response.ok ? '/login' : '/register');
     } catch (err) {
       console.error(err.message);
       setIsLoading(false);
@@ -88,7 +91,7 @@ function RegisterBox() {
 
   return (
     <div className="mx-auto h-[65%] w-[60%] rounded-xl bg-cyan-950 px-4 py-8">
-      <h1 className="font-header col-span-2 mb-10 text-center text-2xl font-bold text-yellow-300">
+      <h1 className="col-span-2 mb-10 text-center font-header text-2xl font-bold text-yellow-300">
         Register
       </h1>
       {error && (
@@ -150,9 +153,13 @@ function RegisterBox() {
         />
         <button
           type="submit"
-          className="font-header col-span-2 mx-auto h-[110%] w-[40%] rounded-md bg-yellow-300 font-bold text-cyan-950"
+          className="col-span-2 mx-auto h-[110%] w-[40%] rounded-md bg-yellow-300 font-header font-bold text-cyan-950"
         >
-          {isLoading ? <Spinner className="" /> : "Register"}
+          {isLoading ? (
+            <Spinner className="" />
+          ) : (
+            'Register'
+          )}
         </button>
       </form>
     </div>

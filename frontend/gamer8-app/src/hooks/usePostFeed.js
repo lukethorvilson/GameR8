@@ -14,7 +14,9 @@ export default function usePostFeed(user, limit) {
           },
         );
         const data = await response.json();
-
+        if(response.ok && data.status === "success"){
+          setPostFeed(data.data)
+        }
         console.log(data);
       } catch (err) {
         console.error(err);

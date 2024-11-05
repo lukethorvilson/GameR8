@@ -15,15 +15,15 @@ function Post({ post }) {
         id="header-container"
         className="flex h-14 w-full rounded-t-lg bg-yellow-300 text-cyan-950"
       >
-        <h3 onClick={() => navigate(`/profile/${post?.user?.id}`)} className="my-auto ml-6 font-header cursor-pointer hover:underline text-cyan-950">
-          {`@ ${post?.user.username}`}
+        <h3 onClick={() => navigate(`/profile/${post?.UserId?.id}`)} className="my-auto ml-6 font-header cursor-pointer hover:underline text-cyan-950">
+          {`@ ${post?.author}`}
         </h3>
       </div>
       <div
         id="text-container"
         className="h-fit w-full rounded-b-2xl bg-cyan-900 px-4 py-6 font-base text-yellow-300"
       >
-        {post?.postBody}
+        {post?.body}
       </div>
       <div
         id="post-actions"
