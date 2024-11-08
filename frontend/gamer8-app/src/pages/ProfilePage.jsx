@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { FaRegUserCircle } from "react-icons/fa";
-import { IoAddCircle } from "react-icons/io5";
-import { MdEdit } from "react-icons/md";
-import { useNavigate, useParams } from "react-router-dom";
-import DropDown from "../components/profilepage/DropDown";
-import DropDownRatings from "../components/profilepage/DropDownRatings";
-import useLoggedUser from "../hooks/useLoggedUser";
+import React, { useEffect, useState } from 'react';
+import { FaRegUserCircle } from 'react-icons/fa';
+import { IoAddCircle } from 'react-icons/io5';
+import { MdEdit } from 'react-icons/md';
+import { useNavigate, useParams } from 'react-router-dom';
+import DropDown from '../components/profilepage/DropDown';
+import DropDownRatings from '../components/profilepage/DropDownRatings';
+import useLoggedUser from '../hooks/useLoggedUser';
 
 function ProfilePage() {
   const { id: userId } = useParams();
   const [profileData, setProfileData] = useState(null);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [, user] = useLoggedUser();
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ function ProfilePage() {
         const response = await fetch(
           `http://localhost:8000/gamer8/api/v1/users/${userId}`,
           {
-            method: "GET",
+            method: 'GET',
           },
         );
         const data = await response.json();
@@ -48,7 +48,7 @@ function ProfilePage() {
             </div>
           </div>
         ))}
-      {error !== "" && <p>{error}</p>}
+      {error !== '' && <p>{error}</p>}
       {!isLoading && !error && profileData && (
         <div className="flex h-screen w-screen flex-col bg-cyan-800 text-yellow-300">
           <div className="flex w-full flex-row justify-between">
@@ -74,11 +74,16 @@ function ProfilePage() {
             {sameUser && (
               <button className="my-10 mr-32 inline-flex items-center gap-2 rounded-lg bg-yellow-300 px-10">
                 <MdEdit className="text-[20px] text-cyan-950" />
-                <p className="font-base text-cyan-950">Edit Profile</p>
+                <p className="font-base text-cyan-950">
+                  Edit Profile
+                </p>
               </button>
             )}
           </div>
-          <div id="bio-container" className="mb-6 flex px-28">
+          <div
+            id="bio-container"
+            className="mb-6 flex px-28"
+          >
             <p>{profileData?.biography}</p>
           </div>
           {!sameUser && (
@@ -93,9 +98,15 @@ function ProfilePage() {
             </div>
           )}
           <div className="flex flex-col gap-4">
-            <DropDown title="Favorite Games" initHidden={true} />
+            <DropDown
+              title="Favorite Games"
+              initHidden={true}
+            />
             <DropDownRatings userId={profileData?.id} />
-            <DropDown title="Recent Posts" initHidden={true} />
+            <DropDown
+              title="Recent Posts"
+              initHidden={true}
+            />
           </div>
         </div>
       )}

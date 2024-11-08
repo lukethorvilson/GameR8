@@ -55,6 +55,21 @@ const associateModels = (models) => {
   Comment.belongsTo(Post, {
     onDelete: "NO ACTION",
   });
+
+  /**
+   * Follow Associations
+   */
+  User.belongsToMany(User, {
+    as: "Followers",
+    through: "Follows",
+    foreignKey: "followedId",
+  });
+
+  User.belongsToMany(User, {
+    as: "Followed",
+    through: "Follows",
+    foreignKey: "followedId",
+  });
 };
 
 module.exports = associateModels;

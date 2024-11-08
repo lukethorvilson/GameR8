@@ -33,8 +33,4 @@ const Post = sequelize.define("Post", {
   }
 });
 
-//associations
-// User.hasMany(Post);
-// Post.belongsTo(User);
-
 module.exports = Post;

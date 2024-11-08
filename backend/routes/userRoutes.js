@@ -18,6 +18,12 @@ router
 
 router.route("/:id").get(userController.getUserById);
 
-router.route("/:id/ratings").get(userController.getUserRatings)
+router.route("/:id/ratings").get(userController.getUserRatings);
+
+router
+  .route("/followers")
+  .get(authController.authorization, userController.getUserFollowers);
+  
+router.route("/follow/:id").post(authController.authorization, userController.postFollowed);
 
 module.exports = router;

@@ -12,11 +12,4 @@ const PostLike = sequelize.define("PostLike", {
   },
 });
 
-//Associations
-// User.hasMany(PostLike);
-// PostLike.belongsTo(User);
-
-// Post.hasMany(PostLike);
-// PostLike.belongsTo(Post);
-
 module.exports = PostLike;

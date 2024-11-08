@@ -139,16 +139,4 @@ Rating.prototype.removeFromOtherFields = function (value) {
   );
 };
 
-// Rating.belongsTo(User, {
-//   onDelete: "NO ACTION",
-//   foreignKey: "userId",
-//   as: "user",
-// });
-
-// User.hasMany(Rating, {
-//   onDelete: "CASCADE",
-//   foreignKey: "userId",
-//   as: "ratings",
-// });
-
 module.exports = Rating;

@@ -46,7 +46,6 @@ exports.createUser = async (req, res) => {
 
 exports.getLoggedUser = async (req, res) => {
   const { id, username } = req.user;
-  console.log(id, username);
   if (!id || !username) {
     return res.status(401).json({
       status: "failed",
@@ -69,7 +68,6 @@ exports.getLoggedUser = async (req, res) => {
 
 exports.getUserById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  console.log(id);
   if (!id)
     return next(new AppError("Bad Request: User was not specified.", 400));
 
@@ -140,6 +138,60 @@ exports.getUserRatings = catchAsync(async (req, res, next) => {
     status: "success",
     body: {
       ratings: user.ratings,
+    },
+  });
+});
+
+exports.getUserFollowers = catchAsync(async (req, res, next) => {
+  const { id } = req.user;
+  if (!id) {
+    return next(
+      new AppError(
+        "Unauthorized action, must be logged in to perform this action.",
+        403
+      )
+    );
+  }
+
+  const user = await User.findByPk(+id);
+  const followers = await user.getFollowers();
+
+  return res.status(200).json({
+    status: "success",
+    data: {
+      followers,
+    },
+  });
+});
+
+exports.postFollowed = catchAsync(async (req, res, next) => {
+  // get the logged user and the user being followed
+  const { id } = req.user;
+  const { id: followedId } = req.params;
+
+  if (!id) {
+    return next(
+      new AppError(
+        "Unauthorized action, must be logged in to perform this action.",
+        403
+      )
+    );
+  }
+  // get users
+  const loggedUser = await User.findByPk(+id);
+  const targetUser = await User.findByPk(+followedId);
+
+  if (!targetUser || !loggedUser) {
+    return next(new AppError("Error following this user!", 404));
+  }
+
+  await loggedUser.addFollowed(targetUser);
+  const newFollowed = await loggedUser.getFollowed();
+
+  return res.status(201).json({
+    status: "success",
+    data: {
+      newFollowed,
     },
   });
 });

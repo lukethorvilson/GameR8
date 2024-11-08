@@ -13,11 +13,10 @@ const sequelize = new Sequelize(
   }
 );
 
-
 sequelize
   .sync({ force: false })
   .then(() => {
-    console.log("Database & tables synced!");
+    console.log("DB synced")
   })
   .catch((err) => {
     console.log("Error syncing the database:", err.message);

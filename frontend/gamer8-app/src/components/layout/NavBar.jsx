@@ -6,7 +6,6 @@ import { FaRegUserCircle } from 'react-icons/fa';
 
 function NavBar() {
   const [hasAccess, user] = useLoggedUser();
-  console.log(hasAccess);
   const navigate = useNavigate();
   function navigateLogin() {
     navigate('/login');
@@ -14,7 +13,7 @@ function NavBar() {
 
   return (
     <div className="sticky top-0 z-10 mx-auto flex h-28 w-[100%] flex-row justify-between bg-cyan-950 py-4 text-center text-base">
-      <div className="h-[100%] w-[10%] justify-center mr-4">
+      <div className="mr-4 h-[100%] w-[10%] justify-center">
         <Logo
           onClick={() => navigate('/')}
           className="cursor-default font-base text-6xl font-extrabold text-yellow-300"
@@ -24,7 +23,7 @@ function NavBar() {
       <div className="h-[100%] w-[60%] content-center justify-center text-yellow-300">
         <SearchBar />
       </div>
-      <div className="h-[100%] w-[10%] content-center justify-center text-yellow-300">
+      <div className="flex h-[100%] w-[10%] flex-row content-center justify-center text-yellow-300">
         {!hasAccess ? (
           <button
             onClick={() => navigateLogin()}
@@ -33,12 +32,15 @@ function NavBar() {
             Login
           </button>
         ) : (
-          <FaRegUserCircle
-            onClick={() => {
-              navigate(`/profile/${user.id}`);
-            }}
-            className="mx-auto h-[50%] w-[50%] text-yellow-300"
-          />
+          <>
+            <FaRegUserCircle
+              onClick={() => {
+                navigate(`/profile/${user.id}`);
+              }}
+              className="my-auto h-[50%] w-[50%] text-yellow-300"
+            />
+            <button onClick={() => handleLogout()} className='bg-red-700 h-fit my-auto px-2 py-2 rounded-md hover:bg-red-600 transition-colors duration-500'>Logout</button>
+          </>
         )}
       </div>
     </div>
