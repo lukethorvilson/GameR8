@@ -6,8 +6,7 @@ function useClickDetector(element, func) {
       // add a check of whether item passed in was clicked or not
       const target = event.target;
       if (
-        !element.current.contains(target) &&
-        !element.current.classList.contains("hidden")
+        !element.current.contains(target)
       ) {
         func(false);
       }

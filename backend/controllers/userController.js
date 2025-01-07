@@ -1,27 +1,19 @@
 const Rating = require("../models/ratingModel");
 const User = require("../models/userModel");
+const handlerFactory = require("./handlerFactory");
 const AppError = require("../util/appError");
 const catchAsync = require("../util/catchAsync");
 
-exports.getAllUsers = async (req, res) => {
-  try {
-    const users = await User.findAll();
-    console.log();
-    res.status(200).json({
-      status: "success",
-      results: users.length,
-      data: {
-        users,
-      },
-    });
-  } catch (err) {
-    res.status(500).json({
-      status: "failed",
-      message: err,
-    });
-  }
-};
+/**
+ * This method gets all the users in the database. If theres a search or limit query, it will be added to the query.
+ */
+exports.getAllUsers = handlerFactory.getAll(User, ["fullName", "username"]);
 
+/**
+ * 
+ * @param {*} req send the body of the request used for creating the user based on info in the body.
+ * @param {*} res send the response back to the client with the new user created.
+ */
 exports.createUser = async (req, res) => {
   try {
     const { firstName, lastName, email, username, password, passwordCheck } =
@@ -88,6 +80,8 @@ exports.getUserById = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+
 
 exports.getUserRatings = catchAsync(async (req, res, next) => {
   const { byDate, limit } = req.query;

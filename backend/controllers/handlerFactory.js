@@ -47,13 +47,26 @@ exports.createOne = (Model) =>
  * @param {*} Model - Model being queried
  * @returns void
  */
-exports.getAll = (Model) =>
+exports.getAll = (Model, searchFields = []) =>
   catchAsync(async (req, res, next) => {
     // automatically gets all the models ordered by the date
     let queryOptions = { order: [["createdAt", "DESC"]] };
     if (req.query?.limit) {
       const number = Number(req.query.limit);
       if (Number.isInteger(number)) queryOptions.limit = Math.round(number);
+    }
+    // check for search query parameter and add it to the query for partial matching string
+    if (req.query?.search) {
+      const searchString = req.query.search;
+      queryOptions.where = {
+        // for each field in the searchFields array, add a query to the where clause
+        [Op.like]: searchFields.map((field) => ({
+          // field name such as username or fullName
+          [field]: {
+            [Op.iLike]: `%${searchString}%`,
+          },
+        })),
+      };
     }
     const rows = await Model.findAll(queryOptions);
     res.status(200).json({
