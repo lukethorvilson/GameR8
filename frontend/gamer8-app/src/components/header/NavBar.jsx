@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import Logo from '../universal/Logo';
-import SearchBar from '../universal/SearchBar';
+import Logo from '../ui/Logo';
+import SearchBar from './SearchBar';
 import useLoggedUser from '../../hooks/useLoggedUser';
 import { FaRegUserCircle } from 'react-icons/fa';
 import useLogout from '../../hooks/useLogout';
-import Button from '../common/button';
+import Button from '../ui/buttons/Button';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
+import SearchedContentBox from './SearchedContentBox';
+import { SearchProvider } from '../../contexts/SearchContext';
 
 function NavBar() {
   const [hasAccess, user] = useLoggedUser();
@@ -31,7 +33,10 @@ function NavBar() {
       <div
         className={`h-[100%] ${windowDimensions.width <= 768 ? 'w-[75%]' : 'w-[50%]'} content-center justify-center text-yellow-300`}
       >
-        <SearchBar />
+        <SearchProvider>
+          <SearchBar />
+          <SearchedContentBox />
+        </SearchProvider>
       </div>
       <div className="h-[100%] w-[25%] flex-row content-center items-center justify-center text-yellow-300">
         {!hasAccess ? (
@@ -41,7 +46,7 @@ function NavBar() {
             height={50}
             bgColor="yellow"
             textColor="cyan"
-            isLoading={false} // No load state for this button
+            isLoading={isLoading} // No load state for this button
           >
             Login
           </Button>

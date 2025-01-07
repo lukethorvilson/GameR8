@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import RegisterInput from './RegisterInput';
 import { useNavigate } from 'react-router-dom';
-import Spinner from './../universal/Spinner';
+import Spinner from './../ui/Spinner';
 
 function RegisterBox() {
   const [formData, setFormData] = useState({

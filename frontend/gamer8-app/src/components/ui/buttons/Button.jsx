@@ -1,5 +1,4 @@
-import classNames from 'classnames';
-import Spinner from '../universal/Spinner';
+import Spinner from '../Spinner';
 
 function Button({
   children,
@@ -10,17 +9,10 @@ function Button({
   isLoading,
   onClick,
 }) {
-  const buttonClass = classNames(
-    'rounded-md text-[12px] sm:text-sm md:text-base font-base  text-center',
-    {
-      [`bg-${bgColor}-300`]: bgColor,
-      [`text-${textColor}-950`]: textColor,
-    },
-  );
   return (
     <button
       onClick={onClick}
-      className={buttonClass}
+      className="rounded-md text-[12px] sm:text-sm md:text-base font-base text-center bg-button-color text-secondary-color"
       style={{
         height: `${height}%`,
         width: `${width}%`,

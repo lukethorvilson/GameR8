@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-function useClickDetector(element) {
+function useClickDetector(element, func) {
   useEffect(() => {
     const handleClick = (event) => {
       // add a check of whether item passed in was clicked or not
@@ -9,16 +9,14 @@ function useClickDetector(element) {
         !element.current.contains(target) &&
         !element.current.classList.contains("hidden")
       ) {
-        element.current.classList.add("hidden");
+        func(false);
       }
     };
-
     document.addEventListener("click", handleClick);
-
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, [element]);
+  }, [element, func]);
 }
 
 export default useClickDetector;

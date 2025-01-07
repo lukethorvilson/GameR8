@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "classnames": "^2.5.1",
     "gamer8-app": "file:",
     "lodash": "^4.17.21",
     "notistack": "^3.0.1",

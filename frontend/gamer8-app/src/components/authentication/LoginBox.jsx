@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginInput from "./LoginInput";
-import Spinner from "../universal/Spinner";
+import Spinner from "./../ui/Spinner";
 
 function LoginBox() {
   const [formData, setFormData] = useState({
