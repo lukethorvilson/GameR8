@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { use, useContext } from 'react';
 import Spinner from '../ui/Spinner';
 import SearchedGameEntry from './SearchedGameEntry';
 import { SearchContext } from '../../contexts/SearchContext';
 import ContentHeader from '../ui/text/SearchContentHeading';
+import useUserSearch from '../../hooks/useUserSearch';
 
 function SearchedContentBox() {
   const {
@@ -12,6 +13,9 @@ function SearchedContentBox() {
     dropDownVisible,
     resultBox,
   } = useContext(SearchContext);
+  // const {userResults,
+  //   userFetchLoading,
+  //   userResultsCount} = useUserSearch(searchVal);
   return (
     <>
       <div
