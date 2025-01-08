@@ -2,21 +2,13 @@ import Spinner from '../Spinner';
 
 function Button({
   children,
-  height,
-  width,
-  bgColor,
-  textColor,
   isLoading,
   onClick,
 }) {
   return (
     <button
       onClick={onClick}
-      className="rounded-md text-[12px] sm:text-sm md:text-base font-base text-center bg-button-color text-secondary-color"
-      style={{
-        height: `${height}%`,
-        width: `${width}%`,
-      }}
+      className="rounded-md text-[12px] h-[35px] w-[100px] sm:text-sm md:text-base font-base text-center bg-button-color text-secondary-color"
     >
       {!isLoading && children}
       {isLoading && (

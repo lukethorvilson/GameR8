@@ -42,10 +42,6 @@ function NavBar() {
         {!hasAccess ? (
           <Button
             onClick={() => navigateLogin()}
-            width={50}
-            height={50}
-            bgColor="yellow"
-            textColor="cyan"
             isLoading={isLoading} // No load state for this button
           >
             Login

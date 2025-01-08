@@ -6,6 +6,7 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "@sequelize/core": "^7.0.0-alpha.42",
     "backend": "file:",
     "bcrypt": "^5.1.1",
     "cookie-parser": "~1.4.4",
@@ -19,8 +20,6 @@
     "morgan": "~1.9.1",
     "node-fetch": "^3.3.2",
     "pg": "^8.13.0",
-    "sequelize": "^6.37.3",
-    "sqlite3": "^5.1.7",
     "validator": "^13.12.0"
   }
 }

@@ -1,4 +1,4 @@
-const sequelize = require("../db");
+const sequelize = require("../config/database");
 const { Sequelize, DataTypes } = require("sequelize");
 const bcrypt = require("bcrypt");
 
@@ -64,7 +64,7 @@ const User = sequelize.define(
       // store the userId of that user's friends here here so we can extract all the information we need from that user.
       type: DataTypes.ARRAY(DataTypes.INTEGER),
       allowNull: false,
-      defaultValue: []
+      defaultValue: [],
     },
   },
   {

@@ -1,23 +1,7 @@
-const { Sequelize } = require("sequelize");
-const User = require("./models/userModel");
-const POSTGRES_PASSWORD = process.env.NODE_POSTGRES_PASSWORD;
-const POSTGRES_USERNAME = process.env.NODE_POSTGRES_USERNAME;
-const POSTGRES_DATABASE = process.env.NODE_POSTGRES_DATABASE;
+const User = require("../models/userModel");
 
-const sequelize = new Sequelize(
-  POSTGRES_DATABASE,
-  POSTGRES_USERNAME,
-  POSTGRES_PASSWORD,
-  {
-    host: "localhost",
-    dialect: "postgres",
-  }
-);
-
-sequelize
-  .sync({ force: true })
-  .then(async () => {
-    console.log("DB synced");
+async function seedDatabase() {
+  try {
     await User.bulkCreate([
       {
         fullName: "Luke Skywalker",
@@ -45,9 +29,7 @@ sequelize
       },
     ]);
     console.log("Test Users created");
-  })
-  .catch((err) => {
-    console.log("Error syncing the database:", err.message);
-  });
-
-module.exports = sequelize;
+  } catch (err) {
+    console.log("Error creating test users:", err.message);
+  }
+}

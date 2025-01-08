@@ -6,6 +6,7 @@ const logger = require("morgan");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 const morgan = require("morgan");
+const sequelize = require("./config/database");
 // error handler
 
 // setup app
@@ -65,5 +66,14 @@ app.all("*", (req, res, next) => {
 
 // EXPRESS's error handling middleware
 app.use(globalErrorHandler);
+
+sequelize
+  .sync({ force: true })
+  .then(() => {
+    console.log("DB synced");
+  })
+  .catch((err) => {
+    console.log("Error syncing the database:", err.message);
+  });
 
 module.exports = app;
