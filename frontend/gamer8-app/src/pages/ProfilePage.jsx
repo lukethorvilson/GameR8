@@ -6,12 +6,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import DropDown from '../components/profilepage/DropDown';
 import DropDownRatings from '../components/profilepage/DropDownRatings';
 import useLoggedUser from '../hooks/useLoggedUser';
+import Button from '../components/ui/buttons/Button';
+import Modal from '../components/ui/modals/Modal';
 
 function ProfilePage() {
   const { id: userId } = useParams();
   const [profileData, setProfileData] = useState(null);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
   const [, user] = useLoggedUser();
   const navigate = useNavigate();
   const sameUser = +userId === +user?.id;
@@ -38,6 +42,7 @@ function ProfilePage() {
   }, [userId]);
   return (
     <div className="h-fit w-full">
+      {showModal && <Modal modalTitle={"Edit Profile"} showModel={showModal} setShowModal={setShowModal}/>}
       {isLoading ||
         (!profileData && (
           <div className="flex h-screen w-screen items-center justify-center bg-cyan-800">
@@ -51,10 +56,10 @@ function ProfilePage() {
       {error !== '' && <p>{error}</p>}
       {!isLoading && !error && profileData && (
         <div className="flex h-screen w-screen flex-col bg-cyan-800 text-yellow-300">
-          <div className="flex w-full flex-row justify-between">
+          <div className="flex w-full flex-row">
             <div
               id="name-container"
-              className="relative my-4 flex h-[100px] flex-row content-start items-center gap-8 px-28 py-3"
+              className="relative my-4 flex h-[100px] flex-[4] flex-row content-start items-center gap-8 px-28 py-3"
             >
               <FaRegUserCircle
                 onClick={() => {
@@ -71,14 +76,16 @@ function ProfilePage() {
                 </h4>
               </div>
             </div>
-            {sameUser && (
-              <button className="my-10 mr-32 inline-flex items-center gap-2 rounded-lg bg-yellow-300 px-10">
-                <MdEdit className="text-[20px] text-cyan-950" />
-                <p className="font-base text-cyan-950">
+            <div className="flex flex-[1] justify-center items-center">
+              {sameUser && (
+                <Button
+                  Icon={MdEdit}
+                  onClick={() => setShowModal(true)}
+                >
                   Edit Profile
-                </p>
-              </button>
-            )}
+                </Button>
+              )}
+            </div>
           </div>
           <div
             id="bio-container"

@@ -9,6 +9,9 @@ export const LoginProvider = ({ children }) => {
     !user || !Object.entries(user).length ? false : true;
   useEffect(() => {
     async function fetchLogged() {
+      if(isLoading) return;// gaurd clause
+
+      // being making request to server to check if user is logged in
       setIsLoading(true);
       try {
         const response = await fetch(
@@ -20,11 +23,11 @@ export const LoginProvider = ({ children }) => {
             },
             credentials: 'include', // This allows cookies to be sent
           },
-        );
+        ); // fetch logged in user
         if (response.ok) {
           const data = await response.json();
           if (data?.body?.user) {
-            setUser(data.body.user);
+            setUser(data.body.user); // set user if logged
           }
           setIsLoading(false);
         } else if (
