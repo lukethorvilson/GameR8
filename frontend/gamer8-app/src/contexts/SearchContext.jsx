@@ -1,6 +1,5 @@
 import {
   createContext,
-  use,
   useCallback,
   useEffect,
   useMemo,
@@ -8,7 +7,8 @@ import {
   useState,
 } from 'react';
 import useClickDetector from '../hooks/useClickDetector';
-import { debounce, set } from 'lodash';
+import useUserSearch from '../hooks/useUserSearch';
+import { debounce } from 'lodash';
 
 export const SearchContext = createContext();
 
@@ -22,6 +22,7 @@ export function SearchProvider({ children }) {
     useState(false);
   const resultBox = useRef(null);
 
+  const {userResults, userFetchLoading, userResultsCount} = useUserSearch(dbSearchVal);
   // Memoize the debounced function so it's created only once
   const debouncedSetDbSearchVal = useMemo(
     () => debounce((value) => setDbSearchVal(value), 500),
@@ -108,6 +109,9 @@ export function SearchProvider({ children }) {
         setSearchVal,
         searchData,
         setSearchData,
+        userResults,
+        userFetchLoading,
+        userResultsCount,
         searchIsLoading,
         setSearchIsLoading,
         dropDownVisible,

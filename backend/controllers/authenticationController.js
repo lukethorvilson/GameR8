@@ -87,7 +87,7 @@ exports.register = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
   const { usernameOrEmail, password } = req.body;
-
+  console.log(usernameOrEmail);
   // check existance of password or user/email
   if (!usernameOrEmail || !password) {
     return next(
@@ -102,8 +102,11 @@ exports.login = catchAsync(async (req, res, next) => {
     },
   });
 
+  console.log(user);
+
   // compare the password to the correct password
   if (!user || !(await bcrypt.compare(password, user.password))) {
+    console.log("Incorrect username/email or password! Please try again!");
     return next(
       new AppError(
         "Incorrect username/email or password! Please try again!",

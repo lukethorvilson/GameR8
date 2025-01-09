@@ -7,6 +7,7 @@ const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 const morgan = require("morgan");
 const sequelize = require("./config/database");
+const seedDatabase = require("./util/seedDatabase");
 // error handler
 
 // setup app
@@ -69,8 +70,9 @@ app.use(globalErrorHandler);
 
 sequelize
   .sync({ force: true })
-  .then(() => {
+  .then(async () => {
     console.log("DB synced");
+    await seedDatabase();
   })
   .catch((err) => {
     console.log("Error syncing the database:", err.message);

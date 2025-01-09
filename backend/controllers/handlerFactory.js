@@ -59,15 +59,14 @@ exports.getAll = (Model, searchFields = []) =>
     if (req.query?.search) {
       const searchString = req.query.search;
       queryOptions.where = {
-        // for each field in the searchFields array, add a query to the where clause
-        [Op.like]: searchFields.map((field) => ({
-          // field name such as username or fullName
+        [Op.or]: searchFields.map((field) => ({
           [field]: {
-            [Op.iLike]: `%${searchString}%`,
+            [Op.iLike]: `${searchString}%`, // Use Op.iLike for case-insensitive search
           },
         })),
       };
     }
+    console.log(queryOptions);
     const rows = await Model.findAll(queryOptions);
     res.status(200).json({
       status: "success",

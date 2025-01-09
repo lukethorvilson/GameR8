@@ -38,28 +38,29 @@ function NavBar() {
           <SearchedContentBox />
         </SearchProvider>
       </div>
-      <div className="h-[100%] w-[25%] flex-row content-center items-center justify-center text-yellow-300">
+      <div className="h-[100%] w-[25%] flex flex-row items-center text-primary-text-color justify-center">
         {!hasAccess ? (
-          <Button
-            onClick={() => navigateLogin()}
-            isLoading={isLoading} // No load state for this button
-          >
+          <Button onClick={() => navigateLogin()}>
             Login
           </Button>
         ) : (
           <>
-            <FaRegUserCircle
-              onClick={() => {
-                navigate(`/profile/${user.id}`);
-              }}
-              className="my-auto h-[50%] w-[50%] text-yellow-300"
-            />
-            <button
-              onClick={() => handleLogout()}
-              className="my-auto h-fit rounded-md bg-red-700 px-2 py-2 transition-colors duration-500 hover:bg-red-600"
-            >
-              Logout
-            </button>
+            <div className=' flex flex-[2] justify-end'>
+              <FaRegUserCircle
+                onClick={() => {
+                  navigate(`/profile/${user.id}`);
+                }}
+                className="h-[50px] w-[50px] text-yellow-300"
+              />
+            </div>
+            <div className='flex flex-[2] justify-center ml-2'>
+              <Button
+                onClick={() => handleLogout()}
+                isLoading={isLoading} // when logging out load state is true
+              >
+                Logout
+              </Button>
+            </div>
           </>
         )}
       </div>
