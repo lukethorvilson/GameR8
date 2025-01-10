@@ -5,7 +5,7 @@ import Footer from '../components/layout/Footer';
 
 function Layout() {
   return (
-    <div className="relative flex h-[100dvh] w-[100dvw] flex-col overflow-x-hidden">
+    <div id="layout-container" className="relative flex h-[100dvh] w-[100dvw] flex-col overflow-x-hidden">
       <NavBar />
       <Outlet />
       <Footer />

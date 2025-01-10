@@ -22,7 +22,7 @@ function SearchedContentBox() {
         ref={resultBox}
         role="region"
         aria-hidden={!dropDownVisible}
-        className={`absolute left-0 mx-auto mt-6 w-screen overflow-hidden rounded bg-cyan-950 pb-10 transition-all duration-700 ${dropDownVisible ? 'max-h-[50vh] opacity-100' : 'max-h-0 opacity-0'}`}
+        className={`absolute left-0 mx-auto mt-6 w-screen overflow-hidden rounded bg-cyan-950 pb-6 transition-all duration-700 ${dropDownVisible ? 'max-h-[50vh] opacity-100' : 'max-h-0 opacity-0'}`}
       >
         {searchIsLoading && (
           <Spinner className="mx-auto mt-8 animate-spin text-6xl" />

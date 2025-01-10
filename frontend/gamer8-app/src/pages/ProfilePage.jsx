@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { IoAddCircle } from 'react-icons/io5';
 import { MdEdit } from 'react-icons/md';
@@ -15,7 +15,7 @@ function ProfilePage() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
+  const outletContainer = useRef(null);
   const [, user] = useLoggedUser();
   const navigate = useNavigate();
   const sameUser = +userId === +user?.id;
@@ -41,8 +41,8 @@ function ProfilePage() {
     fetchUser();
   }, [userId]);
   return (
-    <div className="h-fit w-full">
-      {showModal && <Modal modalTitle={"Edit Profile"} showModel={showModal} setShowModal={setShowModal}/>}
+    <div id="outlet-container" ref={outletContainer} className="h-fit w-full">
+      {showModal && <Modal modalTitle={"Edit Profile"} showModel={showModal} setShowModal={setShowModal} outletContainer={outletContainer}/>}
       {isLoading ||
         (!profileData && (
           <div className="flex h-screen w-screen items-center justify-center bg-cyan-800">
