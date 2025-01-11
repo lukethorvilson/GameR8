@@ -10,7 +10,7 @@ const catchAsync = require("../util/catchAsync");
 exports.getAllUsers = handlerFactory.getAll(User, ["fullName", "username"]);
 
 /**
- * 
+ *
  * @param {*} req send the body of the request used for creating the user based on info in the body.
  * @param {*} res send the response back to the client with the new user created.
  */
@@ -80,8 +80,6 @@ exports.getUserById = catchAsync(async (req, res, next) => {
     },
   });
 });
-
-
 
 exports.getUserRatings = catchAsync(async (req, res, next) => {
   const { byDate, limit } = req.query;
@@ -158,10 +156,52 @@ exports.getUserFollowers = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.postFollowed = catchAsync(async (req, res, next) => {
+exports.getFollowing = catchAsync(async (req, res, next) => {
+  let user;
+  let following;
+  // get ID of logged in user
+  const { id } = req.user;
+  if (!id) {
+    return next(
+      new AppError(
+        "Unauthorized action, must be logged in to perform this action.",
+        403
+      )
+    );
+  }
+
+  // get id of user to get following data from
+  const { userId } = req.params;
+  if (!userId) {
+    return next(new AppError("User id not provided", 400));
+  }
+
+  if (+userId === +id) {
+    return;
+  }
+
+  try {
+    const user = await User.findByPk(+userId);
+    const following = await user.getFollowing();
+  } catch (err) {
+    console.log("Error getting following data on getFollowing 👉👉👉🚫", err.message);
+    return next(new AppError("Error getting following data", 500));
+  }
+
+  
+
+  return res.status(200).json({
+    status: "success",
+    data: {
+      following,
+    },
+  });
+});
+
+exports.postFollowing = catchAsync(async (req, res, next) => {
   // get the logged user and the user being followed
   const { id } = req.user;
-  const { id: followedId } = req.params;
+  const { id: followedId } = req.body?.userId;
 
   if (!id) {
     return next(

@@ -23,7 +23,10 @@ router.route("/:id/ratings").get(userController.getUserRatings);
 router
   .route("/followers")
   .get(authController.authorization, userController.getUserFollowers);
-  
-router.route("/follow/:id").post(authController.authorization, userController.postFollowed);
+
+router
+  .route("/following/:userId")
+  .get(authController.authorization, userController.getFollowing)
+  .post(authController.authorization, userController.postFollowing);
 
 module.exports = router;

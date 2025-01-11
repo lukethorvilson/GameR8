@@ -8,17 +8,25 @@ import DropDownRatings from '../components/profilepage/DropDownRatings';
 import useLoggedUser from '../hooks/useLoggedUser';
 import Button from '../components/ui/buttons/Button';
 import Modal from '../components/ui/modals/Modal';
+import useFollow from '../hooks/useFollow';
 
 function ProfilePage() {
-  const { id: userId } = useParams();
-  const [profileData, setProfileData] = useState(null);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const outletContainer = useRef(null);
+  const { id: userId } = useParams(); // get the user id from the url
+  const {
+    handleFollowUser,
+    handleUnfollowUser,
+    isFollowing,
+  } = useFollow(userId); // hook to handle following/unfollowing a user
+  const [profileData, setProfileData] = useState(null); // store the user data to display
+  
+  const [error, setError] = useState(''); // store any error that occurs, display to screen
+  const [isLoading, setIsLoading] = useState(false); // loading state
+
+  const [showModal, setShowModal] = useState(false); // state of modal opened/closed
+  const outletContainer = useRef(null); // reference to the outlet container for modal blur effect
   const [, user] = useLoggedUser();
   const navigate = useNavigate();
-  const sameUser = +userId === +user?.id;
+  const sameUser = +userId === +user?.id; // check if the user is the same as the logged in user
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -41,8 +49,19 @@ function ProfilePage() {
     fetchUser();
   }, [userId]);
   return (
-    <div id="outlet-container" ref={outletContainer} className="h-fit w-full">
-      {showModal && <Modal modalTitle={"Edit Profile"} showModel={showModal} setShowModal={setShowModal} outletContainer={outletContainer}/>}
+    <div
+      id="outlet-container"
+      ref={outletContainer}
+      className="h-fit w-full"
+    >
+      {showModal && (
+        <Modal
+          modalTitle={'Edit Profile'}
+          showModel={showModal}
+          setShowModal={setShowModal}
+          outletContainer={outletContainer}
+        />
+      )}
       {isLoading ||
         (!profileData && (
           <div className="flex h-screen w-screen items-center justify-center bg-cyan-800">
@@ -76,7 +95,7 @@ function ProfilePage() {
                 </h4>
               </div>
             </div>
-            <div className="flex flex-[1] justify-center items-center">
+            <div className="flex flex-[1] items-center justify-center">
               {sameUser && (
                 <Button
                   Icon={MdEdit}
@@ -96,12 +115,11 @@ function ProfilePage() {
           {!sameUser && (
             <div
               id="friend-button-container"
-              className="mb-8 ml-28 flex content-start"
+              className="mb-4 ml-28 flex h-[10vh] w-[100vw] justify-start items-center"
             >
-              <button className="inline-flex h-fit w-fit items-center gap-2 rounded-xl bg-yellow-300 px-4 py-1 text-xl font-semibold text-cyan-950 transition-colors hover:bg-yellow-400">
-                <IoAddCircle className="text-[28px]" />
-                <p className="font-base">Add Friend</p>
-              </button>
+              <Button Icon={IoAddCircle}>
+                <p className="font-base">Follow</p>
+              </Button>
             </div>
           )}
           <div className="flex flex-col gap-4">

@@ -6,7 +6,7 @@ const logger = require("morgan");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 const morgan = require("morgan");
-const sequelize = require("./config/database");
+const { sequelize } = require("./models/index");
 const seedDatabase = require("./util/seedDatabase");
 // error handler
 
@@ -40,7 +40,7 @@ const postRouter = require("./routes/postRoutes");
 app.use("/gamer8/api/v1/users", userRouter);
 app.use("/gamer8/api/v1/ratings", ratingRouter);
 app.use("/gamer8/api/v1/games", gameRouter);
-app.use("/gamer8/api/v1/posts", postRouter)
+app.use("/gamer8/api/v1/posts", postRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -71,8 +71,8 @@ app.use(globalErrorHandler);
 sequelize
   .sync({ force: true })
   .then(async () => {
-    console.log("DB synced");
     await seedDatabase();
+    console.log("DB synced");
   })
   .catch((err) => {
     console.log("Error syncing the database:", err.message);
