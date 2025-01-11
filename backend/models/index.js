@@ -83,4 +83,6 @@ User.belongsToMany(User, {
   otherKey: "followerId",
 });
 
+console.log("Models associated successfully!")
+
 module.exports = { User, Post, PostLike, Comment, Rating, sequelize };

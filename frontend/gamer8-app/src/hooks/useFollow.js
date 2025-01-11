@@ -6,16 +6,15 @@ import { useEffect, useState } from 'react';
  * @param {*} userId User that is being followed.
  * @returns Object that contains state of the user profile being followed such as following and followed data.
  */
-export default function useFollow(userId) {
+export default function useFollow(authId, userId, setError) {
   /**
    * State to keep track of whether the user is following the user profile being viewed.
    */
   const [followingData, setFollowingData] = useState(null);
-  const [followedData, setFollowedData] = useState(null);
-  const [error, setError] = useState('');
+  const [followerData, setFollowerData] = useState(null);
 
   // check if the user is following the user profile being viewed
-  const [isFollowing, setIsFollowing] = useState(false);
+
 
   /**
    * Effect to run when the component mounts so we can display if the user is following the user already or not.
@@ -35,15 +34,13 @@ export default function useFollow(userId) {
           },
         );
         if (response.ok) {
-          console.log('User data fetched successfully');
+          // if response is ok, then do the following
+          const data = await response.json(); // retrieve the data from the response
+          setFollowingData(data?.data?.following); // set the following data
         }
         else{
-          setIsFollowing(false);
-          setError('Error fetching User data from the server');
+          setError('Error fetching User data from the server'); // set error to display to user
         }
-        const data = await response.json();
-        setFollowingData(data.data?.following);
-        console.log('Following data:', followingData);
       } catch (error) {
         setError(error.message);
         console.error(
@@ -52,21 +49,41 @@ export default function useFollow(userId) {
         );
       }
     }
-    // async function fetchFollowedData() {
-    //   try {
-    //     // make request to get followed data
-    //     console.log('Fetching followed data');
-    //   } catch (error) {
-    //     setError(error.message);
-    //     console.error(
-    //       'Error fetching followed data:',
-    //       error,
-    //     );
-    //   }
-    // }
+
+    async function fetchFollowedData() {
+      try {
+        // make request to get follower data of the user profile being viewed
+        const response = await fetch(
+          `http://localhost:8000/gamer8/api/v1/users/followers/${userId}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        if (response.ok) {
+          // response ok, then do the following
+          const data = await response.json(); // retreive the data from the response
+          setFollowerData(data?.data?.followers); // set the follower data
+        }
+        else{
+          // response !ok, then do the following
+          setFollowerData(null); // data is null, will use '-' in case this is null
+          setError('Error fetching User data from the server'); // set the error status
+        }
+      } catch (error) {
+        setError(error.message);
+        console.error(
+          'Error fetching following data:',
+          error,
+        );
+      }
+    }
     fetchFollowingData();
-    // fetchFollowedData();
-  }, [followingData, userId]);
+    fetchFollowedData();
+  }, [userId]);
 
   /**
    * Function to handle following a user.
@@ -88,6 +105,5 @@ export default function useFollow(userId) {
   return {
     handleFollowUser,
     handleUnfollowUser,
-    isFollowing,
   };
 }

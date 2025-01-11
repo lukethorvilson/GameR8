@@ -21,8 +21,8 @@ router.route("/:id").get(userController.getUserById);
 router.route("/:id/ratings").get(userController.getUserRatings);
 
 router
-  .route("/followers")
-  .get(authController.authorization, userController.getUserFollowers);
+  .route("/followers/:userId")
+  .get(authController.authorization, userController.getFollowers);
 
 router
   .route("/following/:userId")

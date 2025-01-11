@@ -12,11 +12,7 @@ import useFollow from '../hooks/useFollow';
 
 function ProfilePage() {
   const { id: userId } = useParams(); // get the user id from the url
-  const {
-    handleFollowUser,
-    handleUnfollowUser,
-    isFollowing,
-  } = useFollow(userId); // hook to handle following/unfollowing a user
+ 
   const [profileData, setProfileData] = useState(null); // store the user data to display
   
   const [error, setError] = useState(''); // store any error that occurs, display to screen
@@ -24,7 +20,12 @@ function ProfilePage() {
 
   const [showModal, setShowModal] = useState(false); // state of modal opened/closed
   const outletContainer = useRef(null); // reference to the outlet container for modal blur effect
-  const [, user] = useLoggedUser();
+  const [, user] = useLoggedUser(); 
+  const {
+    handleFollowUser,
+    handleUnfollowUser,
+    isFollowing,
+  } = useFollow(user?.id, userId, setError); // hook to handle following/unfollowing a user
   const navigate = useNavigate();
   const sameUser = +userId === +user?.id; // check if the user is the same as the logged in user
   useEffect(() => {

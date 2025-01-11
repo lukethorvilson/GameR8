@@ -134,7 +134,7 @@ exports.getUserRatings = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUserFollowers = catchAsync(async (req, res, next) => {
+exports.getFollowers = catchAsync(async (req, res, next) => {
   const { id } = req.user;
   if (!id) {
     return next(
@@ -145,7 +145,12 @@ exports.getUserFollowers = catchAsync(async (req, res, next) => {
     );
   }
 
-  const user = await User.findByPk(+id);
+  const { userId } = req.params;
+  if (!userId) {
+    return next(new AppError("Error retrieving users followers!", 400));
+  }
+
+  const user = await User.findByPk(+userId);
   const followers = await user.getFollowers();
 
   return res.status(200).json({
@@ -157,8 +162,6 @@ exports.getUserFollowers = catchAsync(async (req, res, next) => {
 });
 
 exports.getFollowing = catchAsync(async (req, res, next) => {
-  let user;
-  let following;
   // get ID of logged in user
   const { id } = req.user;
   if (!id) {
@@ -176,20 +179,10 @@ exports.getFollowing = catchAsync(async (req, res, next) => {
     return next(new AppError("User id not provided", 400));
   }
 
-  if (+userId === +id) {
-    return;
-  }
+  const user = await User.findByPk(+userId);
+  const following = await user.getFollowing();
 
-  try {
-    const user = await User.findByPk(+userId);
-    const following = await user.getFollowing();
-  } catch (err) {
-    console.log("Error getting following data on getFollowing 👉👉👉🚫", err.message);
-    return next(new AppError("Error getting following data", 500));
-  }
-
-  
-
+  console.log(following);
   return res.status(200).json({
     status: "success",
     data: {
