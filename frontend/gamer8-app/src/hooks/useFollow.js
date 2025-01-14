@@ -14,7 +14,7 @@ export default function useFollow(authId, userId, setError) {
   const [followerData, setFollowerData] = useState(null);
 
   // check if the user is following the user profile being viewed
-
+  const isFollowing = false;
 
   /**
    * Effect to run when the component mounts so we can display if the user is following the user already or not.
@@ -90,20 +90,46 @@ export default function useFollow(authId, userId, setError) {
    * @param {number} userId - The id of the user to follow.
    */
   const handleFollowUser = async (userId) => {
+    if(userId === authId){
+      return;
+    }
     try {
-      // make request to follow user
-      console.log('Following user with id:', userId);
+      // make request to follow the user: userId
+      const response = await fetch(
+        `http://localhost:8000/gamer8/api/v1/users/following/${userId}`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      if (response.ok) {
+        // if response is ok, then do the following
+        const data = await response.json(); // retrieve the data from the response
+        setFollowingData(data?.data?.following); // set the following data
+      }
+      else{
+        setError('Error fetching User data from the server'); // set error to display to user
+      }
     } catch (error) {
-      console.error('Error following user:', error);
+      setError(error.message);
+      console.error(
+        'Error fetching following data:',
+        error,
+      );
     }
   };
 
-  const handleUnfollowUser = async () => {
+  const handleUnfollowUser = async (userId) => {
+
     // make request to unfollow user: userId
   };
 
   return {
     handleFollowUser,
     handleUnfollowUser,
+    isFollowing
   };
 }
