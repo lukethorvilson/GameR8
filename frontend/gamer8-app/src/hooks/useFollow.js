@@ -1,5 +1,4 @@
-import { set } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 /**
  *
@@ -15,22 +14,30 @@ export default function useFollow(
   /**
    * State to keep track of whether the user is following the user profile being viewed.
    */
-  const [followingData, setFollowingData] = useState(null);
-  const [followerData, setFollowerData] = useState(null);
+  const [followingData, setFollowingData] = useState([]);
+  const [followerData, setFollowerData] = useState([]);
   const [followLoading, setFollowLoading] = useState(false);
 
-  // check if the user is following the user profile being viewed
-  const isFollowing = followingData?.some(
-    (user) => user.id === authId,
-  );
-  const isFollowed = followerData?.some(
-    (user) => user.id === userId,
+  // check if the authenticated user is following the user profile being viewed/ this controls button functionality
+  let isFollowing = followerData.length > 0 && followerData?.some(
+    (user) => +user?.id === +authId,
   );
 
+  /**
+   * This function checks if the IDs are numbers, if they are not, it returns false, no need to re-run if values never change after the function is created.
+   */
+   const isVerifiedIDs = useCallback(() => {
+    if(Number.isNaN(authId) || Number.isNaN(userId)) return false;
+    return true;
+  }, [authId, userId]);
   /**
    * Effect to run when the component mounts so we can display if the user is following the user already or not.
    */
   useEffect(() => {
+    /**
+     * Function to fetch the following data of the user profile being viewed.
+     * Returns a list of users that the user is following.
+     */
     async function fetchFollowingData() {
       try {
         // make request to get following data of the user profile being viewed
@@ -53,15 +60,15 @@ export default function useFollow(
             'Error fetching User data from the server',
           ); // set error to display to user
         }
-      } catch (error) {
-        setError(error.message);
-        console.error(
-          'Error fetching following data:',
-          error,
-        );
+      } catch (err) {
+        setError(err.message);
       }
     }
 
+    /**
+     * Function to fetch the follower data of the user profile being viewed.
+     * Returns a list of the users that are following the user.
+     */
     async function fetchFollowerData() {
       try {
         // make request to get follower data of the user profile being viewed
@@ -94,16 +101,20 @@ export default function useFollow(
         );
       }
     }
+
+    // both IDs must be numbers, no objects, strings or anything else. They must match an id integer in the DB.
+    if(!isVerifiedIDs()) return;
+    // run if the IDs are verified
     fetchFollowingData();
     fetchFollowerData();
-  }, [userId]);
+  }, [userId, authId, setError]);
 
   /**
    * Function to handle following a user.
    * @param {number} userId - The id of the user to follow.
    */
   const handleFollowUser = async (userId) => {
-    if (userId === authId) {
+    if (!isVerifiedIDs()) {
       return;
     }
     try {
@@ -122,10 +133,10 @@ export default function useFollow(
       if (response.ok) {
         // if response is ok, then do the following
         const data = await response.json(); // retrieve the data from the response
-        setFollowingData(data?.data?.updatedFollowing); // set the following data
+        setFollowerData(data?.data?.updatedFollowers); // set the following data
       } else {
         setError(
-          'Error fetching User data from the server',
+          'Internal Server Error: Error following user.',
         ); // set error to display to user
       }
     } catch (error) {
@@ -140,10 +151,11 @@ export default function useFollow(
   };
 
   const handleUnfollowUser = async (userId) => {
-    // make request to unfollow user: userId
-    if (userId === authId) {
+    // check to make sure the IDs are numbers and not objects or strings
+    if (!isVerifiedIDs()) {
       return;
     }
+    // make request to un-follow user: userId
     try {
       // make request to follow the user: userId
       setFollowLoading(true);
@@ -160,7 +172,7 @@ export default function useFollow(
       if (response.ok) {
         // if response is ok, then do the following
         const data = await response.json(); // retrieve the data from the response
-        setFollowingData(data?.data?.updatedFollowing); // set the following data
+        setFollowerData(data?.data?.updatedFollowers); // set the following data
       } else {
         setError(
           'Error fetching User data from the server',
@@ -178,10 +190,11 @@ export default function useFollow(
   };
 
   return {
+    followingData,
+    followerData,
     handleFollowUser,
     handleUnfollowUser,
     isFollowing,
-    isFollowed,
     followLoading,
   };
 }

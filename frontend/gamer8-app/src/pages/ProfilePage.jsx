@@ -10,48 +10,32 @@ import useLoggedUser from '../hooks/useLoggedUser';
 import Button from '../components/ui/buttons/Button';
 import Modal from '../components/ui/modals/Modal';
 import useFollow from '../hooks/useFollow';
+import useProfilePage from '../hooks/useProfilePage';
 
 function ProfilePage() {
   const { id: userId } = useParams(); // get the user id from the url
+  const navigate = useNavigate(); // hook to naviate to different react route
 
-  const [profileData, setProfileData] = useState(null); // store the user data to display
+  // custom hooks
+  const { profileData, isLoading, error, setError } =
+    useProfilePage(+userId); // hook to get the user profile data
+  const [, user] = useLoggedUser();
 
-  const [error, setError] = useState(''); // store any error that occurs, display to screen
-  const [isLoading, setIsLoading] = useState(false); // loading state
-
+  // modal state
   const [showModal, setShowModal] = useState(false); // state of modal opened/closed
   const outletContainer = useRef(null); // reference to the outlet container for modal blur effect
-  const [, user] = useLoggedUser();
+
   const {
+    followingData,
+    followerData,
     handleFollowUser,
     handleUnfollowUser,
     isFollowing,
-    isFollowed,
     followLoading,
   } = useFollow(+user?.id, +userId, setError); // hook to handle following/unfollowing a user
-  const navigate = useNavigate();
   const sameUser = +userId === +user?.id; // check if the user is the same as the logged in user
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        setIsLoading(true);
-        const response = await fetch(
-          `http://localhost:8000/gamer8/api/v1/users/${userId}`,
-          {
-            method: 'GET',
-          },
-        );
-        const data = await response.json();
-        setProfileData(data.body?.user);
-        setIsLoading(false);
-        console.log(data);
-      } catch (err) {
-        setIsLoading(false);
-        setError(err.message);
-      }
-    }
-    fetchUser();
-  }, [userId]);
+
+  console.log(followingData, followerData);
   return (
     <div
       id="outlet-container"
@@ -97,6 +81,20 @@ function ProfilePage() {
                 <h4 className="text-xl italic text-yellow-300">
                   @{profileData?.username}
                 </h4>
+                <div className="flex flex-row gap-4">
+                  <div className="flex text-primary-text-color font-base">
+                    <span className="pr-1">
+                      Followers:
+                    </span>
+                    {followerData.length}
+                  </div>
+                  <div className="flex text-primary-text-color font-base">
+                    <span className="pr-1 ">
+                      Following:
+                    </span>
+                    {followingData.length}
+                  </div>
+                </div>
               </div>
             </div>
             <div className="flex flex-[1] items-center justify-center">
@@ -130,12 +128,14 @@ function ProfilePage() {
                 isLoading={followLoading}
                 disabled={followLoading}
                 onClick={
-                  isFollowing
-                    ? handleFollowUser
-                    : handleUnfollowUser
+                  !isFollowing
+                    ? () => handleFollowUser(+userId)
+                    : () => handleUnfollowUser(+userId)
                 }
               >
-                <p className="font-base">{!isFollowing ? "Follow" : "Followng"}</p>
+                <p className="font-base">
+                  {!isFollowing ? 'Follow' : 'Following'}
+                </p>
               </Button>
             </div>
           )}

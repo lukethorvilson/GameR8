@@ -25,9 +25,10 @@ function NavBar() {
       {windowDimensions.width > 768 && (
         <div
           id="logo-container"
-          className="w-[25%] flex items-center justify-start pl-4 text-yellow-300"
+          onClick={() => navigate('/')}
+          className="flex w-[25%] items-center justify-start pl-4 text-yellow-300"
         >
-          <Logo onClick={() => navigate('/')} />
+          <Logo />
         </div>
       )}
       <div
@@ -38,22 +39,22 @@ function NavBar() {
           <SearchedContentBox />
         </SearchProvider>
       </div>
-      <div className="h-[100%] w-[25%] flex flex-row items-center text-primary-text-color justify-center">
+      <div className="flex h-[100%] w-[25%] flex-row items-center justify-end pr-4 text-primary-text-color">
         {!hasAccess ? (
           <Button onClick={() => navigateLogin()}>
             Login
           </Button>
         ) : (
           <>
-            <div className=' flex flex-[2] justify-end'>
+            <div className="flex flex-[2] justify-end">
               <FaRegUserCircle
                 onClick={() => {
                   navigate(`/profile/${user.id}`);
                 }}
-                className="h-[50px] w-[50px] text-yellow-300"
+                className="h-[20px] w-[20px] text-yellow-300 transition-all duration-300 sm:h-[30px] sm:w-[30px] md:h-[40px] md:w-[40px] lg:h-[50px] lg:w-[50px]"
               />
             </div>
-            <div className='flex flex-[2] justify-center ml-2'>
+            <div className="ml-2 flex flex-[2] justify-center">
               <Button
                 onClick={() => handleLogout()}
                 isLoading={isLoading} // when logging out load state is true

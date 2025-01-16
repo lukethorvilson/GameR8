@@ -58,13 +58,7 @@ const User = sequelize.define(
     links: {
       type: DataTypes.JSON,
       allowNull: false,
-      defaultValue: {},
-    },
-    friends: {
-      // store the userId of that user's friends here here so we can extract all the information we need from that user.
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
-      allowNull: false,
-      defaultValue: [],
+      defaultValue: {"facebook": "", "twitter": "", "instagram": "", "twitch": "", "youtube": ""},
     },
   },
   {

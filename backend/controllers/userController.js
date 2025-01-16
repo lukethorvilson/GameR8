@@ -194,10 +194,11 @@ exports.getFollowing = catchAsync(async (req, res, next) => {
 exports.postFollowing = catchAsync(async (req, res, next) => {
   // get the logged user and the user being followed
   const { id } = req.user; // get logged user id
-  const { userId: followedId } = req.body; // get user id of user being followed
+  const { userId: followedId } = req.params; // get user id of user being followed
 
   // check if user is logged in, if not, return error
   if (!id) {
+    console.log("No user id");
     return next(
       new AppError(
         "Unauthorized action, must be logged in to perform this action.",
@@ -207,25 +208,29 @@ exports.postFollowing = catchAsync(async (req, res, next) => {
   }
   // internal server error if there is no user id to follow
   if (!followedId) {
+    console.log("No user id for user being followed");
     return next(new AppError("No user id provided to follow", 500));
   }
 
   // get users
-  const loggedUser = await User.findByPk(+id);
-  const targetUser = await User.findByPk(+followedId);
+  const loggedUser = await User.findByPk(+id); // get logged user
+  const targetUser = await User.findByPk(+followedId); // get user being followed
 
+  // if either user is not found, return error
   if (!targetUser || !loggedUser) {
-    return next(new AppError("Error following this user!", 404));
+    return next(
+      new AppError("Oops! There was an error following this user!", 404)
+    );
   }
 
   // add the user to the logged user's following list
-  await loggedUser.addFollowing(targetUser);
-  const newFollowing = await loggedUser.getFollowing();
+  await loggedUser.addFollowing(targetUser); // add the user to the logged user's following list
+  const updatedFollowers = await targetUser.getFollowers(); // get updated following list of logged user
 
   return res.status(201).json({
     status: "success",
     data: {
-      updatedFollowing: newFollowing,
+      updatedFollowers,
     },
   });
 });
@@ -233,7 +238,7 @@ exports.postFollowing = catchAsync(async (req, res, next) => {
 exports.removeFollowing = catchAsync(async (req, res, next) => {
   // get the logged user and the user being followed
   const { id } = req.user; // get logged user id
-  const { userId: followedId } = req.body; // get user id of user being followed
+  const { userId: followedId } = req.params; // get user id of user being followed
 
   // check if user is logged in, if not, return error
   if (!id) {
@@ -259,12 +264,12 @@ exports.removeFollowing = catchAsync(async (req, res, next) => {
 
   // add the user to the logged user's following list
   await loggedUser.removeFollowing(targetUser);
-  const newFollowing = await loggedUser.getFollowing();
+  const updatedFollowers = await targetUser.getFollowers();
 
   return res.status(201).json({
     status: "success",
     data: {
-      updatedFollowing: newFollowing,
+      updatedFollowers,
     },
   });
 });

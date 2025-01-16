@@ -72,15 +72,15 @@ Comment.belongsTo(Post, {
 User.belongsToMany(User, {
   as: "Followers",
   through: "Follows",
-  foreignKey: "followedId",
+  foreignKey: "followingId",
   otherKey: "followerId",
 });
 
 User.belongsToMany(User, {
   as: "Following",
   through: "Follows",
-  foreignKey: "followedId",
-  otherKey: "followerId",
+  foreignKey: "followerId",
+  otherKey: "followingId",
 });
 
 console.log("Models associated successfully!")
