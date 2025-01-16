@@ -25,7 +25,7 @@ function NavBar() {
       {windowDimensions.width > 768 && (
         <div
           id="logo-container"
-          className="w-[25%] content-center justify-start text-yellow-300"
+          className="w-[25%] flex items-center justify-start pl-4 text-yellow-300"
         >
           <Logo onClick={() => navigate('/')} />
         </div>

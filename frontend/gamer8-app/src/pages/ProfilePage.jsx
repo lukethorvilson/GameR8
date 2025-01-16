@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { IoAddCircle } from 'react-icons/io5';
+import { IoIosCheckmarkCircle } from 'react-icons/io';
 import { MdEdit } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import DropDown from '../components/profilepage/DropDown';
@@ -12,20 +13,22 @@ import useFollow from '../hooks/useFollow';
 
 function ProfilePage() {
   const { id: userId } = useParams(); // get the user id from the url
- 
+
   const [profileData, setProfileData] = useState(null); // store the user data to display
-  
+
   const [error, setError] = useState(''); // store any error that occurs, display to screen
   const [isLoading, setIsLoading] = useState(false); // loading state
 
   const [showModal, setShowModal] = useState(false); // state of modal opened/closed
   const outletContainer = useRef(null); // reference to the outlet container for modal blur effect
-  const [, user] = useLoggedUser(); 
+  const [, user] = useLoggedUser();
   const {
     handleFollowUser,
     handleUnfollowUser,
     isFollowing,
-  } = useFollow(user?.id, userId, setError); // hook to handle following/unfollowing a user
+    isFollowed,
+    followLoading,
+  } = useFollow(+user?.id, +userId, setError); // hook to handle following/unfollowing a user
   const navigate = useNavigate();
   const sameUser = +userId === +user?.id; // check if the user is the same as the logged in user
   useEffect(() => {
@@ -116,10 +119,23 @@ function ProfilePage() {
           {!sameUser && (
             <div
               id="friend-button-container"
-              className="mb-4 ml-28 flex h-[10vh] w-[100vw] justify-start items-center"
+              className="mb-4 ml-28 flex h-[10vh] w-[100vw] items-center justify-start"
             >
-              <Button Icon={IoAddCircle}>
-                <p className="font-base">Follow</p>
+              <Button
+                Icon={
+                  isFollowing
+                    ? IoIosCheckmarkCircle
+                    : IoAddCircle
+                }
+                isLoading={followLoading}
+                disabled={followLoading}
+                onClick={
+                  isFollowing
+                    ? handleFollowUser
+                    : handleUnfollowUser
+                }
+              >
+                <p className="font-base">{!isFollowing ? "Follow" : "Followng"}</p>
               </Button>
             </div>
           )}

@@ -193,9 +193,10 @@ exports.getFollowing = catchAsync(async (req, res, next) => {
 
 exports.postFollowing = catchAsync(async (req, res, next) => {
   // get the logged user and the user being followed
-  const { id } = req.user;
-  const { id: followedId } = req.body?.userId;
+  const { id } = req.user; // get logged user id
+  const { userId: followedId } = req.body; // get user id of user being followed
 
+  // check if user is logged in, if not, return error
   if (!id) {
     return next(
       new AppError(
@@ -204,6 +205,11 @@ exports.postFollowing = catchAsync(async (req, res, next) => {
       )
     );
   }
+  // internal server error if there is no user id to follow
+  if (!followedId) {
+    return next(new AppError("No user id provided to follow", 500));
+  }
+
   // get users
   const loggedUser = await User.findByPk(+id);
   const targetUser = await User.findByPk(+followedId);
@@ -212,13 +218,53 @@ exports.postFollowing = catchAsync(async (req, res, next) => {
     return next(new AppError("Error following this user!", 404));
   }
 
-  await loggedUser.addFollowed(targetUser);
-  const newFollowed = await loggedUser.getFollowed();
+  // add the user to the logged user's following list
+  await loggedUser.addFollowing(targetUser);
+  const newFollowing = await loggedUser.getFollowing();
 
   return res.status(201).json({
     status: "success",
     data: {
-      newFollowed,
+      updatedFollowing: newFollowing,
+    },
+  });
+});
+
+exports.removeFollowing = catchAsync(async (req, res, next) => {
+  // get the logged user and the user being followed
+  const { id } = req.user; // get logged user id
+  const { userId: followedId } = req.body; // get user id of user being followed
+
+  // check if user is logged in, if not, return error
+  if (!id) {
+    return next(
+      new AppError(
+        "Unauthorized action, must be logged in to perform this action.",
+        403
+      )
+    );
+  }
+  // internal server error if there is no user id to follow
+  if (!followedId) {
+    return next(new AppError("No user id provided to follow", 500));
+  }
+
+  // get users
+  const loggedUser = await User.findByPk(+id);
+  const targetUser = await User.findByPk(+followedId);
+
+  if (!targetUser || !loggedUser) {
+    return next(new AppError("Error following this user!", 404));
+  }
+
+  // add the user to the logged user's following list
+  await loggedUser.removeFollowing(targetUser);
+  const newFollowing = await loggedUser.getFollowing();
+
+  return res.status(201).json({
+    status: "success",
+    data: {
+      updatedFollowing: newFollowing,
     },
   });
 });

@@ -22,11 +22,15 @@ router.route("/:id/ratings").get(userController.getUserRatings);
 
 router
   .route("/followers/:userId")
-  .get(authController.authorization, userController.getFollowers);
+  .get(authController.authorization, userController.getFollowers); //get followers of a user
 
 router
   .route("/following/:userId")
-  .get(authController.authorization, userController.getFollowing)
-  .post(authController.authorization, userController.postFollowing);
+  .get(authController.authorization, userController.getFollowing) // get following
+  .post(authController.authorization, userController.postFollowing); // post following
+
+router
+  .route("/unfollowing/:userId")
+  .post(authController.authorization, userController.removeFollowing); // remove following user
 
 module.exports = router;
