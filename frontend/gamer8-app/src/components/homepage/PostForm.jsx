@@ -9,13 +9,13 @@ import {
 import { RiDislikeFill } from 'react-icons/ri';
 import { FaHeart, FaLock } from 'react-icons/fa';
 import usePostForm from '../../hooks/usePostForm';
-import { LoginContext } from '../../contexts/LoginContext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 function PostForm() {
   /**
    * handles all the users post data on changes and submissions
    */
-  const { user } = useContext(LoginContext);
+  const { user } = useContext(AuthContext);
   const {
     commentsDisabled,
     likesDisabled,

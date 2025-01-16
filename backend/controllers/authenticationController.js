@@ -43,6 +43,7 @@ exports.register = catchAsync(async (req, res, next) => {
       )
     );
   }
+  // check if the username is alphanumeric(letters and numbers only)
   if (!username || !validator.isAlphanumeric(username)) {
     console.log("Username error");
     return next(
@@ -53,10 +54,13 @@ exports.register = catchAsync(async (req, res, next) => {
     );
   }
 
-  if (password !== passwordCheck) {
-    console.log("Password error");
+  // password
+  if (password !== passwordCheck || !validator.isStrongPassword(password)) {
     return next(
-      new AppError("Please use matching passwords to register! Thank you!", 400)
+      new AppError(
+        "Please make sure password is at is strong, (8 characters long, at least one lower/uppercase letter each, and contains a number and special character) and that it matches the password check!",
+        400
+      )
     );
   }
 
@@ -87,7 +91,7 @@ exports.register = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
   const { usernameOrEmail, password } = req.body;
-  console.log(usernameOrEmail);
+
   // check existance of password or user/email
   if (!usernameOrEmail || !password) {
     return next(
@@ -95,26 +99,25 @@ exports.login = catchAsync(async (req, res, next) => {
     );
   }
 
-  // check if user exists && password is correct
+  // check if user exists with username or email provided (email/username is unique) should only return one user
   const user = await User.findOne({
     where: {
       [Op.or]: [{ email: usernameOrEmail }, { username: usernameOrEmail }],
     },
   });
 
-  console.log(user);
-
-  // compare the password to the correct password
+  // compare the password to the correct password for
   if (!user || !(await bcrypt.compare(password, user.password))) {
     console.log("Incorrect username/email or password! Please try again!");
     return next(
       new AppError(
         "Incorrect username/email or password! Please try again!",
-        400
+        401
       )
     );
   }
 
+  // if everything is okay, sign and send the token to the client
   const token = jwt.sign(
     { id: user.id, username: user.username },
     process.env.NODE_JWT_SECRET,
@@ -122,6 +125,8 @@ exports.login = catchAsync(async (req, res, next) => {
       expiresIn: process.env.NODE_JWT_EXPIRES_IN,
     }
   );
+
+  // send the token as a http cookie to the client
   res
     .cookie("access_token", token, {
       httpOnly: true,
@@ -132,29 +137,39 @@ exports.login = catchAsync(async (req, res, next) => {
     .status(200)
     .json({
       status: "success",
-      message: `Login successful! Welcome ${user.fullName}!`,
+      message: `Login successful! Welcome to GameR8, ${user.fullName}!`,
     });
 });
 
 exports.authorization = (req, res, next) => {
   const token = req.cookies.access_token;
+  // no token available send (403: forbidden)
   if (!token) {
-    console.log("💥ERROR: Token wasn't accessable!");
-    return res.sendStatus(403);
+    
+    return res
+      .status(403)
+      .json({ status: "error", message: "An authorization error occured!" });
   }
-  try {
-    const data = jwt.verify(token, process.env.NODE_JWT_SECRET);
-    req.user = { id: data.id, username: data.username };
-    return next();
-  } catch (err) {
-    console.log("💥Error: Error setting the data and verifying the token.");
-    return res.sendStatus(403);
-  }
+  const data = jwt.verify(token, process.env.NODE_JWT_SECRET); // verify the token with the secret to retrieve auth data
+  req.user = { id: data.id, username: data.username }; // store the data in the request object for later use
+  return next(); // move to the next middleware
 };
 
 exports.logout = (req, res) => {
+  // check for a user access token in the cookies
+  if (!req.cookies.access_token) {
+    return res.status(403).json({
+      status: "error",
+      message:
+        "You are not authorized to perform this action: Logout. Please refresh and try again!",
+    });
+  }
+
+  // clear the cookie
+  res.clearCookie("access_token");
+
+  // send a success message
   return res
-    .clearCookie("access_token")
     .status(200)
     .json({ status: "success", message: "Logout successful!" });
 };

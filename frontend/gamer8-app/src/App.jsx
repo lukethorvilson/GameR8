@@ -1,30 +1,71 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import Ratings from "./pages/Ratings";
-import GamePage from "./pages/GamePage";
-import Login from "./pages/Login";
-import Layout from "./pages/Layout";
-import Register from "./pages/Register";
-import ProfilePage from "./pages/ProfilePage";
-import { LoginProvider } from "./contexts/LoginContext";
-// import {SnackbarProvider, useSnackbar} from "notistack";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+
+import React, { useContext, Suspense } from 'react';
+import LoadingPage from './pages/LoadingPage';
+import { AuthContext } from './contexts/AuthContext';
+
+// Lazy loading of components
+const Layout = React.lazy(() => import('./pages/Layout')); // lazy load layout
+const Homepage = React.lazy(
+  () => import('./pages/HomePage'),
+);
+const Ratings = React.lazy(() => import('./pages/Ratings'));
+const GamePage = React.lazy(
+  () => import('./pages/GamePage'),
+);
+const ProfilePage = React.lazy(
+  () => import('./pages/ProfilePage'),
+);
+
+const Register = React.lazy(
+  () => import('./pages/Register'),
+);
+const Login = React.lazy(() => import('./pages/Login'));
 
 function App() {
+  // check if user is authenticated
+  const { isLoading, isAuthenticated } = useContext(AuthContext);
+  // method of preventing users from accessing pages without being logged in
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
   return (
-    <LoginProvider>
-      <Router>
+    <Router>
+      <Suspense fallback={<LoadingPage />}>
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? (
+                <Layout />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          >
+            <Route index element={<Homepage />} />
             <Route path="/ratings" element={<Ratings />} />
-            <Route path="/game/:id" element={<GamePage />} />
-            <Route path="/profile/:id" element={<ProfilePage />} />
+            <Route
+              path="/game/:id"
+              element={<GamePage />}
+            />
+            <Route
+              path="/profile/:id"
+              element={<ProfilePage />}
+            />
           </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />}></Route>
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/"/> : <Login />} />
+          <Route path="/register" element={isAuthenticated ? <Navigate to="/"/> : <Register />} />
         </Routes>
-      </Router>
-    </LoginProvider>
+      </Suspense>
+    </Router>
   );
 }
 

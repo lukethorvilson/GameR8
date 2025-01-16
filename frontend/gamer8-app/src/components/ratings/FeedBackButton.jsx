@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { LoginContext } from '../../contexts/LoginContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { RatingsContext } from '../../contexts/RatingsContext';
 // import { useSnackbar } from "notistack";
 
@@ -11,7 +11,7 @@ function FeedBackButton({
   setCurrentFeedback,
 }) {
   //get the user from the context to check if the id is concurrent within any of the feedback data
-  const { user } = useContext(LoginContext);
+  const { user } = useContext(AuthContext);
   const { setFilteredRatings } = useContext(RatingsContext);
   // if the title is the same as the users current feedback state then the user has clicked the button so it should he a darker shade
   let isClicked =

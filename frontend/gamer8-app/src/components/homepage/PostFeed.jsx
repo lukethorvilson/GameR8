@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react';
 import Post from './Post';
-import { LoginContext } from '../../contexts/LoginContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import TabbedTable from './TabbedTable';
 import { PostContext } from '../../contexts/PostContext';
@@ -13,7 +13,7 @@ import { PostContext } from '../../contexts/PostContext';
 const WINK_TIME = 1;
 
 function PostFeed() {
-  const { hasAccess } = useContext(LoginContext);
+  const { hasAccess } = useContext(AuthContext);
   const { postData } = useContext(PostContext);
   const [ratingFeed] = useState([]);
   const navigate = useNavigate();

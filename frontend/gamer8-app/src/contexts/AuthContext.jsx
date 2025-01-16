@@ -1,16 +1,19 @@
 import { createContext, useEffect, useState } from 'react';
 
-export const LoginContext = createContext();
+export const AuthContext = createContext();
 
-export const LoginProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const hasAccess =
+  
+  // checks if user is authenticated/ thus being user data is found after the effect below runs
+  const isAuthenticated =
     !user || !Object.entries(user).length ? false : true;
+  
+
+  // effect to check if user is authenticated in
   useEffect(() => {
     async function fetchLogged() {
-      if(isLoading) return;// gaurd clause
-
       // being making request to server to check if user is logged in
       setIsLoading(true);
       try {
@@ -29,26 +32,26 @@ export const LoginProvider = ({ children }) => {
           if (data?.body?.user) {
             setUser(data.body.user); // set user if logged
           }
-          setIsLoading(false);
         } else if (
           response.status === 401 ||
           response.status === 403
         ) {
-          setUser({});
-          setIsLoading(false);
+          setUser(null); // user not logged in, set null
         }
       } catch (err) {
         console.error(err.message);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchLogged();
   }, []);
   //   return [hasAccess, user, setUser, isLoading];
   return (
-    <LoginContext.Provider
-      value={{ user, isLoading, hasAccess }}
+    <AuthContext.Provider
+      value={{ user, isLoading, isAuthenticated }}
     >
       {children}
-    </LoginContext.Provider>
+    </AuthContext.Provider>
   );
 };

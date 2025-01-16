@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { IoAddCircle } from 'react-icons/io5';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
@@ -6,11 +6,11 @@ import { MdEdit } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import DropDown from '../components/profilepage/DropDown';
 import DropDownRatings from '../components/profilepage/DropDownRatings';
-import useLoggedUser from '../hooks/useLoggedUser';
 import Button from '../components/ui/buttons/Button';
 import Modal from '../components/ui/modals/Modal';
 import useFollow from '../hooks/useFollow';
 import useProfilePage from '../hooks/useProfilePage';
+import { AuthContext } from '../contexts/AuthContext';
 
 function ProfilePage() {
   const { id: userId } = useParams(); // get the user id from the url
@@ -19,12 +19,7 @@ function ProfilePage() {
   // custom hooks
   const { profileData, isLoading, error, setError } =
     useProfilePage(+userId); // hook to get the user profile data
-  const [, user] = useLoggedUser();
-
-  // modal state
-  const [showModal, setShowModal] = useState(false); // state of modal opened/closed
-  const outletContainer = useRef(null); // reference to the outlet container for modal blur effect
-
+  const { user } = useContext(AuthContext); // hook to get the logged in user data
   const {
     followingData,
     followerData,
@@ -33,9 +28,13 @@ function ProfilePage() {
     isFollowing,
     followLoading,
   } = useFollow(+user?.id, +userId, setError); // hook to handle following/unfollowing a user
+
+  // modal state
+  const [showModal, setShowModal] = useState(false); // state of modal opened/closed
+  const outletContainer = useRef(null); // reference to the outlet container for modal blur effect
+
   const sameUser = +userId === +user?.id; // check if the user is the same as the logged in user
 
-  console.log(followingData, followerData);
   return (
     <div
       id="outlet-container"
@@ -82,16 +81,12 @@ function ProfilePage() {
                   @{profileData?.username}
                 </h4>
                 <div className="flex flex-row gap-4">
-                  <div className="flex text-primary-text-color font-base">
-                    <span className="pr-1">
-                      Followers:
-                    </span>
+                  <div className="flex font-base text-primary-text-color">
+                    <span className="pr-1">Followers:</span>
                     {followerData.length}
                   </div>
-                  <div className="flex text-primary-text-color font-base">
-                    <span className="pr-1 ">
-                      Following:
-                    </span>
+                  <div className="flex font-base text-primary-text-color">
+                    <span className="pr-1">Following:</span>
                     {followingData.length}
                   </div>
                 </div>

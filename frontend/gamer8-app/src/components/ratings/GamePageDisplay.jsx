@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import GamePageDetails from './GamePageDetails';
 import GameRateForm from './GameRateForm';
 import RatingList from './RatingList';
-import useLoggedUser from '../../hooks/useLoggedUser';
 import { RatingsContext } from '../../contexts/RatingsContext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 function GamePageDisplay({
   gameData,
@@ -12,7 +12,7 @@ function GamePageDisplay({
   handleClickRating,
   setFormShown,
 }) {
-  const [hasAccess, user] = useLoggedUser();
+  const {user, isAuthenticated} = useContext(AuthContext);
   const { ratingData } = useContext(RatingsContext);
   return (
     <>
@@ -26,7 +26,7 @@ function GamePageDisplay({
         </div>
         <div className="absolute top-2/3 h-fit w-screen rounded-t-xl bg-cyan-800 pb-[65px]">
           <GamePageDetails gameData={gameData} />
-          {hasAccess &&
+          {isAuthenticated &&
             !ratingData?.some((rating) => {
               if (rating?.userId === user?.id) {
                 return true;

@@ -1,16 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import Logo from '../ui/Logo';
 import SearchBar from './SearchBar';
-import useLoggedUser from '../../hooks/useLoggedUser';
 import { FaRegUserCircle } from 'react-icons/fa';
-import useLogout from '../../hooks/useLogout';
+import useLogout from '../../hooks/auth/useLogout';
 import Button from '../ui/buttons/Button';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import SearchedContentBox from './SearchedContentBox';
 import { SearchProvider } from '../../contexts/SearchContext';
+import { AuthContext } from '../../contexts/AuthContext';
+import { useContext } from 'react';
 
 function NavBar() {
-  const [hasAccess, user] = useLoggedUser();
+  const {user, isAuthenticated } = useContext(AuthContext);
   const { handleLogout, isLoading, isSuccess, error } =
     useLogout();
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ function NavBar() {
         </SearchProvider>
       </div>
       <div className="flex h-[100%] w-[25%] flex-row items-center justify-end pr-4 text-primary-text-color">
-        {!hasAccess ? (
+        {!isAuthenticated ? (
           <Button onClick={() => navigateLogin()}>
             Login
           </Button>
