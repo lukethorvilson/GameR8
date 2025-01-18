@@ -62,6 +62,14 @@ const User = sequelize.define(
     },
   },
   {
+    indexes: [{
+      unique: true,
+      fields: ["username"],
+    }, {
+      unique: true,
+      fields: ["email"],
+    },
+    ],
     hooks: {
       beforeCreate: async (user) => {
         if (user.password) {

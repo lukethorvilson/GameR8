@@ -14,50 +14,33 @@ exports.getAllUsers = handlerFactory.getAll(User, ["fullName", "username"]);
  * @param {*} req send the body of the request used for creating the user based on info in the body.
  * @param {*} res send the response back to the client with the new user created.
  */
-exports.createUser = async (req, res) => {
-  try {
-    const { firstName, lastName, email, username, password, passwordCheck } =
-      req.body;
-    const fullName = `${firstName} ${lastName}`;
-    const newUser = await User.create({ fullName, email, username, password });
-    res.status(201).json({
-      status: "success",
-      data: {
-        newUser,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "failed",
-      message: {
-        err,
-      },
-    });
-  }
-};
+exports.createUser = catchAsync(async (req, res, next) => {
+  const { firstName, lastName, email, username, password, passwordCheck } =
+    req.body;
 
-exports.getLoggedUser = async (req, res) => {
-  const { id, username } = req.user;
-  if (!id || !username) {
-    return res.status(401).json({
-      status: "failed",
-      message: "You must login before accessing this page!",
-    });
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !username ||
+    !password ||
+    !passwordCheck
+  ) {
+    return next(new AppError("All fields are required!", 400));
   }
-  try {
-    const user = await User.findByPk(+id);
-    if (user) {
-      user.password = undefined;
-    }
-    res.status(200).json({
-      status: "success",
-      body: {
-        user,
-      },
-    });
-  } catch (err) {}
-};
+  const fullName = `${firstName} ${lastName}`;
+  const newUser = await User.create({ fullName, email, username, password });
+  res.status(201).json({
+    status: "success",
+    data: {
+      newUser,
+    },
+  });
+});
 
+/**
+ *
+ */
 exports.getUserById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   if (!id)
@@ -81,6 +64,9 @@ exports.getUserById = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * Gets all the ratings a single user has posted to a specific game.
+ */
 exports.getUserRatings = catchAsync(async (req, res, next) => {
   const { byDate, limit } = req.query;
   const { id } = req.params;
@@ -134,6 +120,9 @@ exports.getUserRatings = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * Get the followers of a user.
+ */
 exports.getFollowers = catchAsync(async (req, res, next) => {
   const { id } = req.user;
   if (!id) {
@@ -161,6 +150,9 @@ exports.getFollowers = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * Get the users that the logged in user is following.
+ */
 exports.getFollowing = catchAsync(async (req, res, next) => {
   // get ID of logged in user
   const { id } = req.user;
@@ -191,6 +183,9 @@ exports.getFollowing = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * Adds user to the following association of the logged in user.
+ */
 exports.postFollowing = catchAsync(async (req, res, next) => {
   // get the logged user and the user being followed
   const { id } = req.user; // get logged user id
@@ -235,6 +230,9 @@ exports.postFollowing = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * Removes a logged user from following a user.
+ */
 exports.removeFollowing = catchAsync(async (req, res, next) => {
   // get the logged user and the user being followed
   const { id } = req.user; // get logged user id

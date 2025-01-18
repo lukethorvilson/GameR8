@@ -94,9 +94,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // check existance of password or user/email
   if (!usernameOrEmail || !password) {
-    return next(
-      new AppError("Please provide email/username and password!", 400)
-    );
+    return next(new AppError("Both fields are required to login!", 400));
   }
 
   // check if user exists with username or email provided (email/username is unique) should only return one user
@@ -108,7 +106,6 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // compare the password to the correct password for
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    console.log("Incorrect username/email or password! Please try again!");
     return next(
       new AppError(
         "Incorrect username/email or password! Please try again!",
@@ -116,6 +113,8 @@ exports.login = catchAsync(async (req, res, next) => {
       )
     );
   }
+
+  user.password = undefined; // remove the password from the user object
 
   // if everything is okay, sign and send the token to the client
   const token = jwt.sign(
@@ -137,6 +136,7 @@ exports.login = catchAsync(async (req, res, next) => {
     .status(200)
     .json({
       status: "success",
+      user,
       message: `Login successful! Welcome to GameR8, ${user.fullName}!`,
     });
 });
@@ -145,15 +145,63 @@ exports.authorization = (req, res, next) => {
   const token = req.cookies.access_token;
   // no token available send (403: forbidden)
   if (!token) {
-    
     return res
       .status(403)
       .json({ status: "error", message: "An authorization error occured!" });
   }
-  const data = jwt.verify(token, process.env.NODE_JWT_SECRET); // verify the token with the secret to retrieve auth data
-  req.user = { id: data.id, username: data.username }; // store the data in the request object for later use
+  try {
+    const data = jwt.verify(token, process.env.NODE_JWT_SECRET); // verify the token with the secret to retrieve auth data
+    req.user = { id: data.id, username: data.username }; // store the data in the request object for later use
+  } catch (err) {
+    req.user = null;
+  }
+
   return next(); // move to the next middleware
 };
+
+/**
+ * This method gets a single user based on the id provided in the request.
+ */
+exports.getUserStatus = catchAsync(async (req, res, next) => {
+  if (!req.user) {
+    return res.status(200).json({
+      status: "success",
+      data: {
+        authenticated: false,
+      },
+    });
+  }
+
+  // if there is a user, get the user data
+  const { id, username } = req.user;
+  
+  // check that data is available
+  if (!id || !username) {
+    return next(
+      new AppError(
+        "Error: Unauthorized action, must be logged in to perform this action.",
+        403
+      )
+    );
+  }
+
+  //retrieve the user data
+  const user = await User.findByPk(+id, { exclude: ["password"] });
+  
+  // check if user is available
+  if (!user) {
+    return next(new AppError("Error: User not found", 404));
+  }
+
+  // send the user data to the client with authentication status
+  res.status(200).json({
+    status: "success",
+    data: {
+      authenticated: true,
+      user: user,
+    },
+  });
+});
 
 exports.logout = (req, res) => {
   // check for a user access token in the cookies

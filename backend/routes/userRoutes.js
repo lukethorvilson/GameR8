@@ -6,7 +6,7 @@ const authController = require("../controllers/authenticationController");
 
 router.route("/register").post(authController.register);
 router.route("/login").post(authController.login);
-router.route("/logout").get(authController.logout);
+router.route("/logout").post(authController.logout);
 
 router
   .route("/")
@@ -14,8 +14,8 @@ router
   .post(userController.createUser);
 
 router
-  .route("/logged")
-  .get(authController.authorization, userController.getLoggedUser);
+  .route("/status")
+  .get(authController.authorization, authController.getUserStatus);
 
 router.route("/:id").get(userController.getUserById);
 

@@ -13,7 +13,7 @@ import { PostContext } from '../../contexts/PostContext';
 const WINK_TIME = 1;
 
 function PostFeed() {
-  const { hasAccess } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
   const { postData } = useContext(PostContext);
   const [ratingFeed] = useState([]);
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ function PostFeed() {
 
   const postContent = (
     <>
-      {hasAccess && !postData.length ? (
+      {isAuthenticated && !postData.length ? (
         <div className="flex h-[50dvh] w-[100dvw] flex-col">
           <h2 className="mx-auto mb-10 mt-20 font-header text-4xl text-yellow-300">
             No posts available from friends or creators!
@@ -61,7 +61,7 @@ function PostFeed() {
 
   const ratingsContent = (
     <>
-      {hasAccess && !ratingFeed.length ? (
+      {isAuthenticated && !ratingFeed.length ? (
         <div className="flex h-[50dvh] w-[100dvw] flex-col">
           <h2 className="mx-auto mb-10 mt-20 font-header text-4xl text-yellow-300">
             No r<span className="italic">8 </span>tings
@@ -89,7 +89,7 @@ function PostFeed() {
 
   return (
     <>
-      {!hasAccess && (
+      {!isAuthenticated && (
         <div className="flex h-[50dvh] w-[100dvw] flex-col">
           <h2 className="mx-auto mb-10 mt-20 font-header text-4xl text-yellow-300">
             Please Login to view posts and ratings!
@@ -104,7 +104,7 @@ function PostFeed() {
           </div>
         </div>
       )}
-      {hasAccess && (
+      {isAuthenticated && (
         <TabbedTable
           titles={['Posts', 'Ratings']}
           content={[postContent, ratingsContent]}

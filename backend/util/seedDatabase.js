@@ -15,7 +15,6 @@ async function seedDatabase() {
   const passwords = ["password01", "password02", "password03", "password04"];
   try {
     const hashedPasswords = await passwordHashHelper(passwords);
-    console.log(hashedPasswords)
     await User.bulkCreate([
       {
         fullName: "Luke Skywalker",

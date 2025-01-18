@@ -1,60 +1,57 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import LoginInput from "./LoginInput";
-import Spinner from "./../ui/Spinner";
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import LoginInput from './LoginInput';
+import Spinner from './../ui/Spinner';
+import useError from './../../hooks/useError';
+import { AuthContext } from './../../contexts/AuthContext';
 
 function LoginBox() {
   const [formData, setFormData] = useState({
-    usernameOrEmail: "",
-    password: "",
+    usernameOrEmail: '',
+    password: '',
   });
-  const navigate = useNavigate();
-  const [error, setError] = useState(null);
+  const { error, setError } = useError();
   const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate();
+  const { checkAuthentication, isAuthenticated,user } = useContext(AuthContext);
   async function handleLoginSubmit(e) {
     e.preventDefault();
     if (!formData.usernameOrEmail || !formData.password) {
-      setError("Please fill in all data fields to login as a user!");
-      setTimeout(() => {
-        setError(null);
-      }, 1000 * 30);
+      setError(
+        'Please fill in all data fields to login as a user!',
+      );
       return;
     }
     try {
       setIsLoading(true);
       const response = await fetch(
-        "http://localhost:8000/gamer8/api/v1/users/login",
+        'http://localhost:8000/gamer8/api/v1/users/login',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
-          credentials: "include", // Include cookies with requests
+          credentials: 'include', // Include cookies with requests
         },
       );
-      setIsLoading(false);
       const data = await response.json();
       if (response.ok) {
+        // set user in context
         localStorage.setItem(
-          "token",
-          JSON.stringify({
-            token: data.accessToken,
-            refreshToken: data.refreshToken,
-          }),
+          'user',
+          JSON.stringify({ user: data.user }),
         );
-        localStorage.setItem("user", JSON.stringify({ user: data.user }));
-      }
-
-      navigate(response.ok ? "/" : "/login");
-      if (response.ok) {
-        console.log("User successfully logged in!");
+        console.log('User successfully logged in!');
+        await checkAuthentication();
       } else {
-        console.log("There was an error!");
+        setError(data.message);
       }
     } catch (err) {
-      console.error("Fetch error:", err);
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -68,7 +65,7 @@ function LoginBox() {
 
   return (
     <div className="mx-auto h-[60%] w-[45%] rounded-xl bg-cyan-950 px-4 py-8">
-      <h1 className="font-header mb-10 text-center text-2xl font-bold text-yellow-300">
+      <h1 className="mb-10 text-center font-header text-2xl font-bold text-yellow-300">
         Login
       </h1>
       {error && (
@@ -95,22 +92,25 @@ function LoginBox() {
           isPassword={true}
           value={formData.password}
           onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
+            setFormData({
+              ...formData,
+              password: e.target.value,
+            })
           }
         />
         <button
-          className="mx-auto h-[12%] w-[25%] rounded-md font-header bg-yellow-300 font-bold text-cyan-950"
+          className="mx-auto h-[12%] w-[25%] rounded-md bg-yellow-300 font-header font-bold text-cyan-950"
           type="submit"
         >
-          {isLoading ? <Spinner className="" /> : "Login"}
+          {isLoading ? <Spinner className="" /> : 'Login'}
         </button>
       </form>
 
-      <p className="ml-4 mt-4 text-yellow-300 font-base">
-        New user?{" "}
+      <p className="ml-4 mt-4 font-base text-yellow-300">
+        New user?{' '}
         <button
           className="hover:underline"
-          onClick={() => navigate("/register")}
+          onClick={() => navigate('/register')}
         >
           Register here &rarr;
         </button>

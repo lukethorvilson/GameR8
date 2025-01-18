@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import Logo from '../ui/Logo';
 import SearchBar from './SearchBar';
 import { FaRegUserCircle } from 'react-icons/fa';
-import useLogout from '../../hooks/auth/useLogout';
 import Button from '../ui/buttons/Button';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import SearchedContentBox from './SearchedContentBox';
@@ -11,9 +10,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { useContext } from 'react';
 
 function NavBar() {
-  const {user, isAuthenticated } = useContext(AuthContext);
-  const { handleLogout, isLoading, isSuccess, error } =
-    useLogout();
+  const {user, isAuthenticated, handleLogout, isLoading } = useContext(AuthContext);
   const navigate = useNavigate();
   const windowDimensions = useWindowDimensions();
 
@@ -57,7 +54,7 @@ function NavBar() {
             </div>
             <div className="ml-2 flex flex-[2] justify-center">
               <Button
-                onClick={() => handleLogout()}
+                onClick={async () => await handleLogout()}
                 isLoading={isLoading} // when logging out load state is true
               >
                 Logout
