@@ -33,16 +33,6 @@ const Rating = sequelize.define("Rating", {
       max: 8,
     },
   },
-  likes: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 0,
-  },
-  dislikes: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 0,
-  },
   author: {
     type: DataTypes.STRING,
     allowNull: false,

@@ -1,11 +1,12 @@
-const { Sequelize } = require('sequelize');
-const sequelize = require('../config/database');
+const { Sequelize } = require("sequelize");
+const sequelize = require("../config/database");
 
 const User = require("./userModel");
 const Comment = require("./commentModel");
 const Post = require("./postModel");
 const Rating = require("./ratingModel");
 const PostLike = require("./likeModel");
+const Reply = require("./replyModel");
 
 /**
  * Ratings and User associations
@@ -37,11 +38,26 @@ Post.belongsTo(User, {
 /**
  * User to like association, and Post to Like association
  */
-//Associations
-User.hasMany(PostLike);
-PostLike.belongsTo(User);
-Post.hasMany(PostLike);
-PostLike.belongsTo(Post);
+PostLike.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+  onDelete: "NO ACTION",
+}); // A like belongs to a user
+PostLike.belongsTo(Post, {
+  foreignKey: "postId",
+  as: "post",
+  onDelete: "NO ACTION",
+}); // A like belongs to a post
+User.hasMany(PostLike, {
+  foreignKey: "userId",
+  as: "postLikes",
+  onDelete: "CASCADE",
+}); // A user has many likes
+Post.hasMany(PostLike, {
+  foreignKey: "postId",
+  as: "postLikes",
+  onDelete: "CASCADE",
+}); // A post has many likes
 
 /**
  * Comments to User and Post associations
@@ -50,19 +66,54 @@ PostLike.belongsTo(Post);
  */
 //Associations
 // One to Many
-User.hasMany(Comment, {
-  onDelete: "CASCADE",
-});
+
 Comment.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+  onDelete: "NO ACTION",
+});
+Comment.belongsTo(Post, {
+  foreignKey: "postId",
+  as: "post",
   onDelete: "NO ACTION",
 });
 
-// One to Many
-Post.hasMany(Comment, {
+User.hasMany(Comment, {
+  foreignKey: "userId",
+  as: "comments",
   onDelete: "CASCADE",
 });
-Comment.belongsTo(Post, {
+Post.hasMany(Comment, {
+  foreignKey: "postId",
+  as: "comments",
+  onDelete: "CASCADE",
+});
+
+/**
+ * Reply to Comment associations
+ * Comment has many replies where a reply has one comment
+ * User has many replies where a reply has one user
+ */
+Reply.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
   onDelete: "NO ACTION",
+});
+Reply.belongsTo(Post, {
+  foreignKey: "postId",
+  as: "post",
+  onDelete: "NO ACTION",
+});
+
+User.hasMany(Reply, {
+  foreignKey: "userId",
+  as: "replies",
+  onDelete: "CASCADE",
+});
+Comment.hasMany(Reply, {
+  foreignKey: "commentId",
+  as: "replies",
+  onDelete: "CASCADE",
 });
 
 /**
@@ -83,6 +134,6 @@ User.belongsToMany(User, {
   otherKey: "followingId",
 });
 
-console.log("Models associated successfully!")
+console.log("Models associated successfully!");
 
 module.exports = { User, Post, PostLike, Comment, Rating, sequelize };

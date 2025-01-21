@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const Comment = sequelize.define("Comment", {
+const Reply = sequelize.define("Reply", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -19,18 +19,18 @@ const Comment = sequelize.define("Comment", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "User",
-      key: "id",
-    }
+        model: "User",
+        key: "id",
+      }
   },
-  postId: {
+  commentId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "Post",
-      key: "id",
-  },
+        model: "Comment",
+        key: "id",
+    },
   },
 });
 
-module.exports = Comment;
+module.exports = Reply;
